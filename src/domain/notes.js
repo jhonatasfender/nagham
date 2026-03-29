@@ -30,7 +30,7 @@ export const NOTE_NAMES_FLATS = [
 
 export const DEFAULT_NOTE = { name: "C", octave: 4 };
 
-const NOTE_TO_INDEX = {
+export const NOTE_TO_INDEX = {
   C: 0,
   "C#": 1,
   Db: 1,

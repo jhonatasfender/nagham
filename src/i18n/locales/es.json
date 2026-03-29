@@ -81,5 +81,23 @@
       { "order": "5ª", "name": "La" },
       { "order": "6ª", "name": "Mi" }
     ]
+  },
+  "seo": {
+    "siteName": "Nagham",
+    "documentTitle": "{{title}} | {{site}}",
+    "pages": {
+      "home": {
+        "title": "Visualizador de notas y acordes",
+        "description": "Estudia notas y acordes con pentagrama en clave de sol, piano y mástil de guitarra sincronizados. Herramienta web gratuita para teoría musical."
+      },
+      "about": {
+        "title": "Acerca de Nagham",
+        "description": "Nagham es una app interactiva para notas y acordes en partitura, piano y guitarra. Conoce el significado de نغم (melodía) y el propósito del proyecto."
+      },
+      "chordBuilder": {
+        "title": "Montar acorde",
+        "description": "Arma acordes en el mástil: tónica, calidad y bajo; ve la formación en la partitura, el piano y los diagramas de acordes."
+      }
+    }
   }
 }

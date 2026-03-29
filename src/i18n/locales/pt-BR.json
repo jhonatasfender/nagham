@@ -81,5 +81,23 @@
       { "order": "5ª", "name": "Lá" },
       { "order": "6ª", "name": "Mi" }
     ]
+  },
+  "seo": {
+    "siteName": "Nagham",
+    "documentTitle": "{{title}} | {{site}}",
+    "pages": {
+      "home": {
+        "title": "Visualizador de notas e acordes",
+        "description": "Estude notas e acordes com partitura em clave de sol, piano e braço de violão sincronizados. Ferramenta web gratuita para teoria e harmonia musical."
+      },
+      "about": {
+        "title": "Sobre o Nagham",
+        "description": "Nagham é um app interativo para notas e acordes: pentagrama, teclado e violão. Conheça o significado de نغم (melodia) e o propósito do projeto."
+      },
+      "chordBuilder": {
+        "title": "Montar acorde",
+        "description": "Monte acordes no braço do violão: tônica, qualidade e baixo; veja a formação na partitura, no piano e no diagrama de acordes."
+      }
+    }
   }
 }

@@ -81,5 +81,23 @@
       { "order": "5th", "name": "A" },
       { "order": "6th", "name": "E" }
     ]
+  },
+  "seo": {
+    "siteName": "Nagham",
+    "documentTitle": "{{title}} | {{site}}",
+    "pages": {
+      "home": {
+        "title": "Notes and chords viewer",
+        "description": "Study notes and chords with a synchronized treble staff, piano keyboard, and guitar fretboard. Free web app for music theory and harmony."
+      },
+      "about": {
+        "title": "About Nagham",
+        "description": "Nagham is an interactive app for notes and chords across staff, piano, and guitar. Learn the meaning of نغم (melody) and the project’s purpose."
+      },
+      "chordBuilder": {
+        "title": "Build chord",
+        "description": "Build chords on the guitar fretboard with root, quality, and bass; see voicings on the staff, piano, and fretboard diagrams."
+      }
+    }
   }
 }
