@@ -1,0 +1,85 @@
+{
+  "app": {
+    "title": "Nagham",
+    "currentNote": "Current note:",
+    "sections": {
+      "staff": "Staff",
+      "piano": "Piano",
+      "guitar": "Guitar"
+    }
+  },
+  "header": {
+    "home": "Home",
+    "about": "About"
+  },
+  "home": {
+    "title": "Notes and Chords Viewer",
+    "currentNote": "Current note:"
+  },
+  "about": {
+    "title": "About Nagham",
+    "intro": "Nagham is an interactive web application for visualizing and studying musical notes and chords through three synchronized views: staff (stave), piano keyboard, and guitar fretboard. The project was created to glorify God through music and aims to evolve into a complete music theory platform.",
+    "meaning": {
+      "title": "The Meaning of the Name",
+      "description": "Nagham (نَغَم) is an ancient Arabic word meaning \"melody\" or \"tone\". It refers to a pleasant and beautiful vocal sound, especially used in Quranic recitation. The name was chosen to reflect the beauty and harmony of music, connecting to the tradition of praise and worship through melodic sounds."
+    },
+    "features": {
+      "title": "Features",
+      "staff": {
+        "title": "Staff",
+        "description": "Stave with treble clef and interactive musical notes"
+      },
+      "piano": {
+        "title": "Piano",
+        "description": "Interactive keyboard with clickable white and black keys"
+      },
+      "guitar": {
+        "title": "Guitar",
+        "description": "Guitar fretboard with strings, frets, and clickable positions"
+      },
+      "chords": {
+        "title": "Chord Builder",
+        "description": "Interface to build and visualize chords with different qualities"
+      }
+    },
+    "future": {
+      "title": "Future Features",
+      "description": "The project is under development and plans to evolve to include:",
+      "items": {
+        "scales": "Analysis of musical scales and modes",
+        "harmony": "Harmonic progressions and chord analysis",
+        "education": "Interactive educational resources on music theory",
+        "instruments": "Support for more musical instruments"
+      }
+    },
+    "verse": "Praise the Lord with the harp; make music to him on the ten-stringed lyre.",
+    "verse.reference": "Psalms 33:2"
+  },
+  "chordBuilder": {
+    "title": "Build chord",
+    "notation": "Notation",
+    "sharps": "Sharps (#)",
+    "flats": "Flats (b)",
+    "root": "Root",
+    "quality": "Quality",
+    "bassOptional": "Bass (slash) — optional",
+    "chordLabel": "Chord: ",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "formationTitle": "Chord formation",
+    "formationDescription": "Notes that form the chord (low to high), to display on the staff, piano and guitar below.",
+    "degree": "degree"
+  },
+  "fretboard": {
+    "string": "String",
+    "open": "Open (0)",
+    "strings": [
+      { "order": "1st", "name": "E" },
+      { "order": "2nd", "name": "B" },
+      { "order": "3rd", "name": "G" },
+      { "order": "4th", "name": "D" },
+      { "order": "5th", "name": "A" },
+      { "order": "6th", "name": "E" }
+    ]
+  }
+}

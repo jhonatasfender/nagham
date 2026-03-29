@@ -1,0 +1,85 @@
+{
+  "app": {
+    "title": "Nagham",
+    "currentNote": "Nota atual:",
+    "sections": {
+      "staff": "Partitura",
+      "piano": "Piano",
+      "guitar": "Violão"
+    }
+  },
+  "header": {
+    "home": "Início",
+    "about": "Sobre"
+  },
+  "home": {
+    "title": "Visualizador de Notas e Acordes",
+    "currentNote": "Nota atual:"
+  },
+  "about": {
+    "title": "Sobre o Nagham",
+    "intro": "Nagham é uma aplicação web interativa para visualização e estudo de notas musicais e acordes através de três visualizações sincronizadas: partitura (pentagrama), teclado de piano e braço de violão. O projeto foi criado para glorificar a Deus através da música e tem como objetivo evoluir para uma plataforma completa de teoria musical.",
+    "meaning": {
+      "title": "O Significado do Nome",
+      "description": "Nagham (نَغَم) é uma palavra do árabe antigo que significa \"melodia\" ou \"tom\". Refere-se a um som vocal agradável e belo, especialmente usado na recitação do Alcorão. O nome foi escolhido para refletir a beleza e a harmonia da música, conectando-se à tradição de louvor e adoração através dos sons melódicos."
+    },
+    "features": {
+      "title": "Características",
+      "staff": {
+        "title": "Partitura",
+        "description": "Pentagrama com clave de sol e notas musicais interativas"
+      },
+      "piano": {
+        "title": "Piano",
+        "description": "Teclado interativo com teclas brancas e pretas clicáveis"
+      },
+      "guitar": {
+        "title": "Violão",
+        "description": "Braço do violão com cordas, trastes e casas clicáveis"
+      },
+      "chords": {
+        "title": "Construtor de Acordes",
+        "description": "Interface para construir e visualizar acordes com diferentes qualidades"
+      }
+    },
+    "future": {
+      "title": "Funcionalidades Futuras",
+      "description": "O projeto está em desenvolvimento e planeja evoluir para incluir:",
+      "items": {
+        "scales": "Análise de escalas e modos musicais",
+        "harmony": "Progressões harmônicas e análise de acordes",
+        "education": "Recursos educacionais interativos sobre teoria musical",
+        "instruments": "Suporte para mais instrumentos musicais"
+      }
+    },
+    "verse": "Louvem ao Senhor com harpa; cantem-lhe louvores com saltério de dez cordas.",
+    "verse.reference": "Salmos 33:2"
+  },
+  "chordBuilder": {
+    "title": "Montar acorde",
+    "notation": "Notação",
+    "sharps": "Sustenidos (#)",
+    "flats": "Bemóis (b)",
+    "root": "Tônica",
+    "quality": "Qualidade",
+    "bassOptional": "Baixo (slash) — opcional",
+    "chordLabel": "Acorde: ",
+    "copy": "Copiar",
+    "copied": "Copiado!",
+    "formationTitle": "Formação do acorde",
+    "formationDescription": "Notas que formam o acorde (grave → agudo), para visualizar na partitura, piano e violão abaixo.",
+    "degree": "grau"
+  },
+  "fretboard": {
+    "string": "Corda",
+    "open": "Solta (0)",
+    "strings": [
+      { "order": "1ª", "name": "Mi" },
+      { "order": "2ª", "name": "Si" },
+      { "order": "3ª", "name": "Sol" },
+      { "order": "4ª", "name": "Ré" },
+      { "order": "5ª", "name": "Lá" },
+      { "order": "6ª", "name": "Mi" }
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "app": {
+    "title": "Nagham",
+    "currentNote": "Nota actual:",
+    "sections": {
+      "staff": "Partitura",
+      "piano": "Piano",
+      "guitar": "Guitarra"
+    }
+  },
+  "header": {
+    "home": "Inicio",
+    "about": "Acerca de"
+  },
+  "home": {
+    "title": "Visualizador de Notas y Acordes",
+    "currentNote": "Nota actual:"
+  },
+  "about": {
+    "title": "Acerca de Nagham",
+    "intro": "Nagham es una aplicación web interactiva para visualizar y estudiar notas musicales y acordes a través de tres visualizaciones sincronizadas: partitura (pentagrama), teclado de piano y mástil de guitarra. El proyecto fue creado para glorificar a Dios a través de la música y tiene como objetivo evolucionar hacia una plataforma completa de teoría musical.",
+    "meaning": {
+      "title": "El Significado del Nombre",
+      "description": "Nagham (نَغَم) es una palabra del árabe antiguo que significa \"melodía\" o \"tono\". Se refiere a un sonido vocal agradable y hermoso, especialmente usado en la recitación del Corán. El nombre fue elegido para reflejar la belleza y la armonía de la música, conectándose con la tradición de alabanza y adoración a través de los sonidos melódicos."
+    },
+    "features": {
+      "title": "Características",
+      "staff": {
+        "title": "Partitura",
+        "description": "Pentagrama con clave de sol y notas musicales interactivas"
+      },
+      "piano": {
+        "title": "Piano",
+        "description": "Teclado interactivo con teclas blancas y negras clicables"
+      },
+      "guitar": {
+        "title": "Guitarra",
+        "description": "Mástil de guitarra con cuerdas, trastes y posiciones clicables"
+      },
+      "chords": {
+        "title": "Constructor de Acordes",
+        "description": "Interfaz para construir y visualizar acordes con diferentes cualidades"
+      }
+    },
+    "future": {
+      "title": "Funcionalidades Futuras",
+      "description": "El proyecto está en desarrollo y planea evolucionar para incluir:",
+      "items": {
+        "scales": "Análisis de escalas y modos musicales",
+        "harmony": "Progresiones armónicas y análisis de acordes",
+        "education": "Recursos educativos interactivos sobre teoría musical",
+        "instruments": "Soporte para más instrumentos musicales"
+      }
+    },
+    "verse": "Alabad al Señor con arpa; cantadle con salterio y decacordio.",
+    "verse.reference": "Salmos 33:2"
+  },
+  "chordBuilder": {
+    "title": "Montar acorde",
+    "notation": "Notación",
+    "sharps": "Sostenidos (#)",
+    "flats": "Bemoles (b)",
+    "root": "Tónica",
+    "quality": "Cualidad",
+    "bassOptional": "Bajo (slash) — opcional",
+    "chordLabel": "Acorde: ",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "formationTitle": "Formación del acorde",
+    "formationDescription": "Notas que forman el acorde (grave → agudo), para visualizar en la partitura, piano y guitarra abajo.",
+    "degree": "grado"
+  },
+  "fretboard": {
+    "string": "Cuerda",
+    "open": "Al aire (0)",
+    "strings": [
+      { "order": "1ª", "name": "Mi" },
+      { "order": "2ª", "name": "Si" },
+      { "order": "3ª", "name": "Sol" },
+      { "order": "4ª", "name": "Re" },
+      { "order": "5ª", "name": "La" },
+      { "order": "6ª", "name": "Mi" }
+    ]
+  }
+}

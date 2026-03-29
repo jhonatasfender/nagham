@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+html {
+  @apply bg-zinc-900 text-zinc-100;
+}
+
+body {
+  @apply m-0 min-h-screen antialiased;
+}
+
+#root {
+  @apply min-h-screen w-full box-border;
+}
+
+.staff-view {
+  color: #e4e4e7;
+  --staff-note-fill: #fbbf24;
+  --staff-note-stroke: #b45309;
+}
+
+.piano-view {
+  --piano-key-white: #f4f4f5;
+  --piano-key-black: #27272a;
+  --piano-key-stroke: #71717a;
+  --piano-key-selected: #f59e0b;
+  --piano-key-black-selected: #f59e0b;
+}
+
+.piano-view .piano-key--triad {
+  fill: #f59e0b;
+  stroke: #b45309;
+  stroke-width: 2px;
+}
+
+.guitar-view {
+  --guitar-string: #71717a;
+  --guitar-fret: #52525b;
+  --guitar-cell-stroke: #3f3f46;
+  --guitar-cell-selected: rgba(245, 158, 11, 0.5);
+}
+
+.guitar-view .guitar-cell--highlight {
+  fill: rgba(245, 158, 11, 0.6);
+  stroke: #b45309;
+  stroke-width: 1.5px;
+}
