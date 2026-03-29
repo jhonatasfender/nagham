@@ -1,0 +1,19 @@
+# Nagham
+
+> Aplicação web interativa para estudar notas musicais e acordes com três vistas sincronizadas: partitura em clave de sol, teclado de piano e braço de violão. SPA (Vite + React); conteúdo principal é carregado no cliente.
+
+## Aplicação (páginas)
+
+- [/](/): Início — visualizador sincronizado (partitura, piano, violão) e idiomas pt-BR / en / es.
+- [/about](/about): Sobre o projeto Nagham e o significado do nome (نغم — melodia).
+- [/chord-builder](/chord-builder): Montagem de acordes no diagrama do braço do violão.
+
+## Recursos para indexação e ferramentas
+
+- [/notes-index.xml](/notes-index.xml): XML com todas as escritas de notas registadas no domínio (classes de altura, sustenidos/bemóis) e gama MIDI 0–127.
+- [/sitemap.xml](/sitemap.xml): Mapa do site (URL absoluta em produção; em desenvolvimento pode estar indisponível).
+- [/robots.txt](/robots.txt): Regras de acesso para crawlers, incluindo agentes de IA explicitamente autorizados a `Allow: /`.
+
+## Optional
+
+- Documentação de arquitetura no repositório em `docs/frontend-architecture.md` (Markdown legível em clone do projeto).

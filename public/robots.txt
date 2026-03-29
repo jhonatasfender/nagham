@@ -1,2 +1,67 @@
+# Nagham — robots.txt
+# Complementos para agentes de IA e LLMs: /llms.txt (índice curado) e /notes-index.xml (dados de notas musicais).
+
+# Crawlers genéricos e motores de busca
 User-agent: *
+Allow: /
+
+# OpenAI (treino, navegação e pesquisa)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Google (Gemini / Vertex — Google-Extended)
+User-agent: Google-Extended
+Allow: /
+
+# Apple Intelligence / Applebot
+User-agent: Applebot-Extended
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Amazon
+User-agent: Amazonbot
+Allow: /
+
+# Common Crawl (datasets usados por vários modelos)
+User-agent: CCBot
+Allow: /
+
+# Meta
+User-agent: FacebookBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+# ByteDance / TikTok
+User-agent: Bytespider
+Allow: /
+
+# Outros frequentes em contexto de IA / extração
+User-agent: Diffbot
+Allow: /
+
+User-agent: YouBot
 Allow: /

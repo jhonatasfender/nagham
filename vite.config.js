@@ -1,4 +1,4 @@
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
@@ -24,6 +24,7 @@ function seoArtifactsPlugin() {
         "/about",
         "/chord-builder",
         "/notes-index.xml",
+        "/llms.txt",
       ];
       const locs = routes.map((path) => {
         const loc = path === "/" ? `${base}/` : `${base}${path}`;
@@ -37,11 +38,11 @@ ${locs.join("\n")}
 `;
       writeFileSync(resolve(outDir, "sitemap.xml"), sitemap);
 
-      const robots = `User-agent: *
-Allow: /
-
-Sitemap: ${base}/sitemap.xml
-`;
+      const robotsBase = readFileSync(
+        resolve(process.cwd(), "public/robots.txt"),
+        "utf8"
+      ).trimEnd();
+      const robots = `${robotsBase}\n\nSitemap: ${base}/sitemap.xml\n`;
       writeFileSync(resolve(outDir, "robots.txt"), robots);
     },
   };

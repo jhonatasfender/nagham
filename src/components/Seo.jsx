@@ -21,8 +21,7 @@ export function Seo() {
     site: siteName,
   });
 
-  const origin =
-    typeof window !== "undefined" ? window.location.origin : "";
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
   const canonical = origin
     ? `${origin}${pathname.startsWith("/") ? pathname : `/${pathname}`}`
     : "";
