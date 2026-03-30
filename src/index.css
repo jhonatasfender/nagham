@@ -116,6 +116,8 @@ body {
   --guitar-fret: #52525b;
   --guitar-cell-stroke: #3f3f46;
   --guitar-cell-selected: rgba(245, 158, 11, 0.5);
+  --guitar-barre: #fb923c;
+  --guitar-barre-fret-number: #fb923c;
 }
 
 .guitar-view .guitar-cell--highlight {

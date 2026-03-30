@@ -10,13 +10,15 @@ export function getChordKeys(
   customPositions,
   chordNotes,
   root,
-  quality
+  quality,
+  visibleFrets
 ) {
   if (isEditor && customPositions) {
     return new Set(
       customPositions.map(([stringIndex, fret]) => `${stringIndex}-${fret}`)
     );
-  } else if (chordNotes?.length && root && quality) {
+  }
+  if (chordNotes?.length && root && quality) {
     const basicVoicing = getBasicChordVoicing(root, quality);
     if (basicVoicing) {
       const keys = new Set(
@@ -24,19 +26,18 @@ export function getChordKeys(
       );
 
       const barre = getBarreFromVoicing(root, quality);
-      if (barre && barre.strings) {
+      if (barre?.strings) {
         barre.strings.forEach((stringIndex) => {
           keys.add(`${stringIndex}-${barre.fret}`);
         });
       }
 
       return keys;
-    } else {
-      return getChordPositionKeys(chordNotes);
     }
-  } else if (chordNotes?.length) {
-    return getChordPositionKeys(chordNotes);
-  } else {
-    return getTriadChordShape();
+    return getChordPositionKeys(chordNotes, visibleFrets);
   }
+  if (chordNotes?.length) {
+    return getChordPositionKeys(chordNotes, visibleFrets);
+  }
+  return getTriadChordShape();
 }

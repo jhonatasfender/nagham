@@ -23,6 +23,8 @@ export function drawBarre(
   if (displayFretIndexForBarre < 0) return;
   barreX = getFretCenterX(displayFretIndexForBarre, VISIBLE_FRETS, fretWidth);
 
+  const barreStrokeWidth = 15;
+
   const barreLine = cells
     .append("line")
     .attr("x1", barreX)
@@ -30,13 +32,14 @@ export function drawBarre(
     .attr("y1", fromStringY)
     .attr("y2", toStringY)
     .attr("stroke", "var(--guitar-barre, #fb923c)")
-    .attr("stroke-width", 6)
-    .attr("opacity", 0.8);
+    .attr("stroke-width", barreStrokeWidth)
+    .attr("stroke-linecap", "round")
+    .attr("opacity", 0.88);
 
   barreLine.lower();
 
   const fretNumberX = barreX;
-  const fretNumberY = fromStringY + 14;
+  const fretNumberY = fromStringY + barreStrokeWidth / 2 + 10;
 
   g.append("text")
     .attr("x", fretNumberX)

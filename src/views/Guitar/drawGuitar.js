@@ -37,12 +37,14 @@ export function drawGuitar(container, data, options = {}) {
   d3.select(container).selectAll("*").remove();
 
   const matrix = getFretboardMatrix();
+  const VISIBLE_FRETS = calculateVisibleFrets();
   const chordKeys = getChordKeys(
     isEditor,
     customPositions,
     chordNotes,
     root,
-    quality
+    quality,
+    VISIBLE_FRETS
   );
 
   const barre = isEditor
@@ -53,10 +55,8 @@ export function drawGuitar(container, data, options = {}) {
         }
       : null
     : root && quality
-      ? getBarreFromVoicing(root, quality) || detectBarre(chordKeys, 12)
+      ? getBarreFromVoicing(root, quality)
       : detectBarre(chordKeys, 12);
-
-  const VISIBLE_FRETS = calculateVisibleFrets();
 
   const { innerWidth, innerHeight, fretWidth, rowHeight, FRETTED_COLUMNS } =
     calculateDimensions(width, height, VISIBLE_FRETS);

@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
-import { getNoteForDisplay } from "../../domain/chord";
 import { cn } from "../../utils/cn";
+import { noteToMidi } from "../../domain/notes";
 import {
   getNoteAtFret,
-  getAllPositionsForNote,
+  getAllPositionsForChordTones,
   TABLE_FRET_COUNT,
 } from "../../domain/guitar";
 
@@ -19,10 +19,8 @@ const DEFAULT_STRING_LABELS = [
 function getChordPositionSet(chordNotes) {
   const set = new Set();
   if (!chordNotes?.length) return set;
-  for (const { name, octave } of chordNotes) {
-    getAllPositionsForNote(name, octave).forEach((p) => {
-      set.add(`${p.stringIndex}-${p.fret}`);
-    });
+  for (const p of getAllPositionsForChordTones(chordNotes)) {
+    set.add(`${p.stringIndex}-${p.fret}`);
   }
   return set;
 }
@@ -39,8 +37,10 @@ export function FretboardTable({ selectedNote, onSelectNote, chordNotes }) {
   function isSelected(stringIndex, fret) {
     if (!selectedNote || selectedNote.octave == null) return false;
     const note = getNoteAtFret(stringIndex, fret);
-    const sharpSelected = getNoteForDisplay(selectedNote.name, false);
-    return note.name === sharpSelected && note.octave === selectedNote.octave;
+    return (
+      noteToMidi(note.name, note.octave) ===
+      noteToMidi(selectedNote.name, selectedNote.octave)
+    );
   }
 
   function isChordCell(stringIndex, fret) {

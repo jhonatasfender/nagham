@@ -1,8 +1,8 @@
-import { getNoteAt, getAllPositionsForNote } from "./guitar";
+import { getNoteAt, getAllPositionsForNote, TABLE_FRET_COUNT } from "./guitar";
 import { getChordVoicing } from "./voicings";
 
 export const STRING_COUNT = 6;
-export const FRET_COUNT = 13;
+export const FRET_COUNT = TABLE_FRET_COUNT + 1;
 
 export const TRIAD_NOTES = [
   { name: "C", octave: 4 },

@@ -26,7 +26,11 @@ function durationToMeiDur(duration, fallbackUnit = 4) {
 function accidToMei(accidental) {
   if (!accidental) return null;
   if (accidental === "#" || accidental === "sharp") return "s";
-  if (accidental === "##" || accidental === "x" || accidental === "double-sharp")
+  if (
+    accidental === "##" ||
+    accidental === "x" ||
+    accidental === "double-sharp"
+  )
     return "ss";
   if (accidental === "b" || accidental === "flat") return "f";
   if (accidental === "bb" || accidental === "double-flat") return "ff";
@@ -53,7 +57,11 @@ function buildMeiFromScore(score) {
   const idToNote = new Map();
   const measureXml = [];
 
-  for (let measureIndex = 0; measureIndex < score.measures.length; measureIndex++) {
+  for (
+    let measureIndex = 0;
+    measureIndex < score.measures.length;
+    measureIndex++
+  ) {
     const events = score.measures[measureIndex]?.staves?.[0] ?? [];
     const layerParts = [];
 
