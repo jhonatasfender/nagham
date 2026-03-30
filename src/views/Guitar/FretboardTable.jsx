@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { getNoteForDisplay } from "../../domain/chord";
+import { cn } from "../../utils/cn";
 import {
   getNoteAtFret,
   getAllPositionsForNote,
@@ -86,13 +87,14 @@ export function FretboardTable({ selectedNote, onSelectNote, chordNotes }) {
                 return (
                   <td
                     key={fret}
-                    className={`border border-zinc-600 px-1 py-1 ${
+                    className={cn(
+                      "cursor-pointer border border-zinc-600 px-1 py-1 transition-colors",
                       selected
                         ? "bg-amber-500/30 text-amber-100"
                         : chord
                           ? "bg-amber-500/20 text-amber-200"
                           : "bg-zinc-800/50 text-zinc-200 hover:bg-zinc-700/50"
-                    } cursor-pointer transition-colors`}
+                    )}
                     onClick={() => handleCellClick(stringIndex, fret)}
                   >
                     {note.name}

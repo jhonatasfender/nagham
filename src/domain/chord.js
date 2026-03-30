@@ -20,7 +20,9 @@ const QUALITY_TO_TONAL = {
   add9: "add9",
   9: "9",
   maj9: "maj9",
+  "9+": "7#9",
   m9: "m9",
+  m5: "m",
   11: "11",
   13: "13",
 };
@@ -65,7 +67,7 @@ export function getChordNotes(root, quality, options = {}) {
   let noteStrings = [];
 
   if (bass && bass !== root) {
-    const symbol = `${root}${qualityToSuffix(quality)}/${bass}`;
+    const symbol = `${root}${qualityToChordSymbolSuffix(quality)}/${bass}`;
     const chordInfo = chordGet(symbol);
     if (chordInfo.empty) return [];
     const pitchClasses = chordInfo.notes;
@@ -86,8 +88,16 @@ export function getChordNotes(root, quality, options = {}) {
     });
 }
 
-function qualityToSuffix(quality) {
+function qualityToChordSymbolSuffix(quality) {
   if (quality === "Maj") return "";
+  if (quality === "m5") return "m";
+  if (quality === "9+") return "7#9";
+  return quality;
+}
+
+function qualityToDisplaySuffix(quality) {
+  if (quality === "Maj") return "";
+  if (quality === "maj9") return "M9";
   return quality;
 }
 
@@ -113,12 +123,30 @@ export function getNoteForDisplay(name, useFlats) {
   return toCanonicalName(name, noteNames);
 }
 
+const EXTENSION_COMPOSABLE_MAP = {
+  5: { Maj: "5", m: "m5" },
+  6: { Maj: "6", m: "m6" },
+  7: { Maj: "7", m: "m7" },
+  9: { Maj: "9", m: "m9" },
+};
+
+export const EXTENSION_COMPOSABLE_WITH_TRIAD = new Set(
+  Object.keys(EXTENSION_COMPOSABLE_MAP)
+);
+
+export function effectiveChordQuality({ triad, extension }) {
+  if (extension == null) return triad;
+  const row = EXTENSION_COMPOSABLE_MAP[extension];
+  if (row) return row[triad];
+  return extension;
+}
+
 export function getChordLabel(root, quality, useFlats, bass = null) {
   const rootDisplay = toCanonicalName(
     root,
     useFlats ? NOTE_NAMES_FLATS : NOTE_NAMES
   );
-  const suffix = qualityToSuffix(quality);
+  const suffix = qualityToDisplaySuffix(quality);
   const main = suffix ? `${rootDisplay}${suffix}` : rootDisplay;
   if (bass && bass !== root) {
     const bassDisplay = toCanonicalName(

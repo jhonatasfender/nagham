@@ -16,6 +16,7 @@ import CSharpDefault from "./CSharp.js";
 const CSharp = CSharpDefault;
 import DSharpDefault from "./DSharp.js";
 const DSharp = DSharpDefault;
+import { resolveVoicingQuality } from "../voicingQualityAlias.js";
 
 const VOICINGS_BY_ROOT = {
   C,
@@ -33,7 +34,7 @@ export function getPianoChordVoicing(root, quality, positionIndex = 0) {
   const rootVoicings = VOICINGS_BY_ROOT[root];
   if (!rootVoicings) return null;
 
-  const voicing = rootVoicings[quality];
+  const voicing = rootVoicings[resolveVoicingQuality(quality)];
   if (!voicing) return null;
 
   if (Array.isArray(voicing[0]) && Array.isArray(voicing[0][0])) {
@@ -55,7 +56,7 @@ export function getPianoChordVoicingCount(root, quality) {
   const rootVoicings = VOICINGS_BY_ROOT[root];
   if (!rootVoicings) return 0;
 
-  const voicing = rootVoicings[quality];
+  const voicing = rootVoicings[resolveVoicingQuality(quality)];
   if (!voicing) return 0;
 
   if (Array.isArray(voicing[0]) && Array.isArray(voicing[0][0])) {

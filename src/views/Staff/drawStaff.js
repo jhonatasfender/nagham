@@ -1,253 +1,196 @@
-import * as d3 from "d3";
+import createVerovioModule from "verovio/wasm";
+import { VerovioToolkit } from "verovio/esm";
 import { noteToMidi, midiToNote } from "../../domain/notes";
-import { createSampleMatrix, iterateNotes } from "../../domain/notationMatrix";
-import {
-  trebleMidiToY,
-  trebleYToMidi,
-  midiToTreblePosition,
-  treblePositionToY,
-  treblePositionToMidi,
-} from "../../domain/staffPositions";
+import { createSampleMatrix } from "../../domain/notationMatrix";
 
-const PADDING = { top: 60, right: 24, bottom: 60, left: 24 };
-const CLEF_WIDTH = 56;
-const KEY_SIG_WIDTH = 32;
-const BAR_LINE_GAP = 8;
-const NOTE_HEAD_R = 11;
-const NOTE_HEAD_W = 22;
-const STEM_HEIGHT = 56;
-const STAFF_HEIGHT = 120;
-const LEDGER_LINE_WIDTH = 36;
+let toolkitPromise;
 
-export function drawStaff(container, data, options = {}) {
+function getToolkit() {
+  if (!toolkitPromise) {
+    toolkitPromise = createVerovioModule().then(
+      (verovioModule) => new VerovioToolkit(verovioModule)
+    );
+  }
+  return toolkitPromise;
+}
+
+function durationToMeiDur(duration, fallbackUnit = 4) {
+  if (duration === "whole") return "1";
+  if (duration === "half") return "2";
+  if (duration === "quarter") return "4";
+  if (duration === "eighth") return "8";
+  if (duration === "sixteenth") return "16";
+  return String(fallbackUnit);
+}
+
+function accidToMei(accidental) {
+  if (!accidental) return null;
+  if (accidental === "#" || accidental === "sharp") return "s";
+  if (accidental === "##" || accidental === "x" || accidental === "double-sharp")
+    return "ss";
+  if (accidental === "b" || accidental === "flat") return "f";
+  if (accidental === "bb" || accidental === "double-flat") return "ff";
+  if (accidental === "n" || accidental === "natural" || accidental === "♮")
+    return "n";
+  return null;
+}
+
+function midiToMeiPitch(midi, explicitAccidental) {
+  const note = midiToNote(midi);
+  const pname = note.name[0].toLowerCase();
+  const accidentalFromName = note.name.includes("#")
+    ? "s"
+    : note.name.includes("b")
+      ? "f"
+      : null;
+  const accid = accidToMei(explicitAccidental) ?? accidentalFromName;
+  return { pname, oct: String(note.octave), accid };
+}
+
+function buildMeiFromScore(score) {
+  const meterCount = score?.timeSignature?.count ?? 4;
+  const meterUnit = score?.timeSignature?.unit ?? 4;
+  const idToNote = new Map();
+  const measureXml = [];
+
+  for (let measureIndex = 0; measureIndex < score.measures.length; measureIndex++) {
+    const events = score.measures[measureIndex]?.staves?.[0] ?? [];
+    const layerParts = [];
+
+    for (let beatIndex = 0; beatIndex < meterCount; beatIndex++) {
+      const ev = events[beatIndex];
+      if (!ev || !ev.notes?.length) {
+        layerParts.push(`<rest dur="${meterUnit}"/>`);
+        continue;
+      }
+
+      const dur = durationToMeiDur(ev.notes[0]?.duration, meterUnit);
+      if (ev.notes.length === 1) {
+        const n = ev.notes[0];
+        const id = `n-${measureIndex}-${beatIndex}-0`;
+        const { pname, oct, accid } = midiToMeiPitch(n.midi, n.accidental);
+        const accidAttr = accid ? ` accid="${accid}"` : "";
+        layerParts.push(
+          `<note xml:id="${id}" pname="${pname}" oct="${oct}" dur="${dur}"${accidAttr}/>`
+        );
+        idToNote.set(id, midiToNote(n.midi));
+      } else {
+        const notesXml = ev.notes
+          .map((n, noteIndex) => {
+            const id = `n-${measureIndex}-${beatIndex}-${noteIndex}`;
+            const { pname, oct, accid } = midiToMeiPitch(n.midi, n.accidental);
+            const accidAttr = accid ? ` accid="${accid}"` : "";
+            idToNote.set(id, midiToNote(n.midi));
+            return `<note xml:id="${id}" pname="${pname}" oct="${oct}"${accidAttr}/>`;
+          })
+          .join("");
+        layerParts.push(`<chord dur="${dur}">${notesXml}</chord>`);
+      }
+    }
+
+    measureXml.push(
+      `<measure n="${measureIndex + 1}"><staff n="1"><layer n="1">${layerParts.join("")}</layer></staff></measure>`
+    );
+  }
+
+  const mei = `<?xml version="1.0" encoding="UTF-8"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="4.0.1">
+  <music>
+    <body>
+      <mdiv>
+        <score>
+          <scoreDef meter.count="${meterCount}" meter.unit="${meterUnit}">
+            <staffGrp>
+              <staffDef n="1" lines="5" clef.shape="G" clef.line="2"/>
+            </staffGrp>
+          </scoreDef>
+          <section>
+            ${measureXml.join("")}
+          </section>
+        </score>
+      </mdiv>
+    </body>
+  </music>
+</mei>`;
+
+  return { mei, idToNote };
+}
+
+const VEROVIO_SVG_CSS = `
+svg.definition-scale {
+  color: inherit !important;
+}
+defs path {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+.notehead, .notehead *, .stem, .stem *, .ledgerLines, .ledgerLines *,
+.rest, .rest *, .clef, .clef *, .barLine, .barLine *, .meterSig, .meterSig * {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+.rest, .rest * {
+  display: none !important;
+}
+.pgHead.autogenerated {
+  display: none !important;
+}
+`;
+
+export async function drawStaff(container, data, options = {}) {
   if (!container) return;
 
   const { selectedNote, scoreMatrix } = data;
   const score = scoreMatrix ?? createSampleMatrix();
-  const { onSelectNote, width = 864, height = 360 } = options;
-
-  d3.select(container).selectAll("*").remove();
-
-  const innerWidth = width - PADDING.left - PADDING.right;
-  const staffTop = PADDING.top;
-  const staffBottom = staffTop + STAFF_HEIGHT;
-  const getY = (midi) => trebleMidiToY(midi, staffTop, staffBottom);
-
-  const measureCount = score.measures.length;
-  const beatsPerMeasure = score.timeSignature?.count ?? 4;
-  const measureWidth = innerWidth / measureCount;
-  const beatWidth = measureWidth / beatsPerMeasure;
-
-  const svg = d3
-    .select(container)
-    .append("svg")
-    .attr("viewBox", [0, 0, width, height])
-    .attr("width", "100%")
-    .attr("height", "100%")
-    .attr("preserveAspectRatio", "xMidYMid meet");
-
-  const staffLeft =
-    PADDING.left +
-    CLEF_WIDTH +
-    (score.keySignature?.sharps ? KEY_SIG_WIDTH : 0);
-  const right = PADDING.left + innerWidth;
-  const rectX = staffLeft;
-  const rectY = PADDING.top;
-  const rectWidth = Math.min(right - staffLeft, width - staffLeft);
-  const rectHeight = Math.min(
-    height - PADDING.top - PADDING.bottom,
-    height - rectY
-  );
-
-  svg
-    .append("rect")
-    .attr("x", rectX)
-    .attr("y", rectY)
-    .attr("width", rectWidth)
-    .attr("height", rectHeight)
-    .attr("fill", "transparent")
-    .style("cursor", "pointer")
-    .on("click", function (event) {
-      const [, py] = d3.pointer(event, this);
-      const midi = Math.max(
-        0,
-        Math.min(127, trebleYToMidi(py, staffTop, staffBottom))
-      );
-      const note = midiToNote(midi);
-      onSelectNote?.(note);
-    });
-
-  const gLines = svg
-    .append("g")
-    .attr("class", "staff-lines")
-    .style("pointer-events", "none");
-  for (let pos = 0; pos <= 8; pos += 2) {
-    const y = treblePositionToY(pos, staffTop, staffBottom);
-    gLines
-      .append("line")
-      .attr("x1", staffLeft)
-      .attr("x2", right)
-      .attr("y1", y)
-      .attr("y2", y)
-      .attr("stroke", "currentColor")
-      .attr("stroke-width", 2);
-  }
-
-  const clefLeft = PADDING.left + 8;
-  const gLineY = treblePositionToY(2, staffTop, staffBottom);
-  const clefFontSize = STAFF_HEIGHT * 1.1;
-  svg
-    .append("text")
-    .attr("x", clefLeft)
-    .attr("y", gLineY + clefFontSize * 0.15)
-    .attr("font-size", clefFontSize)
-    .attr("fill", "currentColor")
-    .attr("text-anchor", "start")
-    .attr("dominant-baseline", "middle")
-    .style("pointer-events", "none")
-    .text("𝄞");
-
-  if (score.keySignature?.sharps > 0) {
-    const sharpX = PADDING.left + CLEF_WIDTH + 10;
-    const f5Y = getY(77);
-    svg
-      .append("text")
-      .attr("x", sharpX)
-      .attr("y", f5Y)
-      .attr("font-size", 36)
-      .attr("fill", "currentColor")
-      .style("pointer-events", "none")
-      .text("♯");
-  }
-
-  for (let i = 0; i <= measureCount; i++) {
-    const x = staffLeft + i * measureWidth;
-    svg
-      .append("line")
-      .attr("x1", x)
-      .attr("x2", x)
-      .attr("y1", staffTop - BAR_LINE_GAP)
-      .attr("y2", staffBottom + BAR_LINE_GAP)
-      .attr("stroke", "currentColor")
-      .attr("stroke-width", i === 0 ? 3 : 2)
-      .style("pointer-events", "none");
-  }
-
+  const { onSelectNote, width = 800, scale = 64 } = options;
   const selectedMidi =
     selectedNote && selectedNote.octave != null
       ? noteToMidi(selectedNote.name, selectedNote.octave)
       : null;
 
-  const chordGroups = new Map();
-  for (const { measureIndex, staffId, beatIndex, note } of iterateNotes(
-    score
-  )) {
-    if (staffId !== 0) continue;
-    const key = `${measureIndex}-${beatIndex}`;
-    if (!chordGroups.has(key)) chordGroups.set(key, []);
-    chordGroups.get(key).push({ measureIndex, beatIndex, note });
-  }
+  const toolkit = await getToolkit();
+  const { mei, idToNote } = buildMeiFromScore(score);
 
-  chordGroups.forEach((notes) => {
-    notes.sort((a, b) => a.note.midi - b.note.midi);
-    const { measureIndex, beatIndex } = notes[0];
-    const xCenter =
-      staffLeft + measureIndex * measureWidth + (beatIndex + 0.5) * beatWidth;
-    const ys = notes.map((n) => getY(n.note.midi));
-    const yMin = Math.min(...ys);
-    const stemX = xCenter + NOTE_HEAD_W / 2;
-    const stemY1 = yMin;
-    const stemY2 = yMin + STEM_HEIGHT;
+  toolkit.setOptions({
+    pageWidth: width,
+    scale,
+    adjustPageHeight: true,
+    pageMarginTop: 4,
+    pageMarginBottom: 4,
+    pageMarginLeft: 6,
+    pageMarginRight: 6,
+    breaks: "line",
+    svgViewBox: true,
+    svgCss: VEROVIO_SVG_CSS,
+  });
+  toolkit.loadData(mei);
+  const rawSvg = toolkit.renderToSVG(1, false);
+  container.innerHTML = rawSvg;
 
-    const allMidis = notes.map((n) => n.note.midi);
-    const ledgerMidis = allMidis.filter((m) => {
-      const pos = midiToTreblePosition(m);
-      return pos < 0 || pos > 8;
-    });
-    const ledgerYs = [...new Set(ledgerMidis.map(getY))];
-    ledgerYs.forEach((ledgerY) => {
-      svg
-        .append("line")
-        .attr("class", "ledger-line")
-        .attr("x1", xCenter - NOTE_HEAD_W / 2 - LEDGER_LINE_WIDTH / 2)
-        .attr("x2", xCenter + NOTE_HEAD_W / 2 + LEDGER_LINE_WIDTH / 2)
-        .attr("y1", ledgerY)
-        .attr("y2", ledgerY)
-        .attr("stroke", "currentColor")
-        .attr("stroke-width", 1.5)
-        .style("pointer-events", "none");
-    });
+  const svg = container.querySelector("svg");
+  if (!svg) return;
+  svg.classList.add("notation", "notation--verovio");
+  svg.setAttribute("width", "100%");
+  svg.removeAttribute("height");
+  svg.style.color = "var(--notation-ink)";
+  svg.style.background = "var(--notation-paper)";
+  svg.style.borderRadius = "0.5rem";
 
-    const gChord = svg
-      .append("g")
-      .attr("class", "staff-chord")
-      .style("pointer-events", "none");
-    gChord
-      .append("line")
-      .attr("x1", stemX)
-      .attr("x2", stemX)
-      .attr("y1", stemY1)
-      .attr("y2", stemY2)
-      .attr("stroke", "currentColor")
-      .attr("stroke-width", 2);
-
-    notes.forEach(({ note }) => {
-      const midi = note.midi;
-      const y = getY(midi);
-      const isSelected = selectedMidi !== null && midi === selectedMidi;
-
-      const position = midiToTreblePosition(midi);
-      const expectedMidi = treblePositionToMidi(position);
-      const isAltered = midi !== expectedMidi;
-      const accidental =
-        note.accidental != null && note.accidental !== ""
-          ? note.accidental
-          : isAltered
-            ? midi > expectedMidi
-              ? "♯"
-              : "♭"
-            : null;
-
-      const g = svg
-        .append("g")
-        .attr("class", "staff-note")
-        .style("cursor", "pointer");
-
-      if (accidental) {
-        g.append("text")
-          .attr("x", xCenter - NOTE_HEAD_W / 2 - 12)
-          .attr("y", y + 8)
-          .attr("font-size", 28)
-          .attr("fill", "currentColor")
-          .attr("text-anchor", "end")
-          .text(
-            accidental === "sharp" || accidental === "#"
-              ? "♯"
-              : accidental === "flat" || accidental === "b"
-                ? "♭"
-                : accidental
-          );
+  idToNote.forEach((noteData, id) => {
+    const el = container.querySelector(`#${id}`);
+    if (!el) return;
+    el.classList.add("staff-note--interactive");
+    if (selectedMidi !== null) {
+      const midi = noteToMidi(noteData.name, noteData.octave);
+      if (midi === selectedMidi) {
+        el.classList.add("staff-note--selected");
       }
-
-      g.append("ellipse")
-        .attr("cx", xCenter)
-        .attr("cy", y)
-        .attr("rx", NOTE_HEAD_W / 2)
-        .attr("ry", NOTE_HEAD_R)
-        .attr(
-          "fill",
-          isSelected ? "var(--staff-note-fill, #fbbf24)" : "currentColor"
-        )
-        .attr(
-          "stroke",
-          isSelected ? "var(--staff-note-stroke, #b45309)" : "currentColor"
-        )
-        .attr("stroke-width", 2);
-
-      g.on("click", () => {
-        const { name, octave } = midiToNote(midi);
-        onSelectNote?.({ name, octave });
-      });
+    }
+    if (!onSelectNote) return;
+    el.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      onSelectNote(noteData);
     });
   });
 }

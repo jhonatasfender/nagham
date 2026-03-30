@@ -10,7 +10,8 @@
   },
   "header": {
     "home": "Inicio",
-    "about": "Acerca de"
+    "about": "Acerca de",
+    "scales": "Escalas"
   },
   "home": {
     "title": "Visualizador de Notas y Acordes",
@@ -55,6 +56,45 @@
     "verse": "Alabad al Señor con arpa; cantadle con salterio y decacordio.",
     "verse.reference": "Salmos 33:2"
   },
+  "scales": {
+    "title": "Escalas musicales",
+    "intro": "Elige el tipo de escala y cómo escribir las notas (sostenidos o bemoles). La tabla recorre las 12 tónicas: notas de la escala, patrón de intervalos (T = tono, S = semitono; otros saltos se etiquetan explícitamente) y, en otra columna, tríadas grado a grado cuando el apilamiento en terceras tenga sentido. En escalas de otras tradiciones o con afinación variable, lo mostrado puede ser solo una aproximación en 12-TET o texto de referencia; los avisos aparecen junto a la tabla cuando corresponda.",
+    "scaleLabels": {
+      "major-ionian": "Mayor (Jónica)",
+      "natural-minor": "Menor natural",
+      "harmonic-minor": "Menor armónica",
+      "melodic-minor": "Menor melódica",
+      "dorian": "Dórica",
+      "phrygian": "Frigia",
+      "lydian": "Lidia",
+      "mixolydian": "Mixolidia",
+      "locrian": "Locria",
+      "major-pentatonic": "Pentatónica mayor",
+      "minor-pentatonic": "Pentatónica menor",
+      "blues": "Blues",
+      "chinese-pentatonic": "Pentatónica china (gōng–shāng–jué–zhǐ–yǔ)",
+      "hirajoshi": "Hirajōshi (Japón)",
+      "hungarian-minor": "Menor húngara / doble armónica",
+      "arabic-maqam": "Maqām árabe (aprox. 12-TET)",
+      "thaat-raga-framework": "Thāṭ / rāga (marco melódico — India)",
+      "pelog": "Pelog (gamelán)",
+      "slendro": "Slendro (gamelán)"
+    },
+    "table": {
+      "scaleType": "Tipo de escala",
+      "sharps": "Sostenidos (#)",
+      "flats": "Bemoles (b)",
+      "stepPattern": "Dibujo de intervalos",
+      "approximationWarning": "Esta escala se muestra como aproximación en 12-TET. En prácticas tradicionales, la afinación y la entonación pueden variar.",
+      "conceptOnly": "Esta entrada representa un sistema o práctica musical. La tabla completa de notas se añadirá con contexto teórico específico.",
+      "noFixedTable": "Sin tabla fija para este tipo por ahora.",
+      "root": "Tónica",
+      "notes": "Notas",
+      "triads": "Acordes por grado",
+      "triadsNaturalMinorHybridHint": "Menor natural: las tríadas siguen sobre todo la eolia (p. ej. III mayor — D♯ o Mi♭ mayor, no aumentado). Solo en el II el quinto grado toma la 6ª de la menor melódica ascendente, para un acorde menor (Dm) en lugar de disminuido (D°), como en muchos métodos de armonía.",
+      "triadsHeptatonicOnly": "La columna de acordos solo aparece en escalas de 7 grados: apilar cada dos pasos no equivale a tríadas diatónicas clásicas en pentatónicas o blues."
+    }
+  },
   "chordBuilder": {
     "title": "Montar acorde",
     "notation": "Notación",
@@ -62,13 +102,20 @@
     "flats": "Bemoles (b)",
     "root": "Tónica",
     "quality": "Cualidad",
+    "qualityMajorMinor": "Mayor o menor",
+    "triadMajor": "Mayor",
+    "triadMinor": "Menor",
     "bassOptional": "Bajo (slash) — opcional",
     "chordLabel": "Acorde: ",
     "copy": "Copiar",
     "copied": "¡Copiado!",
     "formationTitle": "Formación del acorde",
     "formationDescription": "Notas que forman el acorde (grave → agudo), para visualizar en la partitura, piano y guitarra abajo.",
-    "degree": "grado"
+    "degree": "grado",
+    "qualityHintFive": "Con Mayor: power chord (solo tónica y quinta). Con Menor: cifra “m5” (mismas notas que “m”, notación alternativa).",
+    "qualityHint679": "Con Mayor: 6, 7 o 9 mayor/dominante. Con Menor: los mismos botones dan m6, m7 o m9 en la cifra.",
+    "qualityHintM9": "Novena mayor sobre séptima mayor — cifra M9 (no confundir con novena aumentada).",
+    "qualityHint9Plus": "Séptima de dominante con novena aumentada (#9) — cifra 9+."
   },
   "fretboard": {
     "string": "Cuerda",
@@ -97,6 +144,10 @@
       "chordBuilder": {
         "title": "Montar acorde",
         "description": "Arma acordes en el mástil: tónica, calidad y bajo; ve la formación en la partitura, el piano y los diagramas de acordes."
+      },
+      "scales": {
+        "title": "Escalas musicales",
+        "description": "Estudio de escalas y modos en Nagham: tablas por tipo con todos los tonos (natural y sostenidos). En evolución."
       }
     }
   }

@@ -10,7 +10,8 @@
   },
   "header": {
     "home": "Home",
-    "about": "About"
+    "about": "About",
+    "scales": "Scales"
   },
   "home": {
     "title": "Notes and Chords Viewer",
@@ -55,6 +56,45 @@
     "verse": "Praise the Lord with the harp; make music to him on the ten-stringed lyre.",
     "verse.reference": "Psalms 33:2"
   },
+  "scales": {
+    "title": "Musical scales",
+    "intro": "Choose a scale type and how notes are spelled (sharps or flats). The table walks through all twelve roots: scale tones, the step pattern (T = whole step, S = half step; larger gaps are labeled explicitly), and—where tertian stacking makes sense—triads on each degree. For some world traditions or variable tuning, what you see may be a 12-TET approximation or reference-only text; notices appear next to the table when that applies.",
+    "scaleLabels": {
+      "major-ionian": "Major (Ionian)",
+      "natural-minor": "Natural minor",
+      "harmonic-minor": "Harmonic minor",
+      "melodic-minor": "Melodic minor",
+      "dorian": "Dorian",
+      "phrygian": "Phrygian",
+      "lydian": "Lydian",
+      "mixolydian": "Mixolydian",
+      "locrian": "Locrian",
+      "major-pentatonic": "Major pentatonic",
+      "minor-pentatonic": "Minor pentatonic",
+      "blues": "Blues",
+      "chinese-pentatonic": "Chinese pentatonic (gong–shang–jue–zhi–yu)",
+      "hirajoshi": "Hirajoshi (Japan)",
+      "hungarian-minor": "Hungarian minor / double harmonic",
+      "arabic-maqam": "Arabic maqām (12-TET approximation)",
+      "thaat-raga-framework": "Thāṭ / rāga melodic framework (India)",
+      "pelog": "Pelog (gamelan)",
+      "slendro": "Slendro (gamelan)"
+    },
+    "table": {
+      "scaleType": "Scale type",
+      "sharps": "Sharps (#)",
+      "flats": "Flats (b)",
+      "stepPattern": "Interval drawing",
+      "approximationWarning": "This scale is displayed as a 12-TET approximation. In traditional practice, tuning and intonation may vary.",
+      "conceptOnly": "This entry represents a musical system or practice. A complete note table will be added with specific theory context.",
+      "noFixedTable": "No fixed note table for this type yet.",
+      "root": "Root",
+      "notes": "Notes",
+      "triads": "Chords by degree",
+      "triadsNaturalMinorHybridHint": "Natural minor: triads are mostly Aeolian (so ♭III is major—e.g. D♯ or E♭ major, not augmented). Only on ii does the fifth come from ascending melodic minor (raised 6th), giving a minor triad (Dm) instead of diminished (D°), matching common harmony teaching.",
+      "triadsHeptatonicOnly": "Chord column only shows for 7-note scales: stacking every other scale step is not the same as classical diatonic triads on pentatonic or blues collections."
+    }
+  },
   "chordBuilder": {
     "title": "Build chord",
     "notation": "Notation",
@@ -62,13 +102,20 @@
     "flats": "Flats (b)",
     "root": "Root",
     "quality": "Quality",
+    "qualityMajorMinor": "Major or minor",
+    "triadMajor": "Major",
+    "triadMinor": "Minor",
     "bassOptional": "Bass (slash) — optional",
     "chordLabel": "Chord: ",
     "copy": "Copy",
     "copied": "Copied!",
     "formationTitle": "Chord formation",
     "formationDescription": "Notes that form the chord (low to high), to display on the staff, piano and guitar below.",
-    "degree": "degree"
+    "degree": "degree",
+    "qualityHintFive": "With Major: power chord (root and fifth only). With Minor: “m5” symbol (same notes as “m”, alternate notation).",
+    "qualityHint679": "With Major: sixth (major 6), dominant 7, or dominant 9. With Minor: the same buttons produce m6, m7, or m9 in the symbol.",
+    "qualityHintM9": "Major ninth over major seventh — M9 symbol (not an augmented ninth).",
+    "qualityHint9Plus": "Dominant seventh with augmented ninth (#9) — 9+ symbol."
   },
   "fretboard": {
     "string": "String",
@@ -97,6 +144,10 @@
       "chordBuilder": {
         "title": "Build chord",
         "description": "Build chords on the guitar fretboard with root, quality, and bass; see voicings on the staff, piano, and fretboard diagrams."
+      },
+      "scales": {
+        "title": "Musical scales",
+        "description": "Study scales and modes in Nagham: per-type tables for every key (natural and sharp spellings). Work in progress."
       }
     }
   }

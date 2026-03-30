@@ -1,5 +1,18 @@
 import { useState, useMemo } from "react";
+import { cn } from "../utils/cn";
 import { GuitarView } from "../views/Guitar/GuitarView";
+
+const barreFieldClass = cn(
+  "w-full rounded-md border border-zinc-600 bg-zinc-900 px-3 py-2 text-sm text-zinc-100",
+  "focus:outline-none focus:ring-2 focus:ring-amber-500/50",
+  "disabled:cursor-not-allowed disabled:opacity-50"
+);
+
+const clearPositionsButtonClass = cn(
+  "rounded-md px-4 py-2 font-medium text-zinc-100 transition-colors",
+  "bg-zinc-700 hover:bg-zinc-600",
+  "disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-500"
+);
 
 export function ChordBuilder() {
   const [currentPositions, setCurrentPositions] = useState([]);
@@ -186,7 +199,7 @@ export function ChordBuilder() {
                     )
                   }
                   disabled={!hasBarre}
-                  className="w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={barreFieldClass}
                 />
               </div>
               <div>
@@ -201,7 +214,7 @@ export function ChordBuilder() {
                     )
                   }
                   disabled={!hasBarre}
-                  className="w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={barreFieldClass}
                 >
                   <option value="">Automático</option>
                   <option value="5">Mi grave (6ª corda)</option>
@@ -244,7 +257,10 @@ export function ChordBuilder() {
                     code += `\n  ],`;
                     navigator.clipboard.writeText(code);
                   }}
-                  className="absolute top-2 right-2 px-2 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 rounded text-xs font-medium transition-colors"
+                  className={cn(
+                    "absolute top-2 right-2 rounded px-2 py-1 text-xs font-medium text-amber-400 transition-colors",
+                    "bg-amber-500/20 hover:bg-amber-500/30"
+                  )}
                 >
                   Copiar
                 </button>
@@ -288,7 +304,7 @@ ${positions.map((pos) => `    [${pos[0]}, ${pos[1]}],`).join("\n")}`;
               type="button"
               onClick={handleClearPositions}
               disabled={filteredPositions.length === 0}
-              className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 disabled:bg-zinc-700 disabled:text-zinc-500 disabled:cursor-not-allowed text-zinc-100 font-medium rounded-md transition-colors"
+              className={clearPositionsButtonClass}
             >
               Limpar Posições
             </button>

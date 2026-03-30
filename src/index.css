@@ -4,8 +4,43 @@ html {
   @apply bg-zinc-900 text-zinc-100;
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #18181b;
+}
+
 body {
   @apply m-0 min-h-screen antialiased;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #18181b;
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 9999px;
+  border: 2px solid #18181b;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+  border-color: #18181b;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: #b45309;
+}
+
+*::-webkit-scrollbar-corner {
+  background: #18181b;
 }
 
 #root {
@@ -16,6 +51,50 @@ body {
   color: #e4e4e7;
   --staff-note-fill: #fbbf24;
   --staff-note-stroke: #b45309;
+  --notation-paper: rgba(39, 39, 42, 0.55);
+  --notation-ink: #e4e4e7;
+}
+
+.staff-view svg.notation {
+  color: var(--notation-ink);
+}
+
+.staff-view .notation--verovio {
+  display: block;
+  color: var(--notation-ink);
+  background: var(--notation-paper);
+}
+
+.staff-view .notation--verovio .staff-note--interactive {
+  cursor: pointer;
+}
+
+.staff-view .notation--verovio .notehead,
+.staff-view .notation--verovio .notehead *,
+.staff-view .notation--verovio .stem,
+.staff-view .notation--verovio .stem *,
+.staff-view .notation--verovio .ledgerLines,
+.staff-view .notation--verovio .ledgerLines *,
+.staff-view .notation--verovio .rest,
+.staff-view .notation--verovio .rest *,
+.staff-view .notation--verovio .clef,
+.staff-view .notation--verovio .clef *,
+.staff-view .notation--verovio .barLine,
+.staff-view .notation--verovio .barLine *,
+.staff-view .notation--verovio .meterSig,
+.staff-view .notation--verovio .meterSig * {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+.staff-view .notation--verovio .stem,
+.staff-view .notation--verovio .stem * {
+  display: none !important;
+}
+
+.staff-view .notation--verovio .staff-note--selected * {
+  fill: currentColor !important;
+  stroke: currentColor !important;
 }
 
 .piano-view {

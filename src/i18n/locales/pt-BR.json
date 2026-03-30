@@ -10,7 +10,8 @@
   },
   "header": {
     "home": "Início",
-    "about": "Sobre"
+    "about": "Sobre",
+    "scales": "Escalas"
   },
   "home": {
     "title": "Visualizador de Notas e Acordes",
@@ -55,6 +56,45 @@
     "verse": "Louvem ao Senhor com harpa; cantem-lhe louvores com saltério de dez cordas.",
     "verse.reference": "Salmos 33:2"
   },
+  "scales": {
+    "title": "Escalas musicais",
+    "intro": "Escolha o tipo de escala e a escrita das notas (sustenidos ou bemóis). A tabela percorre as 12 tônicas: notas da escala, desenho de intervalos (T = tom, S = semitom; outros passos aparecem com rótulo explícito) e, noutra coluna, tríades grau a grau quando a montagem em terças faz sentido. Em escalas de outras tradições ou com afinação variável, o resultado pode ser só uma aproximação em 12-TET ou texto de referência — os avisos surgem junto da tabela quando isso se aplica.",
+    "scaleLabels": {
+      "major-ionian": "Maior (Jônia)",
+      "natural-minor": "Menor natural",
+      "harmonic-minor": "Menor harmônica",
+      "melodic-minor": "Menor melódica",
+      "dorian": "Dórica",
+      "phrygian": "Frígia",
+      "lydian": "Lídia",
+      "mixolydian": "Mixolídia",
+      "locrian": "Lócria",
+      "major-pentatonic": "Pentatônica maior",
+      "minor-pentatonic": "Pentatônica menor",
+      "blues": "Blues",
+      "chinese-pentatonic": "Pentatônica chinesa (gōng–shāng–jué–zhǐ–yǔ)",
+      "hirajoshi": "Hirajōshi (Japão)",
+      "hungarian-minor": "Menor húngara / duplo harmônico",
+      "arabic-maqam": "Maqām árabe (aprox. 12-TET)",
+      "thaat-raga-framework": "Thāṭ / rāga (quadro melódico — Índia)",
+      "pelog": "Pelog (gamelão)",
+      "slendro": "Slendro (gamelão)"
+    },
+    "table": {
+      "scaleType": "Tipo de escala",
+      "sharps": "Sustenidos (#)",
+      "flats": "Bemóis (b)",
+      "stepPattern": "Desenho de intervalos",
+      "approximationWarning": "Esta escala está mostrada como aproximação em 12-TET. Em práticas tradicionais, a afinação e a entonação podem variar.",
+      "conceptOnly": "Esta entrada representa um sistema ou prática musical. A tabela completa de notas será adicionada com contexto teórico específico.",
+      "noFixedTable": "Sem tabela fixa para este tipo neste momento.",
+      "root": "Tônica",
+      "notes": "Notas",
+      "triads": "Acordes nos graus",
+      "triadsNaturalMinorHybridHint": "Menor natural: as tríades seguem sobretudo a eólia (ex.: III maior — D♯ ou E♭ maior, não aumentado). Só no II grau a quinta vem da menor melódica ascendente (6ª maior), para formar acorde menor (Dm) em vez de diminuto (D°), como em muitos métodos de harmonia.",
+      "triadsHeptatonicOnly": "A coluna de acordos só aparece para escalas de 7 graus: a regra (terça + quinta a cada dois passos na escala) não corresponde a tríades diatónicas clássicas em pentatónicas ou blues."
+    }
+  },
   "chordBuilder": {
     "title": "Montar acorde",
     "notation": "Notação",
@@ -62,13 +102,20 @@
     "flats": "Bemóis (b)",
     "root": "Tônica",
     "quality": "Qualidade",
+    "qualityMajorMinor": "Maior ou menor",
+    "triadMajor": "Maior",
+    "triadMinor": "Menor",
     "bassOptional": "Baixo (slash) — opcional",
     "chordLabel": "Acorde: ",
     "copy": "Copiar",
     "copied": "Copiado!",
     "formationTitle": "Formação do acorde",
     "formationDescription": "Notas que formam o acorde (grave → agudo), para visualizar na partitura, piano e violão abaixo.",
-    "degree": "grau"
+    "degree": "grau",
+    "qualityHintFive": "Com Maior: power chord (só tônica e quinta). Com Menor: cifra “m5” (mesmas notas que “m”, notação alternativa).",
+    "qualityHint679": "Com Maior: 6, 7 ou 9 maiores/dominantes. Com Menor: mesmos botões geram m6, m7 ou m9 na cifra.",
+    "qualityHintM9": "Nona maior com sétima maior — cifra M9 (não confundir com nona aumentada).",
+    "qualityHint9Plus": "Sétima dominante com nona aumentada (#9) — cifra 9+."
   },
   "fretboard": {
     "string": "Corda",
@@ -97,6 +144,10 @@
       "chordBuilder": {
         "title": "Montar acorde",
         "description": "Monte acordes no braço do violão: tônica, qualidade e baixo; veja a formação na partitura, no piano e no diagrama de acordes."
+      },
+      "scales": {
+        "title": "Escalas musicais",
+        "description": "Estudo de escalas e modos no Nagham: tabela por tipo com todos os tons (natural e sustenidos). Em evolução."
       }
     }
   }

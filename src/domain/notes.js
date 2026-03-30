@@ -50,6 +50,21 @@ export const NOTE_TO_INDEX = {
   B: 11,
 };
 
+const LETTER_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+
+function pitchNameToPitchClass(name) {
+  const m = name?.trim().match(/^([A-G])([#b]*)$/);
+  if (!m) return null;
+  const base = LETTER_PC[m[1]];
+  if (base === undefined) return null;
+  let delta = 0;
+  for (const c of m[2]) {
+    if (c === "#") delta += 1;
+    else if (c === "b") delta -= 1;
+  }
+  return (((base + delta) % 12) + 12) % 12;
+}
+
 export function noteToMidi(name, octave) {
   const normalizedName = name?.trim();
   if (!normalizedName) {
@@ -57,7 +72,11 @@ export function noteToMidi(name, octave) {
     return 0;
   }
 
-  const index = NOTE_TO_INDEX[normalizedName];
+  let index = NOTE_TO_INDEX[normalizedName];
+  if (index === undefined) {
+    const parsed = pitchNameToPitchClass(normalizedName);
+    if (parsed !== null) index = parsed;
+  }
   if (index === undefined) {
     console.warn(`noteToMidi: unknown note name "${name}", returning 0`);
     return 0;

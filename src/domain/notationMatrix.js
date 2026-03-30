@@ -59,7 +59,7 @@ export function createSampleMatrix() {
     { name: "E", octave: 4 },
     { name: "G", octave: 4 },
   ];
-  matrix.measures[0].staves[STAFF_TREBLE][0] = chord(chordNotes, "quarter");
+  matrix.measures[0].staves[STAFF_TREBLE][0] = chord(chordNotes, "whole");
   return matrix;
 }
 

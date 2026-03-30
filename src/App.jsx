@@ -4,6 +4,7 @@ import { Seo } from "./components/Seo";
 import { Home } from "./pages/Home";
 import { About } from "./pages/About";
 import { ChordBuilder } from "./pages/ChordBuilder";
+import { Scales } from "./pages/Scales";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/chord-builder" element={<ChordBuilder />} />
+            <Route path="/scales" element={<Scales />} />
           </Routes>
         </div>
       </main>

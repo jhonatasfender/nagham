@@ -6,16 +6,23 @@ import EDefault from "./E.js";
 const E = EDefault;
 import FDefault from "./F.js";
 const F = FDefault;
+import FSharpDefault from "./FSharp.js";
+const FSharp = FSharpDefault;
 import GDefault from "./G.js";
 const G = GDefault;
+import GSharpDefault from "./GSharp.js";
+const GSharp = GSharpDefault;
 import ADefault from "./A.js";
 const A = ADefault;
+import ASharpDefault from "./ASharp.js";
+const ASharp = ASharpDefault;
 import BDefault from "./B.js";
 const B = BDefault;
 import CSharpDefault from "./CSharp.js";
 const CSharp = CSharpDefault;
 import DSharpDefault from "./DSharp.js";
 const DSharp = DSharpDefault;
+import { resolveVoicingQuality } from "../voicingQualityAlias.js";
 
 const VOICINGS_BY_ROOT = {
   C,
@@ -24,8 +31,14 @@ const VOICINGS_BY_ROOT = {
   "D#": DSharp,
   E,
   F,
+  "F#": FSharp,
+  Gb: FSharp,
   G,
+  "G#": GSharp,
+  Ab: GSharp,
   A,
+  "A#": ASharp,
+  Bb: ASharp,
   B,
 };
 
@@ -33,7 +46,7 @@ export function getChordVoicing(root, quality, positionIndex = 0) {
   const rootVoicings = VOICINGS_BY_ROOT[root];
   if (!rootVoicings) return null;
 
-  const voicing = rootVoicings[quality];
+  const voicing = rootVoicings[resolveVoicingQuality(quality)];
   if (!voicing) return null;
 
   if (Array.isArray(voicing[0]) && Array.isArray(voicing[0][0])) {
@@ -64,7 +77,7 @@ export function getBarreFromVoicing(root, quality) {
   const rootVoicings = VOICINGS_BY_ROOT[root];
   if (!rootVoicings) return null;
 
-  const voicing = rootVoicings[quality];
+  const voicing = rootVoicings[resolveVoicingQuality(quality)];
   if (!voicing) return null;
 
   let voicingArray;
@@ -94,7 +107,7 @@ export function getChordVoicingCount(root, quality) {
   const rootVoicings = VOICINGS_BY_ROOT[root];
   if (!rootVoicings) return 0;
 
-  const voicing = rootVoicings[quality];
+  const voicing = rootVoicings[resolveVoicingQuality(quality)];
   if (!voicing) return 0;
 
   if (Array.isArray(voicing[0]) && Array.isArray(voicing[0][0])) {

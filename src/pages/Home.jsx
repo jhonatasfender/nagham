@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import { ChordBuilderSection } from "../components/ChordBuilderSection";
 import { useSelectedNote } from "../context/useSelectedNote";
 import {
+  effectiveChordQuality,
+  EXTENSION_COMPOSABLE_WITH_TRIAD,
   getChordLabel,
   getChordNotes,
   getNoteForDisplay,
@@ -15,7 +17,8 @@ import { StaffView } from "../views/Staff/StaffView";
 
 const initialChordState = {
   root: "C",
-  quality: "Maj",
+  triad: "Maj",
+  extension: null,
   bass: null,
   useFlats: false,
 };
@@ -24,8 +27,25 @@ function chordReducer(state, action) {
   switch (action.type) {
     case "SET_ROOT":
       return { ...state, root: action.payload };
-    case "SET_QUALITY":
-      return { ...state, quality: action.payload };
+    case "SET_TRIAD": {
+      if (action.payload === state.triad) return state;
+      return {
+        ...state,
+        triad: action.payload,
+        extension: EXTENSION_COMPOSABLE_WITH_TRIAD.has(state.extension)
+          ? state.extension
+          : null,
+      };
+    }
+    case "SET_EXTENSION": {
+      const { ext, impliedTriad } = action.payload;
+      if (ext == null) return { ...state, extension: null };
+      return {
+        ...state,
+        extension: ext,
+        triad: impliedTriad != null ? impliedTriad : state.triad,
+      };
+    }
     case "SET_BASS":
       return { ...state, bass: action.payload };
     case "SET_USE_FLATS":
@@ -42,7 +62,12 @@ export function Home() {
     chordReducer,
     initialChordState
   );
-  const { root, quality, bass, useFlats } = chordState;
+  const { root, triad, extension, bass, useFlats } = chordState;
+
+  const quality = useMemo(
+    () => effectiveChordQuality({ triad, extension }),
+    [triad, extension]
+  );
 
   const chordLabel = useMemo(
     () => getChordLabel(root, quality, useFlats, bass),
@@ -79,7 +104,8 @@ export function Home() {
       <aside className="shrink-0 w-96 min-w-80">
         <ChordBuilderSection
           root={root}
-          quality={quality}
+          triad={triad}
+          extension={extension}
           bass={bass}
           useFlats={useFlats}
           chordLabel={chordLabel}
@@ -88,8 +114,11 @@ export function Home() {
             dispatchChord({ type: "SET_ROOT", payload: name });
             setSelectedNote({ name, octave: null });
           }}
-          onQualityChange={(q) =>
-            dispatchChord({ type: "SET_QUALITY", payload: q })
+          onTriadChange={(t) =>
+            dispatchChord({ type: "SET_TRIAD", payload: t })
+          }
+          onExtensionChange={(payload) =>
+            dispatchChord({ type: "SET_EXTENSION", payload })
           }
           onBassChange={(name) => {
             dispatchChord({ type: "SET_BASS", payload: name });

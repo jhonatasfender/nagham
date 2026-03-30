@@ -6,6 +6,7 @@ const ROUTE_PAGE_KEY = {
   "/": "home",
   "/about": "about",
   "/chord-builder": "chordBuilder",
+  "/scales": "scales",
 };
 
 export function Seo() {

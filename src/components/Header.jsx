@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import i18n from "../i18n";
+import { cn } from "../utils/cn";
 import flagPtBR from "../assets/flag-pt-BR.svg";
 import flagEn from "../assets/flag-en.svg";
 import flagEs from "../assets/flag-es.svg";
@@ -10,6 +11,25 @@ const LOCALES = [
   { lng: "en", flag: flagEn },
   { lng: "es", flag: flagEs },
 ];
+
+const NAV_LINK_BASE =
+  "rounded-md px-4 py-2 text-sm font-medium transition-colors";
+
+function navLinkClassName({ isActive }) {
+  return cn(
+    NAV_LINK_BASE,
+    isActive
+      ? "bg-amber-500/20 text-amber-400"
+      : "text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200"
+  );
+}
+
+function localeButtonClassName(isCurrent) {
+  return cn(
+    "rounded p-1 transition-opacity hover:opacity-100",
+    isCurrent ? "opacity-100 ring-1 ring-amber-500/50" : "opacity-60"
+  );
+}
 
 export function Header() {
   const { t } = useTranslation();
@@ -23,40 +43,16 @@ export function Header() {
               Nagham <span className="text-zinc-500 text-lg">(نَغَم)</span>
             </h1>
             <nav className="flex items-center gap-1">
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-amber-500/20 text-amber-400"
-                      : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
-                  }`
-                }
-              >
+              <NavLink to="/" className={navLinkClassName}>
                 {t("header.home")}
               </NavLink>
-              <NavLink
-                to="/chord-builder"
-                className={({ isActive }) =>
-                  `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-amber-500/20 text-amber-400"
-                      : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
-                  }`
-                }
-              >
+              <NavLink to="/chord-builder" className={navLinkClassName}>
                 Construtor de Acordes
               </NavLink>
-              <NavLink
-                to="/about"
-                className={({ isActive }) =>
-                  `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-amber-500/20 text-amber-400"
-                      : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
-                  }`
-                }
-              >
+              <NavLink to="/scales" className={navLinkClassName}>
+                {t("header.scales")}
+              </NavLink>
+              <NavLink to="/about" className={navLinkClassName}>
                 {t("header.about")}
               </NavLink>
             </nav>
@@ -67,11 +63,7 @@ export function Header() {
                 key={lng}
                 type="button"
                 onClick={() => i18n.changeLanguage(lng)}
-                className={`rounded p-1 transition-opacity hover:opacity-100 ${
-                  i18n.language === lng
-                    ? "ring-1 ring-amber-500/50 opacity-100"
-                    : "opacity-60"
-                }`}
+                className={localeButtonClassName(i18n.language === lng)}
                 title={lng}
               >
                 <img src={flag} alt="" className="h-5 w-7 object-cover" />

@@ -1,3 +1,5 @@
+import { cn } from "../../utils/cn";
+
 export function UnorderedList({ children, className = "", marker = "disc" }) {
   const markerClass = {
     disc: "list-disc",
@@ -8,7 +10,11 @@ export function UnorderedList({ children, className = "", marker = "disc" }) {
 
   return (
     <ul
-      className={`list-outside pl-6 text-zinc-300 space-y-1 ${markerClass} ${className}`}
+      className={cn(
+        "list-outside space-y-1 pl-6 text-zinc-300",
+        markerClass,
+        className
+      )}
       role="list"
     >
       {children}
@@ -18,7 +24,7 @@ export function UnorderedList({ children, className = "", marker = "disc" }) {
 
 export function ListItem({ children, className = "" }) {
   return (
-    <li className={`text-zinc-300 dark:text-zinc-300 ${className}`}>
+    <li className={cn("text-zinc-300 dark:text-zinc-300", className)}>
       {children}
     </li>
   );
