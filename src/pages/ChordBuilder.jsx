@@ -124,7 +124,7 @@ export function ChordBuilder() {
       : filteredPositions;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 select-none">
       <div>
         <h2 className="text-2xl font-semibold text-zinc-100 mb-2">
           Construtor de Acordes de Violão
@@ -163,7 +163,7 @@ export function ChordBuilder() {
             <h3 className="mb-4 text-sm font-medium text-zinc-400">
               Configuração da Pestana
             </h3>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div className="flex items-center gap-3">
                 <input
                   type="checkbox"
@@ -199,7 +199,7 @@ export function ChordBuilder() {
                     )
                   }
                   disabled={!hasBarre}
-                  className={barreFieldClass}
+                  className={cn(barreFieldClass, "select-text")}
                 />
               </div>
               <div>
@@ -214,7 +214,7 @@ export function ChordBuilder() {
                     )
                   }
                   disabled={!hasBarre}
-                  className={barreFieldClass}
+                  className={cn(barreFieldClass, "select-text")}
                 >
                   <option value="">Automático</option>
                   <option value="5">Mi grave (6ª corda)</option>
@@ -264,7 +264,7 @@ export function ChordBuilder() {
                 >
                   Copiar
                 </button>
-                <pre className="whitespace-pre font-mono text-xs text-zinc-300 overflow-x-auto pr-16">
+                <pre className="select-text whitespace-pre font-mono text-xs text-zinc-300 overflow-x-auto pr-16">
                   {(() => {
                     const positions =
                       positionsWithoutBarre.length > 0

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<musicalNotesIndex version="1" generated="2026-03-30T22:23:33.604Z">
+<musicalNotesIndex version="1" generated="2026-03-31T01:42:31.400Z">
   <description>Índice das notas registadas no domínio da aplicação Nagham (classes de altura, escritas e gama MIDI 0–127).</description>
   <registeredSpellings>
     <spelling name="A" pitchClass="9" midiOctave4="69"/>

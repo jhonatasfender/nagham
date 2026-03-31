@@ -8,14 +8,24 @@
       "guitar": "Violão"
     }
   },
+  "footer": {
+    "githubNav": "Projeto no GitHub",
+    "sourceLink": "Código-fonte",
+    "issuesLink": "Issues",
+    "reportOnGithub": "Encontrou um erro? Abra uma issue no GitHub.",
+    "copyright": "© {{year}} Nagham"
+  },
   "header": {
     "home": "Início",
     "about": "Sobre",
-    "scales": "Escalas"
+    "scales": "Escalas",
+    "chordBuilder": "Construtor de Acordes",
+    "menuOpen": "Abrir menu de navegação",
+    "menuClose": "Fechar menu de navegação",
+    "navLabel": "Navegação principal"
   },
   "home": {
-    "title": "Visualizador de Notas e Acordes",
-    "currentNote": "Nota atual:"
+    "title": "Visualizador de Notas e Acordes"
   },
   "about": {
     "title": "Sobre o Nagham",

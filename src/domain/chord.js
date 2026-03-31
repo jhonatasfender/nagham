@@ -1,5 +1,5 @@
 import { notes as chordNotes, get as chordGet } from "@tonaljs/chord";
-import { NOTE_NAMES, NOTE_NAMES_FLATS } from "./notes";
+import { NOTE_NAMES, NOTE_NAMES_FLATS, pitchNameToPitchClass } from "./notes";
 
 const QUALITY_TO_TONAL = {
   Maj: "maj",
@@ -22,44 +22,47 @@ const QUALITY_TO_TONAL = {
   maj9: "maj9",
   "9+": "7#9",
   m9: "m9",
-  m5: "m",
+  m5: "5",
   11: "11",
   13: "13",
 };
 
 function parseTonalNote(str, useFlats = false) {
   const noteNames = useFlats ? NOTE_NAMES_FLATS : NOTE_NAMES;
-  const match = str.match(/^([A-G][#b]?)(\d*)$/);
+  const match = str.match(/^([A-G])([#b]*)(\d*)$/);
   if (!match) return null;
-  const [, pitch, octStr] = match;
+  const [, letter, accidentals, octStr] = match;
+  const pitch = letter + accidentals;
   const octave = octStr !== "" ? parseInt(octStr, 10) : 4;
-  const sharpIndex = {
-    C: 0,
-    "C#": 1,
-    D: 2,
-    "D#": 3,
-    E: 4,
-    F: 5,
-    "F#": 6,
-    G: 7,
-    "G#": 8,
-    A: 9,
-    "A#": 10,
-    B: 11,
-  };
   const flatToSharp = { Db: "C#", Eb: "D#", Gb: "F#", Ab: "G#", Bb: "A#" };
-  let name = pitch;
-  if (flatToSharp[name]) name = flatToSharp[name];
-  if (!noteNames.includes(name)) {
-    const sharpName = flatToSharp[pitch] || pitch;
-    const idx = sharpIndex[sharpName];
-    if (idx !== undefined) name = noteNames[idx];
+  const sharpToFlat = {
+    "C#": "Db",
+    "D#": "Eb",
+    "F#": "Gb",
+    "G#": "Ab",
+    "A#": "Bb",
+  };
+
+  if (noteNames.includes(pitch)) {
+    return { name: pitch, octave };
   }
-  return { name, octave };
+  if (flatToSharp[pitch] && noteNames.includes(flatToSharp[pitch])) {
+    return { name: flatToSharp[pitch], octave };
+  }
+  if (sharpToFlat[pitch] && noteNames.includes(sharpToFlat[pitch])) {
+    return { name: sharpToFlat[pitch], octave };
+  }
+
+  const pc = pitchNameToPitchClass(pitch);
+  if (pc !== null) {
+    return { name: noteNames[pc], octave };
+  }
+
+  return null;
 }
 
 export function getChordNotes(root, quality, options = {}) {
-  const { bass = null, octave = 4 } = options;
+  const { bass = null, octave = 4, useFlats = false } = options;
   const tonalType = QUALITY_TO_TONAL[quality];
   if (!tonalType) return [];
 
@@ -79,19 +82,21 @@ export function getChordNotes(root, quality, options = {}) {
     noteStrings = chordNotes(tonalType, tonic);
   }
 
+  const noteNameSet = useFlats ? NOTE_NAMES_FLATS : NOTE_NAMES;
   return noteStrings
-    .map((str) => parseTonalNote(str, false))
+    .map((str) => parseTonalNote(str, useFlats))
     .filter(Boolean)
     .map(({ name, octave: oct }) => {
-      const canonical = toCanonicalName(name, NOTE_NAMES);
+      const canonical = toCanonicalName(name, noteNameSet);
       return { name: canonical, octave: oct };
     });
 }
 
 function qualityToChordSymbolSuffix(quality) {
   if (quality === "Maj") return "";
-  if (quality === "m5") return "m";
+  if (quality === "m5") return "5";
   if (quality === "9+") return "7#9";
+  if (quality === "m7(b5)") return "m7b5";
   return quality;
 }
 

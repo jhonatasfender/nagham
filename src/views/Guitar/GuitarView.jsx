@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { VIEW_MAX_WIDTH } from "../../constants/layout.js";
+import { useContainerSize } from "../../hooks/useContainerSize.js";
 import { drawGuitar } from "./drawGuitar";
 import { FretboardTable } from "./FretboardTable";
 
-const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 220;
 
 export function GuitarView({
@@ -16,51 +17,31 @@ export function GuitarView({
   customBarre,
   onPositionClick,
   isEditor = false,
+  syncGlobalSelection = true,
 }) {
+  const globalOnSelectNote = syncGlobalSelection ? onSelectNote : undefined;
   const containerRef = useRef(null);
-  const [svgSize, setSvgSize] = useState({
-    width: DEFAULT_WIDTH,
-    height: DEFAULT_HEIGHT,
-  });
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const measure = () => {
-      const w = el.clientWidth;
-      setSvgSize({
-        width:
-          w > 0
-            ? Math.min(Math.round(w * 100) / 100, DEFAULT_WIDTH)
-            : DEFAULT_WIDTH,
-        height: DEFAULT_HEIGHT,
-      });
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+  const containerWidth = useContainerSize(containerRef);
 
   useEffect(() => {
     drawGuitar(
       containerRef.current,
       { selectedNote, chordNotes, root, quality, customPositions, customBarre },
       {
-        onSelectNote,
+        onSelectNote: globalOnSelectNote,
         onPositionClick,
-        width: svgSize.width,
-        height: svgSize.height,
+        width: containerWidth,
+        height: DEFAULT_HEIGHT,
         isEditor,
       }
     );
   }, [
     selectedNote,
-    onSelectNote,
+    globalOnSelectNote,
     chordNotes,
     root,
     quality,
-    svgSize,
+    containerWidth,
     customPositions,
     customBarre,
     onPositionClick,
@@ -68,12 +49,13 @@ export function GuitarView({
   ]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 select-none">
       {showTable && (
         <FretboardTable
           selectedNote={selectedNote}
-          onSelectNote={onSelectNote}
+          onSelectNote={globalOnSelectNote}
           chordNotes={chordNotes}
+          highlightGlobalSelection={syncGlobalSelection}
         />
       )}
       <div
@@ -81,7 +63,7 @@ export function GuitarView({
         ref={containerRef}
         style={{
           width: "100%",
-          maxWidth: DEFAULT_WIDTH,
+          maxWidth: VIEW_MAX_WIDTH,
           height: DEFAULT_HEIGHT,
         }}
       />

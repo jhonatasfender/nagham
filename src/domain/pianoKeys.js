@@ -8,9 +8,10 @@ export const TRIAD_KEYS = [
   { name: "G", octave: 4 },
 ];
 
-const DEFAULT_PIANO_OCTAVES = [3, 4];
+const DEFAULT_PIANO_OCTAVES = [3, 4, 5];
 const MIN_PIANO_OCTAVE = 2;
 const MAX_PIANO_OCTAVE = 6;
+const MIN_VISIBLE_OCTAVE_SPAN = 3;
 
 export function resolvePianoOctaves(chordNotes) {
   if (!chordNotes?.length) return [...DEFAULT_PIANO_OCTAVES];
@@ -24,6 +25,11 @@ export function resolvePianoOctaves(chordNotes) {
   let low = Math.max(MIN_PIANO_OCTAVE, minN - 1);
   let high = Math.min(MAX_PIANO_OCTAVE, maxN);
   while (high - low + 1 < 2) {
+    if (high < MAX_PIANO_OCTAVE) high += 1;
+    else if (low > MIN_PIANO_OCTAVE) low -= 1;
+    else break;
+  }
+  while (high - low + 1 < MIN_VISIBLE_OCTAVE_SPAN) {
     if (high < MAX_PIANO_OCTAVE) high += 1;
     else if (low > MIN_PIANO_OCTAVE) low -= 1;
     else break;

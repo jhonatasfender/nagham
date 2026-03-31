@@ -101,6 +101,7 @@ export function drawGuitar(container, data, options = {}) {
   drawDots(
     cells,
     VISIBLE_FRETS,
+    matrix,
     chordKeys,
     selectedKeys,
     barre,
@@ -109,7 +110,8 @@ export function drawGuitar(container, data, options = {}) {
     displayIndexByString,
     rowHeight,
     fretWidth,
-    onPositionClick
+    onPositionClick,
+    onSelectNote
   );
 
   drawBarre(

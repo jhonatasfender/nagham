@@ -20,7 +20,7 @@ Não há script de testes no `package.json` (não assumir Jest/Vitest até ser a
 | Área                | Caminho                              | Função                                                                                                   |
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------- |
 | Entrada             | `src/main.jsx`, `src/App.jsx`        | Bootstrap, rotas de alto nível                                                                           |
-| Páginas             | `src/pages/`                         | `Home` (visor principal sincronizado), `About`, `ChordBuilder`                                           |
+| Páginas             | `src/pages/`                         | `Home` (visor principal sincronizado), `About`, `ChordBuilder`, `Scales`                                 |
 | UI reutilizável     | `src/components/`                    | Cabeçalho, SEO, listas, secção do construtor de acordes na home, etc.                                    |
 | Domínio             | `src/domain/`                        | Lógica pura: notas, acordes, braço, matrizes, _voicings_ (piano/partitura/violão). **Sem React nem D3.** |
 | Vistas D3           | `src/views/Staff`, `Piano`, `Guitar` | Um componente `*View.jsx` + módulos `draw*.js` e auxiliares                                              |
@@ -64,6 +64,13 @@ npm run preview          # pré-visualizar dist
 - **Views:** padrão documentado em `docs/frontend-architecture.md` — `*View.jsx` com `ref`/`useEffect`, desenho em `draw*.js` sem estado React.
 - **Classes CSS:** preferir `cn(...)` para fundir classes Tailwind condicionais.
 - **Novas strings visíveis ao utilizador:** adicionar entradas nos três ficheiros de locale (pt-BR, en, es), não só num deles.
+
+## Layout responsivo e breakpoints
+
+- **Tailwind 4** usa os breakpoints por defeito (`sm` 640px, `md` 768px, `lg` 1024px, etc.); não há `tailwind.config.js` — personalizações em [`src/index.css`](src/index.css) com `@theme` se necessário.
+- **Âncora principal:** `lg` (1024px) = layout “desktop”: duas colunas na home, navegação horizontal no cabeçalho. Abaixo de `lg`, coluna única e menu móvel.
+- **Classes partilhadas** (definidas em `index.css`, `@layer components`): `shell-page` (contentor principal com padding responsivo), `home-layout`, `home-sidebar`.
+- **Vistas D3** (partitura, piano, violão): largura máxima de desenho partilhada em `src/constants/layout.js` (`VIEW_MAX_WIDTH`); o contentor é medido com `useContainerSize` para redesenhar ao redimensionar.
 
 ## Ficheiros estáticos relevantes
 

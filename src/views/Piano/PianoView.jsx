@@ -1,11 +1,12 @@
 import { useEffect, useRef, useMemo } from "react";
-import * as d3 from "d3";
+import { VIEW_MAX_WIDTH } from "../../constants/layout.js";
+import { useContainerSize } from "../../hooks/useContainerSize.js";
+import { midiToNote, noteToMidi } from "../../domain/notes.js";
 import { TRIAD_KEYS } from "../../domain/pianoKeys";
-import { drawPiano } from "./drawPiano";
 import { getPianoChordVoicing } from "../../domain/pianoVoicings";
+import { drawPiano } from "./drawPiano";
 
-const DEFAULT_WIDTH = 800;
-const DEFAULT_HEIGHT = 160;
+const DEFAULT_HEIGHT = 192;
 
 export function PianoView({
   selectedNote,
@@ -16,6 +17,7 @@ export function PianoView({
 }) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
+  const containerWidth = useContainerSize(containerRef);
 
   const notesToHighlight = useMemo(() => {
     if (chordNotes?.length && root && quality) {
@@ -32,15 +34,15 @@ export function PianoView({
     if (!el) return;
     const svg = drawPiano(
       el,
-      { chordNotes: notesToHighlight },
+      { chordNotes: notesToHighlight, selectedNote },
       {
         onSelectNote,
-        width: DEFAULT_WIDTH,
+        width: containerWidth,
         height: DEFAULT_HEIGHT,
       }
     );
     svgRef.current = svg;
-  }, [onSelectNote, notesToHighlight]);
+  }, [onSelectNote, notesToHighlight, selectedNote, containerWidth]);
 
   useEffect(() => {
     if (!selectedNote || !svgRef.current || selectedNote.octave == null) return;
@@ -49,7 +51,10 @@ export function PianoView({
     if (!svg) return;
 
     requestAnimationFrame(() => {
-      const keyName = `${selectedNote.name}${selectedNote.octave}`;
+      const { name, octave } = midiToNote(
+        noteToMidi(selectedNote.name, selectedNote.octave)
+      );
+      const keyName = `${name}${octave}`;
       const keyElement = svg.select(`rect[data-key="${keyName}"]`);
 
       if (keyElement.empty()) return;
@@ -57,42 +62,33 @@ export function PianoView({
       const keyX = parseFloat(keyElement.attr("x")) || 0;
       const keyWidth = parseFloat(keyElement.attr("width")) || 0;
       const keyCenter = keyX + keyWidth / 2;
-      const viewWidth = DEFAULT_WIDTH;
+      const viewWidth = containerWidth;
 
-      const gWhite = svg.select(".piano-white-keys");
-      const gBlack = svg.select(".piano-black-keys");
-
-      if (gWhite.empty() || gBlack.empty()) return;
+      const gScroll = svg.select(".piano-scroll-layer");
+      if (gScroll.empty()) return;
 
       let targetTranslateX = -(keyCenter - viewWidth / 2);
 
-      const allWhiteKeys = gWhite.selectAll("rect").nodes();
-      if (allWhiteKeys.length > 0) {
-        const lastKey = d3.select(allWhiteKeys[allWhiteKeys.length - 1]);
-        const lastKeyX = parseFloat(lastKey.attr("x")) || 0;
-        const lastKeyWidth = parseFloat(lastKey.attr("width")) || 0;
-        const contentWidth = lastKeyX + lastKeyWidth;
+      const scrollWidth = parseFloat(svg.attr("width")) || viewWidth;
+      const minTranslate =
+        scrollWidth > viewWidth ? -(scrollWidth - viewWidth) : 0;
+      const maxTranslate = 0;
+      targetTranslateX = Math.max(
+        minTranslate,
+        Math.min(maxTranslate, targetTranslateX)
+      );
 
-        const minTranslate = -(contentWidth - viewWidth);
-        const maxTranslate = 0;
-        targetTranslateX = Math.max(
-          minTranslate,
-          Math.min(maxTranslate, targetTranslateX)
-        );
-      }
-
-      gWhite.attr("transform", `translate(${targetTranslateX}, 0)`);
-      gBlack.attr("transform", `translate(${targetTranslateX}, 0)`);
+      gScroll.attr("transform", `translate(${targetTranslateX}, 0)`);
     });
-  }, [selectedNote]);
+  }, [selectedNote, containerWidth, notesToHighlight]);
 
   return (
     <div
-      className="piano-view max-w-full overflow-hidden"
+      className="piano-view relative max-w-full overflow-hidden rounded-md bg-zinc-950/90 ring-1 ring-inset ring-zinc-600/35 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
       ref={containerRef}
       style={{
         width: "100%",
-        maxWidth: DEFAULT_WIDTH,
+        maxWidth: VIEW_MAX_WIDTH,
         height: DEFAULT_HEIGHT,
       }}
     />

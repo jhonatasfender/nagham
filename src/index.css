@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+@layer components {
+  .shell-page {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8;
+  }
+
+  .home-layout {
+    @apply flex flex-col gap-6 lg:flex-row lg:gap-8;
+  }
+
+  .home-sidebar {
+    @apply w-full shrink-0 lg:w-96 lg:min-w-0;
+  }
+}
+
 html {
   @apply bg-zinc-900 text-zinc-100;
 }
@@ -11,6 +25,11 @@ html {
 
 body {
   @apply m-0 min-h-screen antialiased;
+}
+
+button {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 *::-webkit-scrollbar {
@@ -44,7 +63,14 @@ body {
 }
 
 #root {
-  @apply min-h-screen w-full box-border;
+  @apply flex min-h-dvh w-full flex-col box-border;
+}
+
+.staff-view,
+.piano-view,
+.guitar-view {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .staff-view {
@@ -98,17 +124,29 @@ body {
 }
 
 .piano-view {
-  --piano-key-white: #f4f4f5;
-  --piano-key-black: #27272a;
-  --piano-key-stroke: #71717a;
-  --piano-key-selected: #f59e0b;
-  --piano-key-black-selected: #f59e0b;
+  --piano-key-white: #e8e8ec;
+  --piano-key-black: #18181b;
+  --piano-key-stroke: #52525b;
+  --guitar-dot-triad: #f59e0b;
+  --guitar-dot-triad-stroke: #b45309;
+  --guitar-dot-selected: #fb923c;
+  --guitar-dot-selected-stroke: #ea580c;
 }
 
-.piano-view .piano-key--triad {
-  fill: #f59e0b;
-  stroke: #b45309;
-  stroke-width: 2px;
+.piano-view .piano-keyboard-svg {
+  shape-rendering: geometricPrecision;
+}
+
+.piano-view .piano-key {
+  transition: filter 0.12s ease;
+}
+
+.piano-view .piano-key--white:hover {
+  filter: brightness(0.94);
+}
+
+.piano-view .piano-key--black:hover {
+  filter: brightness(1.22);
 }
 
 .guitar-view {

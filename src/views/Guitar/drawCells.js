@@ -50,7 +50,7 @@ export function drawCells(
         .attr("width", cellWidth)
         .attr("height", rowHeight)
         .attr("fill", "transparent")
-        .style("cursor", "pointer");
+        .style("cursor", onSelectNote ? "pointer" : "default");
 
       if (isEditor && onPositionClick) {
         const isExistingPosition = isCustomPosition;

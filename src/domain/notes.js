@@ -52,7 +52,7 @@ export const NOTE_TO_INDEX = {
 
 const LETTER_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 
-function pitchNameToPitchClass(name) {
+export function pitchNameToPitchClass(name) {
   const m = name?.trim().match(/^([A-G])([#b]*)$/);
   if (!m) return null;
   const base = LETTER_PC[m[1]];

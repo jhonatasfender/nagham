@@ -10,6 +10,7 @@ import { getStringY, getFretCenterX } from "./layout";
 export function drawDots(
   cells,
   VISIBLE_FRETS,
+  matrix,
   chordKeys,
   selectedKeys,
   barre,
@@ -18,7 +19,8 @@ export function drawDots(
   displayIndexByString,
   rowHeight,
   fretWidth,
-  onPositionClick
+  onPositionClick,
+  onSelectNote
 ) {
   const dotRadius = Math.min(fretWidth, rowHeight) * 0.28;
 
@@ -72,13 +74,22 @@ export function drawDots(
                 : TRIAD_STROKE
           )
           .attr("stroke-width", 1.5)
-          .style("cursor", isEditor ? "pointer" : "default")
+          .style(
+            "cursor",
+            isEditor ? "pointer" : onSelectNote ? "pointer" : "default"
+          )
           .raise();
 
         if (isEditor && onPositionClick) {
           circle.on("click", (e) => {
             e.stopPropagation();
             onPositionClick(stringIndex, fret);
+          });
+        } else if (!isEditor && onSelectNote) {
+          const note = matrix[stringIndex][fret];
+          circle.on("click", (e) => {
+            e.stopPropagation();
+            onSelectNote({ name: note.name, octave: note.octave });
           });
         }
       }

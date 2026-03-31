@@ -124,6 +124,27 @@ function buildMeiFromScore(score) {
   return { mei, idToNote };
 }
 
+export function applyStaffNoteSelection(container, idToNote, selectedNote) {
+  if (!container || !idToNote?.size) return;
+
+  const selectedMidi =
+    selectedNote && selectedNote.octave != null
+      ? noteToMidi(selectedNote.name, selectedNote.octave)
+      : null;
+
+  idToNote.forEach((noteData, id) => {
+    const el = container.querySelector(`#${CSS.escape(id)}`);
+    if (!el) return;
+    el.classList.remove("staff-note--selected");
+    if (selectedMidi !== null) {
+      const midi = noteToMidi(noteData.name, noteData.octave);
+      if (midi === selectedMidi) {
+        el.classList.add("staff-note--selected");
+      }
+    }
+  });
+}
+
 const VEROVIO_SVG_CSS = `
 svg.definition-scale {
   color: inherit !important;
@@ -146,15 +167,11 @@ defs path {
 `;
 
 export async function drawStaff(container, data, options = {}) {
-  if (!container) return;
+  if (!container) return undefined;
 
   const { selectedNote, scoreMatrix } = data;
   const score = scoreMatrix ?? createSampleMatrix();
   const { onSelectNote, width = 800, scale = 64 } = options;
-  const selectedMidi =
-    selectedNote && selectedNote.octave != null
-      ? noteToMidi(selectedNote.name, selectedNote.octave)
-      : null;
 
   const toolkit = await getToolkit();
   const { mei, idToNote } = buildMeiFromScore(score);
@@ -176,7 +193,7 @@ export async function drawStaff(container, data, options = {}) {
   container.innerHTML = rawSvg;
 
   const svg = container.querySelector("svg");
-  if (!svg) return;
+  if (!svg) return { idToNote };
   svg.classList.add("notation", "notation--verovio");
   svg.setAttribute("width", "100%");
   svg.removeAttribute("height");
@@ -185,15 +202,9 @@ export async function drawStaff(container, data, options = {}) {
   svg.style.borderRadius = "0.5rem";
 
   idToNote.forEach((noteData, id) => {
-    const el = container.querySelector(`#${id}`);
+    const el = container.querySelector(`#${CSS.escape(id)}`);
     if (!el) return;
     el.classList.add("staff-note--interactive");
-    if (selectedMidi !== null) {
-      const midi = noteToMidi(noteData.name, noteData.octave);
-      if (midi === selectedMidi) {
-        el.classList.add("staff-note--selected");
-      }
-    }
     if (!onSelectNote) return;
     el.addEventListener("click", (event) => {
       event.preventDefault();
@@ -201,4 +212,7 @@ export async function drawStaff(container, data, options = {}) {
       onSelectNote(noteData);
     });
   });
+
+  applyStaffNoteSelection(container, idToNote, selectedNote);
+  return { idToNote };
 }

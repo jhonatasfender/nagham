@@ -7,7 +7,6 @@ import {
   EXTENSION_COMPOSABLE_WITH_TRIAD,
   getChordLabel,
   getChordNotes,
-  getNoteForDisplay,
 } from "../domain/chord";
 import { createMatrixFromChord } from "../domain/notationMatrix";
 import { getStaffChordVoicing } from "../domain/staffVoicings";
@@ -91,17 +90,9 @@ export function Home() {
     [notesForStaff]
   );
 
-  const noteLabel = useMemo(() => {
-    if (!selectedNote) return "—";
-    const displayName = getNoteForDisplay(selectedNote.name, useFlats);
-    return selectedNote.octave != null
-      ? `${displayName}${selectedNote.octave}`
-      : displayName;
-  }, [selectedNote, useFlats]);
-
   return (
-    <div className="flex gap-8">
-      <aside className="shrink-0 w-96 min-w-80">
+    <div className="home-layout select-none">
+      <aside className="home-sidebar">
         <ChordBuilderSection
           root={root}
           triad={triad}
@@ -136,10 +127,6 @@ export function Home() {
           <h2 className="text-2xl font-semibold text-zinc-100 mb-2">
             {t("home.title")}
           </h2>
-          <p className="text-zinc-400">
-            {t("home.currentNote")}{" "}
-            <span className="font-medium text-zinc-200">{noteLabel}</span>
-          </p>
         </div>
 
         <section className="space-y-8">
@@ -172,6 +159,7 @@ export function Home() {
             <GuitarView
               selectedNote={selectedNote}
               onSelectNote={setSelectedNote}
+              syncGlobalSelection={false}
               chordNotes={chordNotes}
               root={root}
               quality={quality}

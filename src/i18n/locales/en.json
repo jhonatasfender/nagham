@@ -8,14 +8,24 @@
       "guitar": "Guitar"
     }
   },
+  "footer": {
+    "githubNav": "Project on GitHub",
+    "sourceLink": "Source code",
+    "issuesLink": "Issues",
+    "reportOnGithub": "Found a bug? Open an issue on GitHub.",
+    "copyright": "© {{year}} Nagham"
+  },
   "header": {
     "home": "Home",
     "about": "About",
-    "scales": "Scales"
+    "scales": "Scales",
+    "chordBuilder": "Chord builder",
+    "menuOpen": "Open navigation menu",
+    "menuClose": "Close navigation menu",
+    "navLabel": "Main navigation"
   },
   "home": {
-    "title": "Notes and Chords Viewer",
-    "currentNote": "Current note:"
+    "title": "Notes and Chords Viewer"
   },
   "about": {
     "title": "About Nagham",

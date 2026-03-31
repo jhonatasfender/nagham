@@ -8,14 +8,24 @@
       "guitar": "Guitarra"
     }
   },
+  "footer": {
+    "githubNav": "Proyecto en GitHub",
+    "sourceLink": "Código fuente",
+    "issuesLink": "Issues",
+    "reportOnGithub": "¿Encontraste un error? Abre un issue en GitHub.",
+    "copyright": "© {{year}} Nagham"
+  },
   "header": {
     "home": "Inicio",
     "about": "Acerca de",
-    "scales": "Escalas"
+    "scales": "Escalas",
+    "chordBuilder": "Constructor de acordes",
+    "menuOpen": "Abrir menú de navegación",
+    "menuClose": "Cerrar menú de navegación",
+    "navLabel": "Navegación principal"
   },
   "home": {
-    "title": "Visualizador de Notas y Acordes",
-    "currentNote": "Nota actual:"
+    "title": "Visualizador de Notas y Acordes"
   },
   "about": {
     "title": "Acerca de Nagham",

@@ -25,7 +25,12 @@ function getChordPositionSet(chordNotes) {
   return set;
 }
 
-export function FretboardTable({ selectedNote, onSelectNote, chordNotes }) {
+export function FretboardTable({
+  selectedNote,
+  onSelectNote,
+  chordNotes,
+  highlightGlobalSelection = true,
+}) {
   const { t } = useTranslation();
   const raw = t("fretboard.strings", { returnObjects: true });
   const stringLabels =
@@ -35,6 +40,7 @@ export function FretboardTable({ selectedNote, onSelectNote, chordNotes }) {
   const chordPositions = getChordPositionSet(chordNotes ?? []);
 
   function isSelected(stringIndex, fret) {
+    if (!highlightGlobalSelection) return false;
     if (!selectedNote || selectedNote.octave == null) return false;
     const note = getNoteAtFret(stringIndex, fret);
     return (
@@ -88,7 +94,8 @@ export function FretboardTable({ selectedNote, onSelectNote, chordNotes }) {
                   <td
                     key={fret}
                     className={cn(
-                      "cursor-pointer border border-zinc-600 px-1 py-1 transition-colors",
+                      "border border-zinc-600 px-1 py-1 transition-colors",
+                      onSelectNote ? "cursor-pointer" : "cursor-default",
                       selected
                         ? "bg-amber-500/30 text-amber-100"
                         : chord

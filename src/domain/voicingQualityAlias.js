@@ -1,5 +1,5 @@
 const VOICING_QUALITY_ALIAS = {
-  m5: "m",
+  m5: "5",
   "9+": "9",
 };
 
