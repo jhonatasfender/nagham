@@ -42,77 +42,120 @@ const VOICINGS_BY_ROOT = {
   B,
 };
 
-export function getChordVoicing(root, quality, positionIndex = 0) {
-  const rootVoicings = VOICINGS_BY_ROOT[root];
-  if (!rootVoicings) return null;
+// ─── Read shim ──────────────────────────────────────────────────
+// Accepts 3 formats for each `voicings[quality]`:
+//   1. Legacy flat:    [[s,f], ..., {barre, strings}?]
+//   2. Legacy nested:  [[[s,f],...], [[s,f],...]]
+//   3. New (objects):  [{region, positions, barre}, ...]
+// Always returns normalized: [{region, positions, barre}].
+function normalizeVoicing(raw) {
+  if (!raw) return [];
 
-  const voicing = rootVoicings[resolveVoicingQuality(quality)];
-  if (!voicing) return null;
-
-  if (Array.isArray(voicing[0]) && Array.isArray(voicing[0][0])) {
-    const positions = voicing;
-    if (positionIndex >= 0 && positionIndex < positions.length) {
-      return positions[positionIndex]
-        .filter((item) => Array.isArray(item))
-        .map(([stringIndex, fret]) => ({
-          stringIndex,
-          fret,
-        }));
-    }
-    return positions[0]
-      .filter((item) => Array.isArray(item))
-      .map(([stringIndex, fret]) => ({ stringIndex, fret }));
+  if (
+    Array.isArray(raw) &&
+    raw.length > 0 &&
+    raw[0] &&
+    typeof raw[0] === "object" &&
+    !Array.isArray(raw[0]) &&
+    Array.isArray(raw[0].positions)
+  ) {
+    return raw.map((v) => ({
+      region: v.region ?? computeRegion(v.positions, v.barre),
+      positions: v.positions,
+      barre: v.barre ?? null,
+    }));
   }
 
-  if (Array.isArray(voicing)) {
-    return voicing
-      .filter((item) => Array.isArray(item))
-      .map(([stringIndex, fret]) => ({ stringIndex, fret }));
+  if (
+    Array.isArray(raw) &&
+    Array.isArray(raw[0]) &&
+    Array.isArray(raw[0][0])
+  ) {
+    return raw.map((inner) => splitPositionsAndBarre(inner));
   }
 
-  return null;
+  if (Array.isArray(raw)) {
+    return [splitPositionsAndBarre(raw)];
+  }
+
+  return [];
 }
 
-export function getBarreFromVoicing(root, quality) {
+function splitPositionsAndBarre(items) {
+  const positions = [];
+  let barre = null;
+  for (const item of items) {
+    if (Array.isArray(item)) {
+      positions.push(item);
+    } else if (item && typeof item === "object" && item.barre != null) {
+      barre = { fret: item.barre, strings: item.strings ?? [] };
+    }
+  }
+  return {
+    region: computeRegion(positions, barre),
+    positions,
+    barre,
+  };
+}
+
+function computeRegion(positions, barre) {
+  const frettedFrets = positions
+    .map(([, f]) => f)
+    .filter((f) => f > 0);
+  const hasOpenString = positions.some(([, f]) => f === 0);
+  const minFretted = frettedFrets.length
+    ? Math.min(...frettedFrets)
+    : Infinity;
+  const minBarre = barre?.fret ?? Infinity;
+  const minOverall = Math.min(minFretted, minBarre);
+  if (hasOpenString || minOverall <= 1) return "open";
+  return `fret-${minOverall}`;
+}
+
+// ─── Public API ─────────────────────────────────────────────────
+
+export function getChordVariations(root, quality) {
   const rootVoicings = VOICINGS_BY_ROOT[root];
-  if (!rootVoicings) return null;
+  if (!rootVoicings) return [];
+  const raw = rootVoicings[resolveVoicingQuality(quality)];
+  return normalizeVoicing(raw);
+}
 
-  const voicing = rootVoicings[resolveVoicingQuality(quality)];
-  if (!voicing) return null;
+export function getChordVoicing(root, quality, variationIndex = 0) {
+  const variations = getChordVariations(root, quality);
+  if (!variations.length) return null;
+  const idx =
+    variationIndex >= 0 && variationIndex < variations.length
+      ? variationIndex
+      : 0;
+  return variations[idx].positions.map(([stringIndex, fret]) => ({
+    stringIndex,
+    fret,
+  }));
+}
 
-  let voicingArray;
-  if (Array.isArray(voicing[0]) && Array.isArray(voicing[0][0])) {
-    voicingArray = voicing[0];
-  } else if (Array.isArray(voicing)) {
-    voicingArray = voicing;
-  } else {
-    return null;
-  }
-
-  const barreObj = voicingArray.find(
-    (item) => item && typeof item === "object" && item.barre
-  );
-
-  if (barreObj && barreObj.barre) {
-    return {
-      fret: barreObj.barre,
-      strings: barreObj.strings || [],
-    };
-  }
-
-  return null;
+export function getBarreFromVoicing(root, quality, variationIndex = 0) {
+  const variations = getChordVariations(root, quality);
+  if (!variations.length) return null;
+  const idx =
+    variationIndex >= 0 && variationIndex < variations.length
+      ? variationIndex
+      : 0;
+  return variations[idx].barre ?? null;
 }
 
 export function getChordVoicingCount(root, quality) {
-  const rootVoicings = VOICINGS_BY_ROOT[root];
-  if (!rootVoicings) return 0;
+  return getChordVariations(root, quality).length;
+}
 
-  const voicing = rootVoicings[resolveVoicingQuality(quality)];
-  if (!voicing) return 0;
-
-  if (Array.isArray(voicing[0]) && Array.isArray(voicing[0][0])) {
-    return voicing.length;
+export function getVariationRegionLabelKey(region) {
+  if (region === "open") return { key: "voicings.region.open", params: {} };
+  const m = /^fret-(\d+)$/.exec(region ?? "");
+  if (m) {
+    return {
+      key: "voicings.region.fret",
+      params: { n: parseInt(m[1], 10) },
+    };
   }
-
-  return 1;
+  return { key: "voicings.region.open", params: {} };
 }
