@@ -13,12 +13,14 @@ function computeCenterFret({
   quality,
   customPositions,
   customBarre,
+  variationIndex = 0,
 }) {
   const frets = [];
-  const voicing = root && quality ? getChordVoicing(root, quality) : null;
+  const voicing =
+    root && quality ? getChordVoicing(root, quality, variationIndex) : null;
   if (voicing) {
     voicing.forEach((p) => frets.push(p.fret));
-    const barre = getBarreFromVoicing(root, quality);
+    const barre = getBarreFromVoicing(root, quality, variationIndex);
     if (barre?.fret != null) frets.push(barre.fret);
   } else if (customPositions?.length) {
     customPositions.forEach(([, f]) => frets.push(f));
@@ -44,6 +46,7 @@ export function GuitarView({
   onPositionClick,
   isEditor = false,
   syncGlobalSelection = true,
+  variationIndex = 0,
 }) {
   const globalOnSelectNote = syncGlobalSelection ? onSelectNote : undefined;
   const containerRef = useRef(null);
@@ -55,7 +58,7 @@ export function GuitarView({
     const previousScrollLeft = el.scrollLeft;
     drawGuitar(
       el,
-      { selectedNote, chordNotes, root, quality, customPositions, customBarre },
+      { selectedNote, chordNotes, root, quality, customPositions, customBarre, variationIndex },
       {
         onSelectNote: globalOnSelectNote,
         onPositionClick,
@@ -76,6 +79,7 @@ export function GuitarView({
     customBarre,
     onPositionClick,
     isEditor,
+    variationIndex,
   ]);
 
   useEffect(() => {
@@ -89,6 +93,7 @@ export function GuitarView({
       quality,
       customPositions,
       customBarre,
+      variationIndex,
     });
     if (centerFret == null) return;
 
@@ -105,7 +110,7 @@ export function GuitarView({
       nextScrollLeft = Math.max(0, Math.min(maxScroll, nextScrollLeft));
       el.scrollLeft = nextScrollLeft;
     });
-  }, [chordNotes, root, quality, customPositions, customBarre, containerWidth]);
+  }, [chordNotes, root, quality, customPositions, customBarre, containerWidth, variationIndex]);
 
   return (
     <div className="space-y-4 select-none">

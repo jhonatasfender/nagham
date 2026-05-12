@@ -50,6 +50,6 @@ export function getTriadChordShape() {
   return new Set(positions.map(([s, f]) => `${s}-${f}`));
 }
 
-export function getBasicChordVoicing(root, quality) {
-  return getChordVoicing(root, quality);
+export function getBasicChordVoicing(root, quality, variationIndex = 0) {
+  return getChordVoicing(root, quality, variationIndex);
 }

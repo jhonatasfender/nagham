@@ -25,6 +25,7 @@ export function drawGuitar(container, data, options = {}) {
     quality,
     customPositions,
     customBarre,
+    variationIndex = 0,
   } = data;
   const {
     onSelectNote,
@@ -44,7 +45,8 @@ export function drawGuitar(container, data, options = {}) {
     chordNotes,
     root,
     quality,
-    VISIBLE_FRETS
+    VISIBLE_FRETS,
+    variationIndex
   );
 
   const barre = isEditor
@@ -55,7 +57,7 @@ export function drawGuitar(container, data, options = {}) {
         }
       : null
     : root && quality
-      ? getBarreFromVoicing(root, quality)
+      ? getBarreFromVoicing(root, quality, variationIndex)
       : detectBarre(chordKeys, 12);
 
   const minSvgContentWidth =
