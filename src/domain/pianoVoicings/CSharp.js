@@ -1,7 +1,7 @@
 const voicings = {
   Maj: [
     { name: "C#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "G#", octave: 4 },
   ],
 
@@ -24,7 +24,7 @@ const voicings = {
 
   aug: [
     { name: "C#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "A", octave: 4 },
   ],
 
@@ -42,7 +42,7 @@ const voicings = {
 
   7: [
     { name: "C#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "G#", octave: 4 },
     { name: "B", octave: 4 },
   ],
@@ -56,9 +56,9 @@ const voicings = {
 
   maj7: [
     { name: "C#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "G#", octave: 4 },
-    { name: "C", octave: 5 },
+    { name: "B#", octave: 4 },
   ],
 
   "m7(b5)": [
@@ -77,7 +77,7 @@ const voicings = {
 
   6: [
     { name: "C#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "G#", octave: 4 },
     { name: "A#", octave: 4 },
   ],
@@ -91,7 +91,7 @@ const voicings = {
 
   9: [
     { name: "C#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "G#", octave: 4 },
     { name: "B", octave: 4 },
     { name: "D#", octave: 5 },
@@ -99,9 +99,9 @@ const voicings = {
 
   maj9: [
     { name: "C#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "G#", octave: 4 },
-    { name: "C", octave: 5 },
+    { name: "B#", octave: 4 },
     { name: "D#", octave: 5 },
   ],
 
@@ -115,21 +115,21 @@ const voicings = {
 
   add9: [
     { name: "C#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "G#", octave: 4 },
     { name: "D#", octave: 5 },
   ],
 
   2: [
     { name: "C#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "G#", octave: 4 },
     { name: "D#", octave: 5 },
   ],
 
   11: [
     { name: "C#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "G#", octave: 4 },
     { name: "B", octave: 4 },
     { name: "D#", octave: 5 },
@@ -138,7 +138,7 @@ const voicings = {
 
   13: [
     { name: "C#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "G#", octave: 4 },
     { name: "B", octave: 4 },
     { name: "D#", octave: 5 },

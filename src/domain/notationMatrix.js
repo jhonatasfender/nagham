@@ -29,6 +29,8 @@ export function chord(noteSpecs, duration = "quarter") {
       midi: noteToMidi(n.name, n.octave),
       duration,
       accidental: n.accidental,
+      spelling: n.name,
+      spellingOctave: n.octave,
     })),
   };
 }

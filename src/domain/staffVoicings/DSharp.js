@@ -79,14 +79,14 @@ const voicings = {
     { name: "D#", octave: 4 },
     { name: "G", octave: 4 },
     { name: "A#", octave: 4 },
-    { name: "B", octave: 4 },
+    { name: "C", octave: 5 },
   ],
 
   m6: [
     { name: "D#", octave: 4 },
     { name: "F#", octave: 4 },
     { name: "A#", octave: 4 },
-    { name: "B", octave: 4 },
+    { name: "C", octave: 5 },
   ],
 
   9: [
@@ -143,7 +143,7 @@ const voicings = {
     { name: "C#", octave: 5 },
     { name: "F", octave: 5 },
     { name: "G#", octave: 5 },
-    { name: "B", octave: 5 },
+    { name: "C", octave: 6 },
   ],
 };
 

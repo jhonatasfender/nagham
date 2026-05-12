@@ -4,6 +4,7 @@ import { useContainerSize } from "../../hooks/useContainerSize.js";
 import { midiToNote, noteToMidi } from "../../domain/notes.js";
 import { TRIAD_KEYS } from "../../domain/pianoKeys";
 import { getPianoChordVoicing } from "../../domain/pianoVoicings";
+import { getNoteForDisplay } from "../../domain/chord";
 import { drawPiano } from "./drawPiano";
 
 const DEFAULT_HEIGHT = 192;
@@ -14,6 +15,7 @@ export function PianoView({
   chordNotes,
   root,
   quality,
+  useFlats = false,
 }) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
@@ -23,11 +25,14 @@ export function PianoView({
     if (chordNotes?.length && root && quality) {
       const voicing = getPianoChordVoicing(root, quality);
       if (voicing) {
-        return voicing;
+        return voicing.map((n) => ({
+          ...n,
+          name: getNoteForDisplay(n.name, useFlats),
+        }));
       }
     }
     return chordNotes?.length ? chordNotes : TRIAD_KEYS;
-  }, [chordNotes, root, quality]);
+  }, [chordNotes, root, quality, useFlats]);
 
   useEffect(() => {
     const el = containerRef.current;

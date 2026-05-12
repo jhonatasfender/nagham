@@ -39,16 +39,27 @@ function accidToMei(accidental) {
   return null;
 }
 
-function midiToMeiPitch(midi, explicitAccidental) {
-  const note = midiToNote(midi);
-  const pname = note.name[0].toLowerCase();
-  const accidentalFromName = note.name.includes("#")
-    ? "s"
-    : note.name.includes("b")
-      ? "f"
-      : null;
+function midiToMeiPitch(midi, explicitAccidental, spelling, spellingOctave) {
+  const fallback = midiToNote(midi);
+  const baseName = spelling ?? fallback.name;
+  const pname = baseName[0].toLowerCase();
+  const suffix = baseName.slice(1);
+  const accidentalFromName =
+    suffix === "##" || suffix === "x"
+      ? "ss"
+      : suffix === "bb"
+        ? "ff"
+        : suffix.includes("#")
+          ? "s"
+          : suffix.includes("b")
+            ? "f"
+            : null;
   const accid = accidToMei(explicitAccidental) ?? accidentalFromName;
-  return { pname, oct: String(note.octave), accid };
+  const oct =
+    spelling != null && spellingOctave != null
+      ? String(spellingOctave)
+      : String(fallback.octave);
+  return { pname, oct, accid };
 }
 
 function buildMeiFromScore(score) {
@@ -76,7 +87,12 @@ function buildMeiFromScore(score) {
       if (ev.notes.length === 1) {
         const n = ev.notes[0];
         const id = `n-${measureIndex}-${beatIndex}-0`;
-        const { pname, oct, accid } = midiToMeiPitch(n.midi, n.accidental);
+        const { pname, oct, accid } = midiToMeiPitch(
+          n.midi,
+          n.accidental,
+          n.spelling,
+          n.spellingOctave
+        );
         const accidAttr = accid ? ` accid="${accid}"` : "";
         layerParts.push(
           `<note xml:id="${id}" pname="${pname}" oct="${oct}" dur="${dur}"${accidAttr}/>`
@@ -86,7 +102,12 @@ function buildMeiFromScore(score) {
         const notesXml = ev.notes
           .map((n, noteIndex) => {
             const id = `n-${measureIndex}-${beatIndex}-${noteIndex}`;
-            const { pname, oct, accid } = midiToMeiPitch(n.midi, n.accidental);
+            const { pname, oct, accid } = midiToMeiPitch(
+              n.midi,
+              n.accidental,
+              n.spelling,
+              n.spellingOctave
+            );
             const accidAttr = accid ? ` accid="${accid}"` : "";
             idToNote.set(id, midiToNote(n.midi));
             return `<note xml:id="${id}" pname="${pname}" oct="${oct}"${accidAttr}/>`;
