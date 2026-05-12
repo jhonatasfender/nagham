@@ -105,15 +105,34 @@ const results = [];
 let total = 0, pass = 0, fail = 0;
 const failList = [];
 
+function flattenVariation(v) {
+  const positions = v.positions ?? [];
+  const barre = v.barre
+    ? [{ barre: v.barre.fret, strings: v.barre.strings }]
+    : [];
+  return [...positions, ...barre];
+}
+
 for (const [rootName, voicings] of Object.entries(ROOTS)) {
-  for (const [quality, voicing] of Object.entries(voicings)) {
-    total++;
-    const res = checkPlayability(voicing);
-    const pcs = pitchClassSet(voicing);
-    if (res.playable) pass++;
-    else {
-      fail++;
-      failList.push({ root: rootName, quality, ...res, pcs: [...pcs].sort((a,b)=>a-b) });
+  for (const [quality, variations] of Object.entries(voicings)) {
+    if (!Array.isArray(variations)) continue;
+    for (let idx = 0; idx < variations.length; idx++) {
+      const flat = flattenVariation(variations[idx]);
+      total++;
+      const res = checkPlayability(flat);
+      const pcs = pitchClassSet(flat);
+      if (res.playable) {
+        pass++;
+      } else {
+        fail++;
+        const id = variations.length > 1 ? `${quality}#${idx}` : quality;
+        failList.push({
+          root: rootName,
+          quality: id,
+          ...res,
+          pcs: [...pcs].sort((a, b) => a - b),
+        });
+      }
     }
   }
 }
@@ -132,8 +151,11 @@ if (failList.length > 0) {
 const pcSnapshot = {};
 for (const [rootName, voicings] of Object.entries(ROOTS)) {
   pcSnapshot[rootName] = {};
-  for (const [quality, voicing] of Object.entries(voicings)) {
-    pcSnapshot[rootName][quality] = [...pitchClassSet(voicing)].sort((a,b)=>a-b);
+  for (const [quality, variations] of Object.entries(voicings)) {
+    if (!Array.isArray(variations)) continue;
+    pcSnapshot[rootName][quality] = variations.map((v) =>
+      [...pitchClassSet(flattenVariation(v))].sort((a, b) => a - b),
+    );
   }
 }
 

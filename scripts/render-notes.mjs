@@ -20,7 +20,10 @@ import {
   getPianoChordVoicing,
   getStaffChordVoicing,
 } from "../src/domain/pianoVoicings/index.js";
-import { getChordVoicing } from "../src/domain/voicings/index.js";
+import {
+  getChordVoicing,
+  getChordVoicingCount,
+} from "../src/domain/voicings/index.js";
 
 const ALL_ROOTS = ["C", "C#", "D", "D#", "E", "F", "G", "A", "B"];
 const ALL_QUALITIES = QUALITY_KEYS;
@@ -359,19 +362,24 @@ if (arg1 === "--summary") {
   console.log(C.bold + "\n── GUITAR voicings ──" + C.reset);
   for (const root of ALL_ROOTS_GUITAR) {
     for (const quality of ALL_QUALITIES) {
-      const v = getChordVoicing(root, quality);
-      if (!v) continue;
-      guitarTotal++;
-      const notes = v.map((p) => fb[p.stringIndex][p.fret]);
-      const expected = expectedPcSet(root, quality);
-      const pcSet = pcSetFromNotes(notes);
-      if (expected && !setsEqual(pcSet, expected)) {
-        guitarFailures++;
-        const missing = setDiff(expected, pcSet);
-        const extra = setDiff(pcSet, expected);
-        console.log(
-          `${C.red}⨯${C.reset} ${root.padEnd(3)} ${quality.padEnd(8)}  got=[${notes.map((n) => n.name + n.octave).join(",")}]  missing=[${missing.join(",")}]  extra=[${extra.join(",")}]`,
-        );
+      const count = getChordVoicingCount(root, quality);
+      if (count === 0) continue;
+      for (let idx = 0; idx < count; idx++) {
+        const v = getChordVoicing(root, quality, idx);
+        if (!v) continue;
+        guitarTotal++;
+        const notes = v.map((p) => fb[p.stringIndex][p.fret]);
+        const expected = expectedPcSet(root, quality);
+        const pcSet = pcSetFromNotes(notes);
+        if (expected && !setsEqual(pcSet, expected)) {
+          guitarFailures++;
+          const missing = setDiff(expected, pcSet);
+          const extra = setDiff(pcSet, expected);
+          const id = count > 1 ? `${quality}#${idx}` : quality;
+          console.log(
+            `${C.red}⨯${C.reset} ${root.padEnd(3)} ${id.padEnd(10)}  got=[${notes.map((n) => n.name + n.octave).join(",")}]  missing=[${missing.join(",")}]  extra=[${extra.join(",")}]`,
+          );
+        }
       }
     }
   }
