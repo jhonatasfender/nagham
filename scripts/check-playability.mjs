@@ -4,7 +4,7 @@
 //
 // Usage:
 //   node scripts/check-playability.mjs           # summary + list of failures
-//   node scripts/check-playability.mjs --dump-pcs  # also emit pitch-class snapshot (JSON) for regression diffing
+//   node scripts/check-playability.mjs --dump-pcs  # emit pitch-class snapshot (JSON); shape: {root: {quality: [[pc,...], ...]}} (one pc-set per variation)
 import C from "../src/domain/voicings/C.js";
 import CSharp from "../src/domain/voicings/CSharp.js";
 import D from "../src/domain/voicings/D.js";
@@ -105,6 +105,11 @@ const results = [];
 let total = 0, pass = 0, fail = 0;
 const failList = [];
 
+/**
+ * Bridge from the new {region, positions, barre} variation object to the
+ * legacy mixed array `[[s,f], ..., {barre, strings}?]` that the helpers
+ * `analyze` and `pitchClassSet` were originally written against.
+ */
 function flattenVariation(v) {
   const positions = v.positions ?? [];
   const barre = v.barre
