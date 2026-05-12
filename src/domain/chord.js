@@ -28,13 +28,23 @@ const QUALITY_TO_TONAL = {
 };
 
 function parseTonalNote(str, useFlats = false) {
-  const noteNames = useFlats ? NOTE_NAMES_FLATS : NOTE_NAMES;
   const match = str.match(/^([A-G])([#b]*)(\d*)$/);
   if (!match) return null;
   const [, letter, accidentals, octStr] = match;
   const pitch = letter + accidentals;
   const octave = octStr !== "" ? parseInt(octStr, 10) : 4;
-  const flatToSharp = { Db: "C#", Eb: "D#", Gb: "F#", Ab: "G#", Bb: "A#" };
+
+  // When useFlats is off, preserve tonal's spelling verbatim — including
+  // theoretical hard accidentals like F##, B#. These are intentional
+  // (tonal already returns the correct spelling for each scale degree).
+  if (!useFlats) return { name: pitch, octave };
+
+  // useFlats=true: convert simple sharps to flats; for hard enharmonics
+  // (double-sharps, B#, etc.) fall back to a natural-letter equivalent
+  // from the flat name set.
+  const noteNames = NOTE_NAMES_FLATS;
+  if (noteNames.includes(pitch)) return { name: pitch, octave };
+
   const sharpToFlat = {
     "C#": "Db",
     "D#": "Eb",
@@ -42,22 +52,12 @@ function parseTonalNote(str, useFlats = false) {
     "G#": "Ab",
     "A#": "Bb",
   };
-
-  if (noteNames.includes(pitch)) {
-    return { name: pitch, octave };
-  }
-  if (flatToSharp[pitch] && noteNames.includes(flatToSharp[pitch])) {
-    return { name: flatToSharp[pitch], octave };
-  }
   if (sharpToFlat[pitch] && noteNames.includes(sharpToFlat[pitch])) {
     return { name: sharpToFlat[pitch], octave };
   }
 
   const pc = pitchNameToPitchClass(pitch);
-  if (pc !== null) {
-    return { name: noteNames[pc], octave };
-  }
-
+  if (pc !== null) return { name: noteNames[pc], octave };
   return null;
 }
 

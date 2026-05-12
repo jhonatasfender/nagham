@@ -25,7 +25,7 @@ const voicings = {
   aug: [
     { name: "C#", octave: 4 },
     { name: "E#", octave: 4 },
-    { name: "A", octave: 4 },
+    { name: "G##", octave: 4 },
   ],
 
   sus2: [

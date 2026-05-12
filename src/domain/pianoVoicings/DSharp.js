@@ -1,7 +1,7 @@
 const voicings = {
   Maj: [
     { name: "D#", octave: 4 },
-    { name: "G", octave: 4 },
+    { name: "F##", octave: 4 },
     { name: "A#", octave: 4 },
   ],
 
@@ -24,13 +24,13 @@ const voicings = {
 
   aug: [
     { name: "D#", octave: 4 },
-    { name: "G", octave: 4 },
-    { name: "B", octave: 4 },
+    { name: "F##", octave: 4 },
+    { name: "A##", octave: 4 },
   ],
 
   sus2: [
     { name: "D#", octave: 4 },
-    { name: "F", octave: 4 },
+    { name: "E#", octave: 4 },
     { name: "A#", octave: 4 },
   ],
 
@@ -42,7 +42,7 @@ const voicings = {
 
   7: [
     { name: "D#", octave: 4 },
-    { name: "G", octave: 4 },
+    { name: "F##", octave: 4 },
     { name: "A#", octave: 4 },
     { name: "C#", octave: 5 },
   ],
@@ -56,9 +56,9 @@ const voicings = {
 
   maj7: [
     { name: "D#", octave: 4 },
-    { name: "G", octave: 4 },
+    { name: "F##", octave: 4 },
     { name: "A#", octave: 4 },
-    { name: "D", octave: 5 },
+    { name: "C##", octave: 5 },
   ],
 
   "m7(b5)": [
@@ -77,32 +77,32 @@ const voicings = {
 
   6: [
     { name: "D#", octave: 4 },
-    { name: "G", octave: 4 },
+    { name: "F##", octave: 4 },
     { name: "A#", octave: 4 },
-    { name: "C", octave: 5 },
+    { name: "B#", octave: 4 },
   ],
 
   m6: [
     { name: "D#", octave: 4 },
     { name: "F#", octave: 4 },
     { name: "A#", octave: 4 },
-    { name: "C", octave: 5 },
+    { name: "B#", octave: 4 },
   ],
 
   9: [
     { name: "D#", octave: 4 },
-    { name: "G", octave: 4 },
+    { name: "F##", octave: 4 },
     { name: "A#", octave: 4 },
     { name: "C#", octave: 5 },
-    { name: "F", octave: 5 },
+    { name: "E#", octave: 5 },
   ],
 
   maj9: [
     { name: "D#", octave: 4 },
-    { name: "G", octave: 4 },
+    { name: "F##", octave: 4 },
     { name: "A#", octave: 4 },
-    { name: "D", octave: 5 },
-    { name: "F", octave: 5 },
+    { name: "C##", octave: 5 },
+    { name: "E#", octave: 5 },
   ],
 
   m9: [
@@ -110,40 +110,40 @@ const voicings = {
     { name: "F#", octave: 4 },
     { name: "A#", octave: 4 },
     { name: "C#", octave: 5 },
-    { name: "F", octave: 5 },
+    { name: "E#", octave: 5 },
   ],
 
   add9: [
     { name: "D#", octave: 4 },
-    { name: "G", octave: 4 },
+    { name: "F##", octave: 4 },
     { name: "A#", octave: 4 },
-    { name: "F", octave: 5 },
+    { name: "E#", octave: 5 },
   ],
 
   2: [
     { name: "D#", octave: 4 },
-    { name: "G", octave: 4 },
+    { name: "F##", octave: 4 },
     { name: "A#", octave: 4 },
-    { name: "F", octave: 5 },
+    { name: "E#", octave: 5 },
   ],
 
   11: [
     { name: "D#", octave: 4 },
-    { name: "G", octave: 4 },
+    { name: "F##", octave: 4 },
     { name: "A#", octave: 4 },
     { name: "C#", octave: 5 },
-    { name: "F", octave: 5 },
+    { name: "E#", octave: 5 },
     { name: "G#", octave: 5 },
   ],
 
   13: [
     { name: "D#", octave: 4 },
-    { name: "G", octave: 4 },
+    { name: "F##", octave: 4 },
     { name: "A#", octave: 4 },
     { name: "C#", octave: 5 },
-    { name: "F", octave: 5 },
+    { name: "E#", octave: 5 },
     { name: "G#", octave: 5 },
-    { name: "C", octave: 6 },
+    { name: "B#", octave: 5 },
   ],
 };
 
