@@ -99,6 +99,7 @@ function splitPositionsAndBarre(items) {
 }
 
 function computeRegion(positions, barre) {
+  if (!positions.length && !barre) return "open";
   const frettedFrets = positions
     .map(([, f]) => f)
     .filter((f) => f > 0);
