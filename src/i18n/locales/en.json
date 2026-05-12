@@ -165,5 +165,14 @@
         "description": "Study scales and modes in Nagham: per-type tables for every key (natural and sharp spellings). Work in progress."
       }
     }
+  },
+  "voicings": {
+    "region": {
+      "open": "Open",
+      "fret": "Fret {{n}}"
+    },
+    "variation_label": "Variation {{n}} of {{total}}",
+    "variations_strip_title": "Variations",
+    "no_variations": "Only one shape known"
   }
 }

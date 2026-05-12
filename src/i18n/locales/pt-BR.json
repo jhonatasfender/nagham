@@ -165,5 +165,14 @@
         "description": "Estudo de escalas e modos no Nagham: tabela por tipo com todos os tons (natural e sustenidos). Em evolução."
       }
     }
+  },
+  "voicings": {
+    "region": {
+      "open": "Aberto",
+      "fret": "{{n}}ª casa"
+    },
+    "variation_label": "Variação {{n}} de {{total}}",
+    "variations_strip_title": "Variações",
+    "no_variations": "Apenas uma forma conhecida"
   }
 }
