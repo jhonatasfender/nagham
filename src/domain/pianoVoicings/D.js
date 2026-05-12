@@ -72,7 +72,7 @@ const voicings = {
     { name: "D", octave: 4 },
     { name: "F", octave: 4 },
     { name: "Ab", octave: 4 },
-    { name: "B", octave: 4 },
+    { name: "Cb", octave: 5 },
   ],
 
   6: [

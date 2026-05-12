@@ -19,7 +19,7 @@ const voicings = {
   dim: [
     { name: "F", octave: 4 },
     { name: "Ab", octave: 4 },
-    { name: "B", octave: 4 },
+    { name: "Cb", octave: 5 },
   ],
 
   aug: [
@@ -64,15 +64,15 @@ const voicings = {
   "m7(b5)": [
     { name: "F", octave: 4 },
     { name: "Ab", octave: 4 },
-    { name: "B", octave: 4 },
+    { name: "Cb", octave: 5 },
     { name: "Eb", octave: 5 },
   ],
 
   dim7: [
     { name: "F", octave: 4 },
     { name: "Ab", octave: 4 },
-    { name: "B", octave: 4 },
-    { name: "D", octave: 5 },
+    { name: "Cb", octave: 5 },
+    { name: "Ebb", octave: 5 },
   ],
 
   6: [

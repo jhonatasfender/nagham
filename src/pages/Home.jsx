@@ -8,7 +8,6 @@ import {
   EXTENSION_COMPOSABLE_WITH_TRIAD,
   getChordLabel,
   getChordNotes,
-  getNoteForDisplay,
 } from "../domain/chord";
 import { createMatrixFromChord } from "../domain/notationMatrix";
 import { getStaffChordVoicing } from "../domain/staffVoicings";
@@ -90,15 +89,10 @@ export function Home() {
   const notesForStaff = useMemo(() => {
     if (chordNotes?.length && root && quality) {
       const voicing = getStaffChordVoicing(root, quality);
-      if (voicing) {
-        return voicing.map((n) => ({
-          ...n,
-          name: getNoteForDisplay(n.name, useFlats),
-        }));
-      }
+      if (voicing) return voicing;
     }
     return chordNotes;
-  }, [chordNotes, root, quality, useFlats]);
+  }, [chordNotes, root, quality]);
   const scoreMatrix = useMemo(
     () => createMatrixFromChord(notesForStaff),
     [notesForStaff]
@@ -164,7 +158,6 @@ export function Home() {
               chordNotes={chordNotes}
               root={root}
               quality={quality}
-              useFlats={useFlats}
             />
           </div>
           <div className="rounded-lg border border-zinc-700 bg-zinc-800/50 p-4">
