@@ -65,3 +65,9 @@ export function getPianoChordVoicingCount(root, quality) {
 
   return 1;
 }
+
+// Staff renders from the same data as the piano (see ADR-0007). These
+// aliases exist so callers don't need to change all at once; new code
+// should import getPianoChordVoicing directly.
+export const getStaffChordVoicing = getPianoChordVoicing;
+export const getStaffChordVoicingCount = getPianoChordVoicingCount;

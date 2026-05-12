@@ -10,7 +10,7 @@ import {
   getChordNotes,
 } from "../domain/chord";
 import { createMatrixFromChord } from "../domain/notationMatrix";
-import { getStaffChordVoicing } from "../domain/staffVoicings";
+import { getStaffChordVoicing } from "../domain/pianoVoicings";
 import { GuitarView } from "../views/Guitar/GuitarView";
 import { PianoView } from "../views/Piano/PianoView";
 import { StaffView } from "../views/Staff/StaffView";

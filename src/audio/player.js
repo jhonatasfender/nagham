@@ -19,8 +19,10 @@ function getContext() {
 }
 
 export function isAudioSupported() {
-  return typeof window !== "undefined" &&
-    Boolean(window.AudioContext || window.webkitAudioContext);
+  return (
+    typeof window !== "undefined" &&
+    Boolean(window.AudioContext || window.webkitAudioContext)
+  );
 }
 
 export function getMuted() {

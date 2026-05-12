@@ -93,7 +93,8 @@ export function GuitarView({
     if (centerFret == null) return;
 
     requestAnimationFrame(() => {
-      const contentWidth = parseFloat(svg.getAttribute("width")) || el.clientWidth;
+      const contentWidth =
+        parseFloat(svg.getAttribute("width")) || el.clientWidth;
       const viewWidth = el.clientWidth;
       if (contentWidth <= viewWidth) return;
       const visibleFretCount = 14;

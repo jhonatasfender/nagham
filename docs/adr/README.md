@@ -10,14 +10,16 @@
 
 ## Índice
 
-| ID | Título | Status | Data |
-|---|---|---|---|
-| [0001](0001-uso-do-verovio-para-partitura.md) | Uso do Verovio para renderizar partitura | Accepted | 2025-XX |
-| [0002](0002-grafia-teorica-estrita.md) | Grafia teórica estrita por padrão | Accepted | 2026-05-12 |
-| [0003](0003-dim-significa-dim7-cifra-br.md) | "dim" no UI significa dim7 (cifra brasileira) | Accepted | 2026-05-12 |
-| [0004](0004-touch-mobile-pointerdown.md) | Captura de toque mobile via pointerdown + touch-action | Accepted | 2026-05-12 |
-| [0005](0005-audio-web-audio-puro.md) | Áudio via Web Audio puro (sem Tone.js) | Accepted | 2026-05-12 |
-| [0006](0006-ascii-text-chord-symbol-style.md) | Renderização de cifras em texto ASCII | Accepted | 2026-05-12 |
+| ID                                            | Título                                                 | Status   | Data       |
+| --------------------------------------------- | ------------------------------------------------------ | -------- | ---------- |
+| [0001](0001-uso-do-verovio-para-partitura.md) | Uso do Verovio para renderizar partitura               | Accepted | 2025-XX    |
+| [0002](0002-grafia-teorica-estrita.md)        | Grafia teórica estrita por padrão                      | Accepted | 2026-05-12 |
+| [0003](0003-dim-significa-dim7-cifra-br.md)   | "dim" no UI significa dim7 (cifra brasileira)          | Accepted | 2026-05-12 |
+| [0004](0004-touch-mobile-pointerdown.md)      | Captura de toque mobile via pointerdown + touch-action | Accepted | 2026-05-12 |
+| [0005](0005-audio-web-audio-puro.md)          | Áudio via Web Audio puro (sem Tone.js)                 | Accepted | 2026-05-12 |
+| [0006](0006-ascii-text-chord-symbol-style.md) | Renderização de cifras em texto ASCII                  | Accepted | 2026-05-12 |
+| [0007](0007-unificar-piano-staff-voicings.md) | Unificar piano e staff voicings em uma fonte única     | Accepted | 2026-05-12 |
+| [0008](0008-chord-qualities-single-source.md) | `chordQualities.js` como fonte única de intervalos     | Accepted | 2026-05-12 |
 
 ## Template
 

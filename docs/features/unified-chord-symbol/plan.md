@@ -2,16 +2,16 @@
 
 ## Arquivos que vão mudar
 
-| Arquivo | Mudança |
-|---|---|
-| `src/domain/chordSymbol.js` | **novo** — `QUALITY_SUFFIX`, `formatQualitySuffix`, `formatChordSymbol` |
-| `src/domain/chord.js` | `getChordLabel` delega para `formatChordSymbol`; `qualityToDisplaySuffix` removida |
-| `src/components/ChordBuilderSection/constants.js` | `extensionChipLabel` delega para `formatQualitySuffix` |
-| `src/domain/scales.js` | `formatTriadLabel` mapeia `TriadQuality` enum → quality string e usa `formatQualitySuffix` |
-| `docs/adr/0006-ascii-text-chord-symbol-style.md` | **novo** — registra decisão de estilo |
-| `docs/adr/README.md` | adicionar entrada 0006 no índice |
-| `docs/domain/notation-conventions.md` | adicionar tabela de suffix |
-| `docs/features/unified-chord-symbol/spec.md` | marcar Status: shipped no fim |
+| Arquivo                                           | Mudança                                                                                    |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `src/domain/chordSymbol.js`                       | **novo** — `QUALITY_SUFFIX`, `formatQualitySuffix`, `formatChordSymbol`                    |
+| `src/domain/chord.js`                             | `getChordLabel` delega para `formatChordSymbol`; `qualityToDisplaySuffix` removida         |
+| `src/components/ChordBuilderSection/constants.js` | `extensionChipLabel` delega para `formatQualitySuffix`                                     |
+| `src/domain/scales.js`                            | `formatTriadLabel` mapeia `TriadQuality` enum → quality string e usa `formatQualitySuffix` |
+| `docs/adr/0006-ascii-text-chord-symbol-style.md`  | **novo** — registra decisão de estilo                                                      |
+| `docs/adr/README.md`                              | adicionar entrada 0006 no índice                                                           |
+| `docs/domain/notation-conventions.md`             | adicionar tabela de suffix                                                                 |
+| `docs/features/unified-chord-symbol/spec.md`      | marcar Status: shipped no fim                                                              |
 
 ## Riscos
 

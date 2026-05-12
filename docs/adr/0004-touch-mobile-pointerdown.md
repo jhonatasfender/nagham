@@ -32,8 +32,8 @@ Três mudanças combinadas:
    - `src/views/Guitar/drawCells.js` (rects de cell)
    - `src/views/Guitar/drawDots.js` (círculos)
    - `src/views/Staff/drawStaff.js` (noteheads do Verovio)
-   Dispara no momento que o dedo toca, antes do navegador decidir se é
-   tap ou pan.
+     Dispara no momento que o dedo toca, antes do navegador decidir se é
+     tap ou pan.
 2. **`touch-action: manipulation`** no SVG raiz de cada vista (piano, guitar,
    staff). Elimina o delay de 300 ms e impede double-tap-zoom de engolir
    o toque.

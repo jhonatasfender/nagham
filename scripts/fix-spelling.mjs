@@ -47,7 +47,6 @@ const ROOT_TO_FILE = {
 };
 
 const PIANO_DIR = pathResolve(__dirname, "../src/domain/pianoVoicings");
-const STAFF_DIR = pathResolve(__dirname, "../src/domain/staffVoicings");
 
 function pcMod(n) { return ((n % 12) + 12) % 12; }
 
@@ -156,7 +155,7 @@ function rewriteFile(filePath, root) {
 
 let total = 0;
 for (const [root, filename] of Object.entries(ROOT_TO_FILE)) {
-  for (const dir of [PIANO_DIR, STAFF_DIR]) {
+  for (const dir of [PIANO_DIR]) {
     const filePath = pathResolve(dir, filename);
     try {
       const n = rewriteFile(filePath, root);

@@ -28,6 +28,7 @@ Implementamos áudio com **Web Audio API puro**, em
 `src/audio/player.js` e `src/audio/useAudio.js`. Sem dependências externas.
 
 Características:
+
 - `AudioContext` criado lazy (no primeiro clique do usuário), atendendo
   a política de autoplay dos navegadores.
 - Oscillator `triangle` → BiquadFilter lowpass → GainNode com ADSR

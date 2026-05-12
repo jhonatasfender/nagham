@@ -50,7 +50,44 @@ export const NOTE_TO_INDEX = {
   B: 11,
 };
 
-const LETTER_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+export const LETTERS = ["C", "D", "E", "F", "G", "A", "B"];
+
+// pc (0..11) of each natural letter. Use this to derive accidentals when
+// spelling chord/scale notes that must land on a specific letter.
+export const LETTER_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+
+// Pairs for converting between simple sharp/flat spellings of the same
+// pitch class (e.g. "C#" ↔ "Db"). Does NOT include hard enharmonics like
+// "F##" ↔ "G" — those are intentional and preserve the strict spelling
+// rule (see ADR-0002).
+export const ENHARMONIC_SHARP_TO_FLAT = Object.freeze({
+  "C#": "Db",
+  "D#": "Eb",
+  "F#": "Gb",
+  "G#": "Ab",
+  "A#": "Bb",
+});
+
+export const ENHARMONIC_FLAT_TO_SHARP = Object.freeze({
+  Db: "C#",
+  Eb: "D#",
+  Gb: "F#",
+  Ab: "G#",
+  Bb: "A#",
+});
+
+// Normalised pitch class for a MIDI value (0..11).
+export function pitchClass(midi) {
+  return ((midi % 12) + 12) % 12;
+}
+
+// "#", "##", "b", "bb", … from a signed semitone offset relative to the
+// natural letter pitch class. Empty string for offset 0.
+export function buildAccidental(offset) {
+  if (offset === 0) return "";
+  if (offset > 0) return "#".repeat(offset);
+  return "b".repeat(-offset);
+}
 
 export function pitchNameToPitchClass(name) {
   const m = name?.trim().match(/^([A-G])([#b]*)$/);

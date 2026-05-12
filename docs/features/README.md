@@ -10,12 +10,14 @@
 ## Quando criar uma pasta
 
 ✅ Cria spec se:
+
 - A feature mexe em mais de 3 arquivos.
 - Há uma decisão de design não-óbvia (ADR provável).
 - A feature exige mudança no domínio musical (ver `domain/`).
 - A feature será desenvolvida ao longo de mais de uma sessão.
 
 ❌ Pula spec se:
+
 - Mudança puramente cosmética.
 - Correção de bug isolada, sem mudança de comportamento documentado.
 - Refactor sem impacto externo.

@@ -43,6 +43,7 @@ para esse módulo. Mudar a forma como qualquer qualidade é exibida agora
 é uma edição de um único arquivo.
 
 Mapeamentos importantes:
+
 - `dim7 → "dim"` (ver [ADR-0003](0003-dim-significa-dim7-cifra-br.md))
 - `9+ → "7(#9)"` (cifra explícita do Hendrix chord)
 - `maj7 → "maj7"`, `maj9 → "maj9"` (sem encurtar para `M7`/`M9`)

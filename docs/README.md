@@ -29,13 +29,13 @@ docs/
 
 ## Quem usa o quê
 
-| Documento | Audiência | Mutabilidade |
-|---|---|---|
-| `constitution.md` | Humanos + agentes IA | Quase nunca muda; lido em todo `AGENTS.md` |
-| `domain/*` | Quem mexe em teoria musical | Atualizado a cada feature que toca em chord/scale |
-| `adr/*` | Quem quer entender "por quê" | **Nunca editado** — só superseded por outro ADR |
-| `frontend-architecture.md` | Quem implementa | Atualizado quando muda padrão de pasta/D3 |
-| `features/*/spec.md` | Quem está implementando aquela feature | Durante o trabalho; arquivado depois |
+| Documento                  | Audiência                              | Mutabilidade                                      |
+| -------------------------- | -------------------------------------- | ------------------------------------------------- |
+| `constitution.md`          | Humanos + agentes IA                   | Quase nunca muda; lido em todo `AGENTS.md`        |
+| `domain/*`                 | Quem mexe em teoria musical            | Atualizado a cada feature que toca em chord/scale |
+| `adr/*`                    | Quem quer entender "por quê"           | **Nunca editado** — só superseded por outro ADR   |
+| `frontend-architecture.md` | Quem implementa                        | Atualizado quando muda padrão de pasta/D3         |
+| `features/*/spec.md`       | Quem está implementando aquela feature | Durante o trabalho; arquivado depois              |
 
 ## Workflow para uma nova feature
 

@@ -27,41 +27,44 @@ Cada escala em `SCALE_DEFINITIONS` (em `src/domain/scales.js`) tem:
 ## Escalas registradas
 
 ### Heptatônicas
-| ID | Semitones | Notas (a partir de C) |
-|---|---|---|
-| `major-ionian` | [0,2,4,5,7,9,11] | C D E F G A B |
-| `natural-minor` | [0,2,3,5,7,8,10] | C D E♭ F G A♭ B♭ |
-| `harmonic-minor` | [0,2,3,5,7,8,11] | C D E♭ F G A♭ B |
-| `melodic-minor` | [0,2,3,5,7,9,11] | C D E♭ F G A B (ascendente jazz) |
-| `dorian` | [0,2,3,5,7,9,10] | C D E♭ F G A B♭ |
-| `phrygian` | [0,1,3,5,7,8,10] | C D♭ E♭ F G A♭ B♭ |
-| `lydian` | [0,2,4,6,7,9,11] | C D E F# G A B |
-| `mixolydian` | [0,2,4,5,7,9,10] | C D E F G A B♭ |
-| `locrian` | [0,1,3,5,6,8,10] | C D♭ E♭ F G♭ A♭ B♭ |
-| `hungarian-minor` | [0,2,3,6,7,8,11] | C D E♭ F# G A♭ B |
-| `arabic-maqam` | [0,1,3,5,7,8,10] | C D♭ E♭ F G A♭ B♭ (aproximação) |
+
+| ID                | Semitones        | Notas (a partir de C)            |
+| ----------------- | ---------------- | -------------------------------- |
+| `major-ionian`    | [0,2,4,5,7,9,11] | C D E F G A B                    |
+| `natural-minor`   | [0,2,3,5,7,8,10] | C D E♭ F G A♭ B♭                 |
+| `harmonic-minor`  | [0,2,3,5,7,8,11] | C D E♭ F G A♭ B                  |
+| `melodic-minor`   | [0,2,3,5,7,9,11] | C D E♭ F G A B (ascendente jazz) |
+| `dorian`          | [0,2,3,5,7,9,10] | C D E♭ F G A B♭                  |
+| `phrygian`        | [0,1,3,5,7,8,10] | C D♭ E♭ F G A♭ B♭                |
+| `lydian`          | [0,2,4,6,7,9,11] | C D E F# G A B                   |
+| `mixolydian`      | [0,2,4,5,7,9,10] | C D E F G A B♭                   |
+| `locrian`         | [0,1,3,5,6,8,10] | C D♭ E♭ F G♭ A♭ B♭               |
+| `hungarian-minor` | [0,2,3,6,7,8,11] | C D E♭ F# G A♭ B                 |
+| `arabic-maqam`    | [0,1,3,5,7,8,10] | C D♭ E♭ F G A♭ B♭ (aproximação)  |
 
 ### Não-heptatônicas (têm `letterSteps`)
-| ID | Semitones | letterSteps | Notas (C) |
-|---|---|---|---|
-| `major-pentatonic` | [0,2,4,7,9] | [0,1,2,4,5] | C D E G A |
-| `minor-pentatonic` | [0,3,5,7,10] | [0,2,3,4,6] | C E♭ F G B♭ |
-| `blues` | [0,3,5,6,7,10] | [0,2,3,3,4,6] | C E♭ F F# G B♭ |
-| `chinese-pentatonic` | [0,2,4,7,9] | [0,1,2,4,5] | C D E G A |
-| `hirajoshi` | [0,2,3,7,8] | [0,1,2,4,5] | C D E♭ G A♭ |
+
+| ID                   | Semitones      | letterSteps   | Notas (C)      |
+| -------------------- | -------------- | ------------- | -------------- |
+| `major-pentatonic`   | [0,2,4,7,9]    | [0,1,2,4,5]   | C D E G A      |
+| `minor-pentatonic`   | [0,3,5,7,10]   | [0,2,3,4,6]   | C E♭ F G B♭    |
+| `blues`              | [0,3,5,6,7,10] | [0,2,3,3,4,6] | C E♭ F F# G B♭ |
+| `chinese-pentatonic` | [0,2,4,7,9]    | [0,1,2,4,5]   | C D E G A      |
+| `hirajoshi`          | [0,2,3,7,8]    | [0,1,2,4,5]   | C D E♭ G A♭    |
 
 ### Conceituais (sem semitones — só rótulos)
+
 - `thaat-raga-framework`, `pelog`, `slendro`
 
 ## Funções públicas
 
-| Função | Saída | Quando usar |
-|---|---|---|
-| `buildScaleNotes(root, semitones, useFlats, opts)` | array de strings (`["C", "D", ...]`) | renderizar lista de notas |
-| `buildScaleDegreeTriads(root, semitones, useFlats, opts)` | array de strings (`["C", "Dm", "Em", ...]`) | mostrar tríades por grau |
-| `buildNaturalMinorTriadsWithBorrowedSixth(root, useFlats)` | idem | menor natural com II especial (ver tooltip i18n) |
-| `buildScalesTableTriads(root, options)` | dispatcher | usado pela página `/scales` |
-| `buildStepPattern(semitones)` | array de `"T"`, `"S"`, `"T+S"` | padrão de intervalos em escala |
+| Função                                                     | Saída                                       | Quando usar                                      |
+| ---------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------ |
+| `buildScaleNotes(root, semitones, useFlats, opts)`         | array de strings (`["C", "D", ...]`)        | renderizar lista de notas                        |
+| `buildScaleDegreeTriads(root, semitones, useFlats, opts)`  | array de strings (`["C", "Dm", "Em", ...]`) | mostrar tríades por grau                         |
+| `buildNaturalMinorTriadsWithBorrowedSixth(root, useFlats)` | idem                                        | menor natural com II especial (ver tooltip i18n) |
+| `buildScalesTableTriads(root, options)`                    | dispatcher                                  | usado pela página `/scales`                      |
+| `buildStepPattern(semitones)`                              | array de `"T"`, `"S"`, `"T+S"`              | padrão de intervalos em escala                   |
 
 `opts.letterSteps` deve ser passado em `buildScaleNotes` e
 `buildScaleDegreeTriads` quando a escala tiver `letterSteps` declarado em

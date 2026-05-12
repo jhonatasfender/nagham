@@ -3,7 +3,12 @@ import {
   NOTE_NAMES,
   noteToMidi,
   midiToNote,
+  pitchClass,
 } from "../src/domain/notes.js";
+import {
+  QUALITY_KEYS,
+  getQualityPitchClasses,
+} from "../src/domain/chordQualities.js";
 import { midiToTreblePosition } from "../src/domain/staffPositions.js";
 import {
   createMatrixFromChord,
@@ -11,38 +16,14 @@ import {
 } from "../src/domain/notationMatrix.js";
 import { getFretboardMatrix } from "../src/domain/fretboardMatrix.js";
 import { getPianoKeys, resolvePianoOctaves } from "../src/domain/pianoKeys.js";
-import { getPianoChordVoicing } from "../src/domain/pianoVoicings/index.js";
-import { getStaffChordVoicing } from "../src/domain/staffVoicings/index.js";
+import {
+  getPianoChordVoicing,
+  getStaffChordVoicing,
+} from "../src/domain/pianoVoicings/index.js";
 import { getChordVoicing } from "../src/domain/voicings/index.js";
 
-const EXPECTED_INTERVALS_PC = {
-  Maj: [0, 4, 7],
-  m: [0, 3, 7],
-  5: [0, 7],
-  m5: [0, 7],
-  dim: [0, 3, 6],
-  aug: [0, 4, 8],
-  sus2: [0, 2, 7],
-  sus4: [0, 5, 7],
-  7: [0, 4, 7, 10],
-  m7: [0, 3, 7, 10],
-  maj7: [0, 4, 7, 11],
-  "m7(b5)": [0, 3, 6, 10],
-  dim7: [0, 3, 6, 9],
-  6: [0, 4, 7, 9],
-  m6: [0, 3, 7, 9],
-  9: [0, 4, 7, 10, 2],
-  maj9: [0, 4, 7, 11, 2],
-  m9: [0, 3, 7, 10, 2],
-  add9: [0, 4, 7, 2],
-  "6/9": [0, 4, 7, 9, 2],
-  11: [0, 4, 7, 10, 2, 5],
-  13: [0, 4, 7, 10, 2, 5, 9],
-  "9+": [0, 4, 7, 10, 3],
-};
-
 const ALL_ROOTS = ["C", "C#", "D", "D#", "E", "F", "G", "A", "B"];
-const ALL_QUALITIES = Object.keys(EXPECTED_INTERVALS_PC);
+const ALL_QUALITIES = QUALITY_KEYS;
 
 const C = {
   reset: "\x1b[0m",
@@ -56,26 +37,19 @@ const C = {
   gray: "\x1b[90m",
 };
 
-function pc(midi) {
-  return ((midi % 12) + 12) % 12;
-}
-
 function rootToPc(root) {
-  const m = noteToMidi(root, 4);
-  return pc(m);
+  return pitchClass(noteToMidi(root, 4));
 }
 
 function expectedPcSet(root, quality) {
   const rootPc = rootToPc(root);
-  const intervals = EXPECTED_INTERVALS_PC[quality];
+  const intervals = getQualityPitchClasses(quality);
   if (!intervals) return null;
-  return new Set(intervals.map((i) => pc(rootPc + i)));
+  return new Set(intervals.map((i) => pitchClass(rootPc + i)));
 }
 
 function pcSetFromNotes(notes) {
-  return new Set(
-    notes.map((n) => pc(noteToMidi(n.name, n.octave))),
-  );
+  return new Set(notes.map((n) => pitchClass(noteToMidi(n.name, n.octave))));
 }
 
 function setsEqual(a, b) {

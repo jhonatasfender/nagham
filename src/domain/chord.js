@@ -1,32 +1,13 @@
 import { notes as chordNotes, get as chordGet } from "@tonaljs/chord";
-import { NOTE_NAMES, NOTE_NAMES_FLATS, pitchNameToPitchClass } from "./notes";
+import {
+  ENHARMONIC_FLAT_TO_SHARP,
+  ENHARMONIC_SHARP_TO_FLAT,
+  NOTE_NAMES,
+  NOTE_NAMES_FLATS,
+  pitchNameToPitchClass,
+} from "./notes";
+import { getQualityTonalType } from "./chordQualities";
 import { formatChordSymbol } from "./chordSymbol";
-
-const QUALITY_TO_TONAL = {
-  Maj: "maj",
-  m: "m",
-  5: "5",
-  dim: "dim",
-  aug: "aug",
-  sus2: "sus2",
-  sus4: "sus4",
-  6: "6",
-  m6: "m6",
-  "6/9": "69",
-  7: "7",
-  maj7: "maj7",
-  m7: "m7",
-  "m7(b5)": "m7b5",
-  dim7: "dim7",
-  add9: "add9",
-  9: "9",
-  maj9: "maj9",
-  "9+": "7#9",
-  m9: "m9",
-  m5: "5",
-  11: "11",
-  13: "13",
-};
 
 function parseTonalNote(str, useFlats = false) {
   const match = str.match(/^([A-G])([#b]*)(\d*)$/);
@@ -46,15 +27,9 @@ function parseTonalNote(str, useFlats = false) {
   const noteNames = NOTE_NAMES_FLATS;
   if (noteNames.includes(pitch)) return { name: pitch, octave };
 
-  const sharpToFlat = {
-    "C#": "Db",
-    "D#": "Eb",
-    "F#": "Gb",
-    "G#": "Ab",
-    "A#": "Bb",
-  };
-  if (sharpToFlat[pitch] && noteNames.includes(sharpToFlat[pitch])) {
-    return { name: sharpToFlat[pitch], octave };
+  const flatEquivalent = ENHARMONIC_SHARP_TO_FLAT[pitch];
+  if (flatEquivalent && noteNames.includes(flatEquivalent)) {
+    return { name: flatEquivalent, octave };
   }
 
   const pc = pitchNameToPitchClass(pitch);
@@ -64,7 +39,7 @@ function parseTonalNote(str, useFlats = false) {
 
 export function getChordNotes(root, quality, options = {}) {
   const { bass = null, octave = 4, useFlats = false } = options;
-  const tonalType = QUALITY_TO_TONAL[quality];
+  const tonalType = getQualityTonalType(quality);
   if (!tonalType) return [];
 
   const tonic = `${root}${octave}`;
@@ -98,18 +73,10 @@ function qualityToChordSymbolSuffix(quality) {
 }
 
 function toCanonicalName(name, noteNames) {
-  const sharpToFlat = {
-    "C#": "Db",
-    "D#": "Eb",
-    "F#": "Gb",
-    "G#": "Ab",
-    "A#": "Bb",
-  };
   if (noteNames.includes(name)) return name;
-  const asFlat = sharpToFlat[name];
+  const asFlat = ENHARMONIC_SHARP_TO_FLAT[name];
   if (asFlat && noteNames.includes(asFlat)) return asFlat;
-  const flatToSharp = { Db: "C#", Eb: "D#", Gb: "F#", Ab: "G#", Bb: "A#" };
-  const asSharp = flatToSharp[name];
+  const asSharp = ENHARMONIC_FLAT_TO_SHARP[name];
   if (asSharp && noteNames.includes(asSharp)) return asSharp;
   return name;
 }

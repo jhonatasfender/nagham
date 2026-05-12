@@ -55,7 +55,9 @@ export function ChordLabelBar({ chordLabel, chordNotes }) {
                 ? "bg-zinc-800 text-zinc-600"
                 : "bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
             )}
-            title={t("chordBuilder.playChord", { defaultValue: "Tocar acorde" })}
+            title={t("chordBuilder.playChord", {
+              defaultValue: "Tocar acorde",
+            })}
             aria-label={t("chordBuilder.playChord", {
               defaultValue: "Tocar acorde",
             })}

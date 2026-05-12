@@ -5,43 +5,18 @@
 // the interval. Catches enharmonic spelling errors that the pitch-class
 // audit misses (e.g., "G#" used for the augmented 5th of F# instead of
 // "Cx", or "B" used for the diminished 7th of D instead of "Cb").
-import { noteToMidi } from "../src/domain/notes.js";
-import { getPianoChordVoicing } from "../src/domain/pianoVoicings/index.js";
-import { getStaffChordVoicing } from "../src/domain/staffVoicings/index.js";
-
-const LETTERS = ["C", "D", "E", "F", "G", "A", "B"];
-const LETTER_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+import { LETTERS, LETTER_PC, noteToMidi, buildAccidental } from "../src/domain/notes.js";
+import {
+  CHORD_QUALITIES,
+  getQualityDegrees,
+} from "../src/domain/chordQualities.js";
+import {
+  getPianoChordVoicing,
+  getStaffChordVoicing,
+} from "../src/domain/pianoVoicings/index.js";
 
 // scale-degree (1-based) → letter step from the root letter.
 const DEGREE_LETTER_STEP = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 9: 1, 11: 3, 13: 5 };
-
-// chord quality → list of [scaleDegree, semitones-from-root].
-// each entry produces exactly one note in the expected spelling.
-const QUALITY_INTERVALS = {
-  Maj: [[1, 0], [3, 4], [5, 7]],
-  m: [[1, 0], [3, 3], [5, 7]],
-  5: [[1, 0], [5, 7]],
-  m5: [[1, 0], [5, 7]],
-  dim: [[1, 0], [3, 3], [5, 6]],
-  aug: [[1, 0], [3, 4], [5, 8]],
-  sus2: [[1, 0], [2, 2], [5, 7]],
-  sus4: [[1, 0], [4, 5], [5, 7]],
-  7: [[1, 0], [3, 4], [5, 7], [7, 10]],
-  m7: [[1, 0], [3, 3], [5, 7], [7, 10]],
-  maj7: [[1, 0], [3, 4], [5, 7], [7, 11]],
-  "m7(b5)": [[1, 0], [3, 3], [5, 6], [7, 10]],
-  dim7: [[1, 0], [3, 3], [5, 6], [7, 9]],
-  6: [[1, 0], [3, 4], [5, 7], [6, 9]],
-  m6: [[1, 0], [3, 3], [5, 7], [6, 9]],
-  9: [[1, 0], [3, 4], [5, 7], [7, 10], [9, 14]],
-  maj9: [[1, 0], [3, 4], [5, 7], [7, 11], [9, 14]],
-  m9: [[1, 0], [3, 3], [5, 7], [7, 10], [9, 14]],
-  add9: [[1, 0], [3, 4], [5, 7], [9, 14]],
-  "6/9": [[1, 0], [3, 4], [5, 7], [6, 9], [9, 14]],
-  11: [[1, 0], [3, 4], [5, 7], [7, 10], [9, 14], [11, 17]],
-  13: [[1, 0], [3, 4], [5, 7], [7, 10], [9, 14], [11, 17], [13, 21]],
-  "9+": [[1, 0], [3, 4], [5, 7], [7, 10], [9, 15]],
-};
 
 const ROOTS = ["C", "C#", "D", "D#", "E", "F", "G", "A", "B"];
 
@@ -72,18 +47,12 @@ function rootInfo(root) {
   };
 }
 
-function buildAccidental(offset) {
-  if (offset === 0) return "";
-  if (offset > 0) return "#".repeat(offset);
-  return "b".repeat(-offset);
-}
-
 function expectedSpelling(root, quality) {
   const info = rootInfo(root);
   if (!info) return null;
-  const intervals = QUALITY_INTERVALS[quality];
-  if (!intervals) return null;
-  return intervals.map(([degree, semitones]) => {
+  const degrees = getQualityDegrees(quality);
+  if (!degrees) return null;
+  return degrees.map(([degree, semitones]) => {
     const letterStep = DEGREE_LETTER_STEP[degree];
     const targetLetter = LETTERS[(info.letterIdx + letterStep) % 7];
     const naturalPc = LETTER_PC[targetLetter];
@@ -130,7 +99,7 @@ function auditOne(root, quality) {
   };
 }
 
-const QUALITIES_TO_AUDIT = Object.keys(QUALITY_INTERVALS);
+const QUALITIES_TO_AUDIT = Object.keys(CHORD_QUALITIES);
 
 const failures = [];
 for (const root of ROOTS) {

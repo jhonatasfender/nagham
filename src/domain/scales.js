@@ -1,12 +1,12 @@
 import {
+  LETTERS,
+  LETTER_PC,
   NOTE_NAMES,
   NOTE_NAMES_FLATS,
+  buildAccidental,
   pitchNameToPitchClass,
 } from "./notes";
 import { formatQualitySuffix } from "./chordSymbol";
-
-const LETTERS = ["C", "D", "E", "F", "G", "A", "B"];
-const LETTER_NATURAL_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 
 const INTERVAL_SEMITONES_12TET = Object.freeze({
   minorThird: 3,
@@ -97,12 +97,6 @@ export function getScaleDefinition(scaleId) {
   );
 }
 
-function accidentalToken(offset) {
-  if (offset === 0) return "";
-  if (offset > 0) return "#".repeat(offset);
-  return "b".repeat(-offset);
-}
-
 function defaultLetterSteps(semitones) {
   if (semitones.length === 7) return [0, 1, 2, 3, 4, 5, 6];
   // For unknown shapes, derive a best-effort letter step from each
@@ -118,7 +112,12 @@ function defaultLetterSteps(semitones) {
 // computing the accidental needed on each letter so the audible pitch
 // matches the requested semitone interval. Falls back to the chromatic
 // spelling row if the tonic's letter cannot be parsed.
-export function buildScaleNotes(root, semitones, useFlats = false, options = {}) {
+export function buildScaleNotes(
+  root,
+  semitones,
+  useFlats = false,
+  options = {}
+) {
   if (!Array.isArray(semitones) || semitones.length === 0) return [];
   const tonicPitchClass = pitchNameToPitchClass(root);
   if (tonicPitchClass == null) return [];
@@ -129,7 +128,7 @@ export function buildScaleNotes(root, semitones, useFlats = false, options = {})
     const spellingRow = useFlats ? NOTE_NAMES_FLATS : NOTE_NAMES;
     return semitones.map(
       (intervalFromTonic) =>
-        spellingRow[(tonicPitchClass + intervalFromTonic) % 12],
+        spellingRow[(tonicPitchClass + intervalFromTonic) % 12]
     );
   }
 
@@ -138,12 +137,12 @@ export function buildScaleNotes(root, semitones, useFlats = false, options = {})
   return semitones.map((intervalFromTonic, idx) => {
     const letterStep = letterSteps[idx] ?? 0;
     const targetLetter = LETTERS[(rootLetterIdx + letterStep) % 7];
-    const naturalPc = LETTER_NATURAL_PC[targetLetter];
+    const naturalPc = LETTER_PC[targetLetter];
     const targetPc = (tonicPitchClass + intervalFromTonic) % 12;
     let offset = targetPc - naturalPc;
     while (offset > 6) offset -= 12;
     while (offset < -6) offset += 12;
-    return targetLetter + accidentalToken(offset);
+    return targetLetter + buildAccidental(offset);
   });
 }
 

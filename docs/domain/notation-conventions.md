@@ -17,14 +17,14 @@ por grau**, na sequência `C → D → E → F → G → A → B` (cíclica).
 Quando uma altura precisa de acidente duplo para se encaixar na letra
 correta, é assim que escrevemos:
 
-| Acorde | Grafia teórica estrita | Grafia popular |
-|---|---|---|
-| **D# maior** | D# – F𝄪 – A# | D# – G – A# |
-| **C# maior** | C# – E# – G# | C# – F – G# |
-| **C dim7** | C – E♭ – G♭ – B𝄫 | C – E♭ – G♭ – A |
-| **F dim7** | F – A♭ – C♭ – E𝄫 | F – A♭ – B – D |
-| **G dim7** | G – B♭ – D♭ – F♭ | G – B♭ – D♭ – E |
-| **C 7♯9** | C – E – G – B♭ – D# | C – E – G – A# – D# |
+| Acorde       | Grafia teórica estrita | Grafia popular      |
+| ------------ | ---------------------- | ------------------- |
+| **D# maior** | D# – F𝄪 – A#           | D# – G – A#         |
+| **C# maior** | C# – E# – G#           | C# – F – G#         |
+| **C dim7**   | C – E♭ – G♭ – B𝄫       | C – E♭ – G♭ – A     |
+| **F dim7**   | F – A♭ – C♭ – E𝄫       | F – A♭ – B – D      |
+| **G dim7**   | G – B♭ – D♭ – F♭       | G – B♭ – D♭ – E     |
+| **C 7♯9**    | C – E – G – B♭ – D#    | C – E – G – A# – D# |
 
 O Nagham usa a coluna estrita. Ver
 [ADR-0002](../adr/0002-grafia-teorica-estrita.md) para o porquê.
@@ -50,16 +50,16 @@ são colapsados para o equivalente natural com letra do conjunto de bemóis
 
 ## Convenção brasileira para qualidades
 
-| Cifra brasileira | Significado | Mapeamento interno |
-|---|---|---|
-| `C°` / `Cdim` | Tétrade `dim7` | `dim7` |
-| `Cm7(♭5)` / `Cø` | Meio-diminuto | `m7(b5)` |
-| `C7M` / `Cmaj7` | Maior com 7ª maior | `maj7` |
-| `CM9` / `Cmaj9` | Maior com 7ª maior e 9ª | `maj9` |
-| `C7(♯9)` | Hendrix chord | `9+` internamente, exibido `7(#9)` |
-| `C6/9` | Sextina com nona | `6/9` |
-| `C(♭5)` | Tríade com 5ª diminuta | usar `m7(b5)` sem 7ª (não exposto separado) |
-| `C5` | Power chord | `5` (alias: `m5`) |
+| Cifra brasileira | Significado             | Mapeamento interno                          |
+| ---------------- | ----------------------- | ------------------------------------------- |
+| `C°` / `Cdim`    | Tétrade `dim7`          | `dim7`                                      |
+| `Cm7(♭5)` / `Cø` | Meio-diminuto           | `m7(b5)`                                    |
+| `C7M` / `Cmaj7`  | Maior com 7ª maior      | `maj7`                                      |
+| `CM9` / `Cmaj9`  | Maior com 7ª maior e 9ª | `maj9`                                      |
+| `C7(♯9)`         | Hendrix chord           | `9+` internamente, exibido `7(#9)`          |
+| `C6/9`           | Sextina com nona        | `6/9`                                       |
+| `C(♭5)`          | Tríade com 5ª diminuta  | usar `m7(b5)` sem 7ª (não exposto separado) |
+| `C5`             | Power chord             | `5` (alias: `m5`)                           |
 
 Detalhes da decisão de `dim = dim7` em
 [ADR-0003](../adr/0003-dim-significa-dim7-cifra-br.md).
@@ -70,23 +70,23 @@ Fonte única: `src/domain/chordSymbol.js` (`QUALITY_SUFFIX`). Veja
 [ADR-0006](../adr/0006-ascii-text-chord-symbol-style.md) para o porquê
 do estilo ASCII.
 
-| Quality interna | Sufixo exibido | Exemplo (root = C) |
-|---|---|---|
-| `Maj` | _(vazio)_ | `C` |
-| `m` | `m` | `Cm` |
-| `5` / `m5` | `5` | `C5` |
-| `dim` (tríade) | `dim` | `Cdim` |
-| `dim7` | `dim` | `Cdim` (4 notas — ver ADR-0003) |
-| `aug` | `aug` | `Caug` |
-| `sus2`, `sus4` | `sus2` / `sus4` | `Csus4` |
-| `6`, `m6` | `6` / `m6` | `Cm6` |
-| `6/9` | `6/9` | `C6/9` |
-| `7`, `m7`, `maj7` | `7` / `m7` / `maj7` | `Cmaj7` |
-| `m7(b5)` | `m7(b5)` | `Cm7(b5)` |
-| `9`, `m9`, `maj9` | `9` / `m9` / `maj9` | `Cmaj9` |
-| `add9` | `add9` | `Cadd9` |
-| `9+` | `7(#9)` | `C7(#9)` (Hendrix chord) |
-| `11`, `13` | `11` / `13` | `C13` |
+| Quality interna   | Sufixo exibido      | Exemplo (root = C)              |
+| ----------------- | ------------------- | ------------------------------- |
+| `Maj`             | _(vazio)_           | `C`                             |
+| `m`               | `m`                 | `Cm`                            |
+| `5` / `m5`        | `5`                 | `C5`                            |
+| `dim` (tríade)    | `dim`               | `Cdim`                          |
+| `dim7`            | `dim`               | `Cdim` (4 notas — ver ADR-0003) |
+| `aug`             | `aug`               | `Caug`                          |
+| `sus2`, `sus4`    | `sus2` / `sus4`     | `Csus4`                         |
+| `6`, `m6`         | `6` / `m6`          | `Cm6`                           |
+| `6/9`             | `6/9`               | `C6/9`                          |
+| `7`, `m7`, `maj7` | `7` / `m7` / `maj7` | `Cmaj7`                         |
+| `m7(b5)`          | `m7(b5)`            | `Cm7(b5)`                       |
+| `9`, `m9`, `maj9` | `9` / `m9` / `maj9` | `Cmaj9`                         |
+| `add9`            | `add9`              | `Cadd9`                         |
+| `9+`              | `7(#9)`             | `C7(#9)` (Hendrix chord)        |
+| `11`, `13`        | `11` / `13`         | `C13`                           |
 
 Tríades em graus de escala usam a mesma tabela (via
 `formatTriadLabel` em `scales.js`). Resultado em C major: `C · Dm · Em

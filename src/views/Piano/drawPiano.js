@@ -7,14 +7,14 @@ import {
   resolvePianoOctaves,
 } from "../../domain/pianoKeys";
 import {
+  MIN_WHITE_KEY_PX,
   TRIAD_FILL,
   TRIAD_STROKE,
   SELECTED_FILL,
   SELECTED_STROKE,
-} from "../Guitar/constants.js";
+} from "../../constants/ui";
 
 const BLACK_WIDTH_RATIO = 0.58;
-const MIN_WHITE_KEY_PX = 48;
 const KEYBOARD_PAD_X = 6;
 const WHITE_KEY_RX = 3;
 const BLACK_KEY_RX = 2;
