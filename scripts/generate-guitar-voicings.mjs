@@ -7,11 +7,12 @@ import { writeFileSync } from "node:fs";
 import { dirname, resolve as pathResolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { pitchClass } from "../src/domain/notes.js";
+const pc = pitchClass;
 import {
   QUALITY_KEYS,
   getQualityPitchClasses,
 } from "../src/domain/chordQualities.js";
-import { getChordVoicing } from "../src/domain/voicings/index.js";
+import { getChordVoicing, getBarreFromVoicing } from "../src/domain/voicings/index.js";
 import CDefault from "../src/domain/voicings/C.js";
 import CSharpDefault from "../src/domain/voicings/CSharp.js";
 import DDefault from "../src/domain/voicings/D.js";
@@ -166,6 +167,34 @@ function findShape(rootName, quality) {
   return (movableResult?.positions ?? openResult?.positions) ?? null;
 }
 
+function findVariations(rootName, quality, target) {
+  const expected = expectedPcSet(rootName, quality);
+  if (!expected) return [];
+  const rootPc = ALL_ROOTS[rootName];
+
+  const REGIONS = [
+    { name: "open", range: [0, 4] },
+    { name: "mid", range: [3, 8] },
+    { name: "high", range: [7, 12] },
+  ];
+
+  const results = [];
+  const fingerprints = new Set();
+  for (const region of REGIONS) {
+    if (results.length >= target) break;
+    const result = searchShape(rootName, expected, rootPc, region.range);
+    if (!result?.positions?.length) continue;
+    const fingerprint = result.positions
+      .map(([s, f]) => `${s}:${f}`)
+      .sort()
+      .join("|");
+    if (fingerprints.has(fingerprint)) continue;
+    fingerprints.add(fingerprint);
+    results.push(result.positions);
+  }
+  return results;
+}
+
 function isExistingVoicingValid(rootName, quality) {
   const existing = getChordVoicing(rootName, quality);
   if (!existing || !existing.length) return false;
@@ -194,33 +223,110 @@ function formatVoicing(items) {
   return "[\n" + items.map((it) => `    ${formatItem(it)},`).join("\n") + "\n  ]";
 }
 
-function generateFileContent(rootName) {
-  const raw = RAW_VOICINGS[rootName] ?? {};
-  const qualities = QUALITY_KEYS.filter((q) => q !== "m5");
-  const lines = ["const voicings = {"];
-  for (const quality of qualities) {
-    let items;
-    if (isExistingVoicingValid(rootName, quality)) {
-      // Preserve the original voicing verbatim (including any barre object).
-      const original = raw[quality];
-      if (Array.isArray(original)) {
-        items = original;
-      } else {
-        const existing = getChordVoicing(rootName, quality);
-        items = existing?.map((p) => [p.stringIndex, p.fret]) ?? null;
-      }
-    } else {
-      const positions = findShape(rootName, quality);
-      items = positions;
+function computeRegionForPositions(positions) {
+  const fretted = positions
+    .filter((p) => Array.isArray(p))
+    .map(([, f]) => f);
+  const hasOpen = fretted.some((f) => f === 0);
+  const nonZero = fretted.filter((f) => f > 0);
+  const barreItem = positions.find(
+    (p) => p && typeof p === "object" && p.barre != null,
+  );
+  const minBarre = barreItem ? barreItem.barre : Infinity;
+  const minFretted = nonZero.length ? Math.min(...nonZero) : Infinity;
+  const minOverall = Math.min(minFretted, minBarre);
+  if (hasOpen || minOverall <= 1 || minOverall === Infinity) return "open";
+  return `fret-${minOverall}`;
+}
+
+function splitPosBarre(items) {
+  const positions = [];
+  let barre = null;
+  for (const item of items) {
+    if (Array.isArray(item)) positions.push(item);
+    else if (item && item.barre != null)
+      barre = { fret: item.barre, strings: item.strings ?? [] };
+  }
+  return { positions, barre };
+}
+
+function formatVariation(items) {
+  const { positions, barre } = splitPosBarre(items);
+  const region = computeRegionForPositions(items);
+  const lines = ["    {"];
+  lines.push(`      region: ${JSON.stringify(region)},`);
+  if (positions.length === 0) {
+    lines.push("      positions: [],");
+  } else {
+    lines.push("      positions: [");
+    for (const [s, f] of positions) {
+      lines.push(`        [${s}, ${f}],`);
     }
-    if (!items) {
+    lines.push("      ],");
+  }
+  if (barre) {
+    const strings = barre.strings.join(", ");
+    lines.push(`      barre: { fret: ${barre.fret}, strings: [${strings}] },`);
+  } else {
+    lines.push("      barre: null,");
+  }
+  lines.push("    },");
+  return lines.join("\n");
+}
+
+function generateFileContent(rootName) {
+  const qualities = QUALITY_KEYS.filter((q) => q !== "m5");
+  const lines = ["const voicings = {", ""];
+  for (const quality of qualities) {
+    const variationsItems = [];
+
+    // 1. Preserve existing primary variation if valid
+    if (isExistingVoicingValid(rootName, quality)) {
+      const existing = getChordVoicing(rootName, quality);
+      if (existing) {
+        const positions = existing.map((p) => [p.stringIndex, p.fret]);
+        const barre = getBarreFromVoicing(rootName, quality);
+        const merged = [
+          ...positions,
+          ...(barre
+            ? [{ barre: barre.fret, strings: barre.strings }]
+            : []),
+        ];
+        variationsItems.push(merged);
+      }
+    }
+
+    // 2. Search additional variations in distinct regions
+    if (variationsItems.length < TARGET_VARIATIONS) {
+      const extras = findVariations(
+        rootName,
+        quality,
+        TARGET_VARIATIONS - variationsItems.length,
+      );
+      for (const ex of extras) {
+        const fp = ex.map(([s, f]) => `${s}:${f}`).sort().join("|");
+        const dup = variationsItems.some((items) => {
+          const fv = items
+            .filter((p) => Array.isArray(p))
+            .map(([s, f]) => `${s}:${f}`)
+            .sort()
+            .join("|");
+          return fv === fp;
+        });
+        if (!dup) variationsItems.push(ex);
+      }
+    }
+
+    if (!variationsItems.length) {
       lines.push(`  // ${quality}: unable to generate a valid shape`);
       continue;
     }
+
     const key = /^[a-zA-Z_$][\w$]*$/.test(quality)
       ? quality
       : JSON.stringify(quality);
-    lines.push(`  ${key}: ${formatVoicing(items)},`);
+    const body = variationsItems.map(formatVariation).join("\n");
+    lines.push(`  ${key}: [\n${body}\n  ],`);
     lines.push("");
   }
   lines.push("};\n");
@@ -231,6 +337,10 @@ function generateFileContent(rootName) {
 // ─── CLI ───────────────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
+const variationsArg = args.find((a) => a.startsWith("--variations="));
+const TARGET_VARIATIONS = variationsArg
+  ? Math.max(1, parseInt(variationsArg.split("=")[1], 10) || 1)
+  : 3;
 const onlyRoot = args.find((a) => !a.startsWith("--"));
 
 const VOICINGS_DIR = pathResolve(__dirname, "../src/domain/voicings");
