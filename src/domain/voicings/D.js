@@ -9,6 +9,25 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "open",
+      positions: [
+        [1, 3],
+        [2, 2],
+        [3, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-5",
+      positions: [
+        [0, 5],
+        [2, 7],
+        [3, 7],
+        [4, 5],
+      ],
+      barre: null,
+    },
   ],
 
   "6": [
@@ -22,6 +41,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-4",
+      positions: [
+        [0, 5],
+        [2, 4],
+        [3, 4],
+        [4, 5],
+      ],
+      barre: null,
+    },
   ],
 
   "7": [
@@ -32,6 +61,16 @@ const voicings = {
         [1, 1],
         [2, 2],
         [3, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-4",
+      positions: [
+        [0, 5],
+        [2, 5],
+        [3, 4],
+        [4, 5],
       ],
       barre: null,
     },
@@ -49,32 +88,8 @@ const voicings = {
     },
   ],
 
-  "11": [
-    {
-      region: "fret-5",
-      positions: [
-        [4, 5],
-        [3, 5],
-        [2, 5],
-        [1, 5],
-      ],
-      barre: null,
-    },
-  ],
-
-  "13": [
-    {
-      region: "fret-10",
-      positions: [
-        [5, 10],
-        [3, 10],
-        [2, 11],
-        [1, 12],
-      ],
-      barre: null,
-    },
-  ],
-
+  // 11: unable to generate a valid shape
+  // 13: unable to generate a valid shape
   Maj: [
     {
       region: "open",
@@ -83,6 +98,16 @@ const voicings = {
         [2, 2],
         [1, 3],
         [0, 2],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-4",
+      positions: [
+        [0, 5],
+        [2, 7],
+        [3, 4],
+        [4, 5],
       ],
       barre: null,
     },
@@ -99,6 +124,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-5",
+      positions: [
+        [0, 5],
+        [1, 6],
+        [3, 7],
+        [4, 5],
+      ],
+      barre: null,
+    },
   ],
 
   dim: [
@@ -109,6 +144,16 @@ const voicings = {
         [2, 1],
         [1, 3],
         [0, 1],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-4",
+      positions: [
+        [0, 4],
+        [1, 6],
+        [3, 6],
+        [4, 5],
       ],
       barre: null,
     },
@@ -125,6 +170,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-4",
+      positions: [
+        [0, 6],
+        [2, 7],
+        [3, 4],
+        [4, 5],
+      ],
+      barre: null,
+    },
   ],
 
   sus2: [
@@ -135,6 +190,16 @@ const voicings = {
         [1, 3],
         [2, 2],
         [3, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-5",
+      positions: [
+        [0, 5],
+        [1, 5],
+        [3, 7],
+        [4, 5],
       ],
       barre: null,
     },
@@ -151,6 +216,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-5",
+      positions: [
+        [0, 5],
+        [2, 7],
+        [3, 5],
+        [4, 5],
+      ],
+      barre: null,
+    },
   ],
 
   m6: [
@@ -161,6 +236,16 @@ const voicings = {
         [1, 0],
         [2, 2],
         [3, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-4",
+      positions: [
+        [0, 5],
+        [1, 6],
+        [2, 4],
+        [4, 5],
       ],
       barre: null,
     },
@@ -189,6 +274,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-5",
+      positions: [
+        [0, 5],
+        [1, 6],
+        [2, 5],
+        [4, 5],
+      ],
+      barre: null,
+    },
   ],
 
   maj7: [
@@ -199,6 +294,16 @@ const voicings = {
         [2, 2],
         [1, 2],
         [0, 2],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-4",
+      positions: [
+        [0, 5],
+        [2, 6],
+        [3, 4],
+        [4, 5],
       ],
       barre: null,
     },
@@ -215,6 +320,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-4",
+      positions: [
+        [0, 4],
+        [1, 6],
+        [2, 5],
+        [4, 5],
+      ],
+      barre: null,
+    },
   ],
 
   dim7: [
@@ -225,6 +340,16 @@ const voicings = {
         [1, 0],
         [2, 1],
         [3, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-4",
+      positions: [
+        [0, 4],
+        [1, 6],
+        [2, 4],
+        [4, 5],
       ],
       barre: null,
     },
@@ -239,6 +364,26 @@ const voicings = {
         [5, 10],
       ],
       barre: { fret: 9, strings: [5, 4, 3, 2, 1] },
+    },
+    {
+      region: "fret-4",
+      positions: [
+        [0, 5],
+        [1, 5],
+        [3, 4],
+        [4, 5],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-9",
+      positions: [
+        [1, 10],
+        [2, 9],
+        [4, 9],
+        [5, 10],
+      ],
+      barre: null,
     },
   ],
 
@@ -263,19 +408,7 @@ const voicings = {
     },
   ],
 
-  "9+": [
-    {
-      region: "fret-5",
-      positions: [
-        [4, 5],
-        [3, 10],
-        [2, 11],
-        [1, 6],
-      ],
-      barre: null,
-    },
-  ],
-
+  // 9+: unable to generate a valid shape
 };
 
 export default voicings;

@@ -126,6 +126,8 @@ function searchShape(rootName, expected, rootPc, fretRange) {
           const frets = positions.map(([, f]) => f).filter((f) => f > 0);
           const span = frets.length ? Math.max(...frets) - Math.min(...frets) : 0;
           if (span > MAX_SPAN - 1) return;
+          // Playability: at most 4 independent fingers (non-open fretted positions).
+          if (frets.length > 4) return;
           // Score (higher = better):
           //  +10000 for being at fret 0..3 (open-ish position)
           //  +1000 per played string
@@ -189,6 +191,16 @@ function isExistingVoicingValid(rootName, quality) {
   const expected = expectedPcSet(rootName, quality);
   if (!expected) return false;
   const positions = existing.map((p) => [p.stringIndex, p.fret]);
+  // Include barre notes when checking pitch classes.
+  const barre = getBarreFromVoicing(rootName, quality);
+  if (barre) {
+    for (const s of barre.strings) {
+      // Only add if not already overridden by a fingered position on same string.
+      if (!positions.some(([ps]) => ps === s)) {
+        positions.push([s, barre.fret]);
+      }
+    }
+  }
   const pcs = pcSetFromPositions(positions);
   return setsEqual(pcs, expected);
 }

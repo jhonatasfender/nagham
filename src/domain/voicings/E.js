@@ -9,6 +9,27 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "open",
+      positions: [
+        [0, 0],
+        [1, 0],
+        [3, 2],
+        [4, 2],
+        [5, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-7",
+      positions: [
+        [0, 7],
+        [2, 9],
+        [3, 9],
+        [4, 7],
+      ],
+      barre: null,
+    },
   ],
 
   "6": [
@@ -21,6 +42,16 @@ const voicings = {
         [3, 2],
         [4, 2],
         [5, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-6",
+      positions: [
+        [0, 7],
+        [2, 6],
+        [3, 6],
+        [4, 7],
       ],
       barre: null,
     },
@@ -39,6 +70,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-6",
+      positions: [
+        [0, 7],
+        [2, 7],
+        [3, 6],
+        [4, 7],
+      ],
+      barre: null,
+    },
   ],
 
   "9": [
@@ -53,34 +94,36 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "open",
+      positions: [
+        [0, 2],
+        [1, 0],
+        [2, 1],
+        [3, 0],
+        [4, 2],
+        [5, 0],
+      ],
+      barre: null,
+    },
   ],
 
   "11": [
     {
-      region: "fret-7",
+      region: "open",
       positions: [
-        [4, 7],
-        [3, 7],
-        [2, 7],
-        [1, 7],
+        [0, 2],
+        [1, 0],
+        [2, 1],
+        [3, 0],
+        [4, 0],
+        [5, 0],
       ],
       barre: null,
     },
   ],
 
-  "13": [
-    {
-      region: "fret-6",
-      positions: [
-        [4, 7],
-        [2, 6],
-        [1, 9],
-        [0, 10],
-      ],
-      barre: null,
-    },
-  ],
-
+  // 13: unable to generate a valid shape
   Maj: [
     {
       region: "open",
@@ -91,6 +134,16 @@ const voicings = {
         [2, 1],
         [1, 0],
         [0, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-6",
+      positions: [
+        [0, 7],
+        [2, 9],
+        [3, 6],
+        [4, 7],
       ],
       barre: null,
     },
@@ -109,6 +162,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-7",
+      positions: [
+        [0, 7],
+        [1, 8],
+        [3, 9],
+        [4, 7],
+      ],
+      barre: null,
+    },
   ],
 
   dim: [
@@ -119,6 +182,27 @@ const voicings = {
         [4, 1],
         [3, 2],
         [2, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "open",
+      positions: [
+        [0, 0],
+        [2, 0],
+        [3, 2],
+        [4, 1],
+        [5, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-6",
+      positions: [
+        [0, 6],
+        [1, 8],
+        [3, 8],
+        [4, 7],
       ],
       barre: null,
     },
@@ -137,6 +221,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-6",
+      positions: [
+        [0, 8],
+        [2, 9],
+        [3, 6],
+        [4, 7],
+      ],
+      barre: null,
+    },
   ],
 
   sus2: [
@@ -151,6 +245,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-7",
+      positions: [
+        [0, 7],
+        [1, 7],
+        [3, 9],
+        [4, 7],
+      ],
+      barre: null,
+    },
   ],
 
   sus4: [
@@ -162,6 +266,28 @@ const voicings = {
         [3, 2],
         [2, 2],
         [1, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "open",
+      positions: [
+        [0, 0],
+        [1, 0],
+        [2, 2],
+        [3, 2],
+        [4, 0],
+        [5, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-7",
+      positions: [
+        [0, 7],
+        [2, 9],
+        [3, 7],
+        [4, 7],
       ],
       barre: null,
     },
@@ -180,6 +306,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-6",
+      positions: [
+        [0, 7],
+        [1, 8],
+        [2, 6],
+        [4, 7],
+      ],
+      barre: null,
+    },
   ],
 
   "6/9": [
@@ -191,6 +327,17 @@ const voicings = {
         [4, 7],
       ],
       barre: { fret: 6, strings: [4, 3, 2, 1, 0] },
+    },
+    {
+      region: "open",
+      positions: [
+        [0, 2],
+        [1, 2],
+        [2, 1],
+        [4, 2],
+        [5, 0],
+      ],
+      barre: null,
     },
   ],
 
@@ -204,6 +351,16 @@ const voicings = {
         [2, 0],
         [1, 0],
         [0, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-7",
+      positions: [
+        [0, 7],
+        [1, 8],
+        [2, 7],
+        [4, 7],
       ],
       barre: null,
     },
@@ -222,6 +379,16 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "fret-6",
+      positions: [
+        [0, 7],
+        [2, 8],
+        [3, 6],
+        [4, 7],
+      ],
+      barre: null,
+    },
   ],
 
   "m7(b5)": [
@@ -233,6 +400,28 @@ const voicings = {
         [3, 2],
         [2, 0],
         [1, 3],
+      ],
+      barre: null,
+    },
+    {
+      region: "open",
+      positions: [
+        [0, 0],
+        [1, 3],
+        [2, 0],
+        [3, 0],
+        [4, 1],
+        [5, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-6",
+      positions: [
+        [0, 6],
+        [1, 8],
+        [2, 7],
+        [4, 7],
       ],
       barre: null,
     },
@@ -250,6 +439,28 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "open",
+      positions: [
+        [0, 0],
+        [1, 2],
+        [2, 0],
+        [3, 2],
+        [4, 1],
+        [5, 0],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-6",
+      positions: [
+        [0, 6],
+        [1, 8],
+        [2, 6],
+        [4, 7],
+      ],
+      barre: null,
+    },
   ],
 
   add9: [
@@ -262,6 +473,16 @@ const voicings = {
         [2, 1],
         [1, 0],
         [0, 2],
+      ],
+      barre: null,
+    },
+    {
+      region: "fret-6",
+      positions: [
+        [0, 7],
+        [1, 7],
+        [3, 6],
+        [4, 7],
       ],
       barre: null,
     },
@@ -295,16 +516,30 @@ const voicings = {
       ],
       barre: null,
     },
+    {
+      region: "open",
+      positions: [
+        [0, 2],
+        [1, 0],
+        [2, 0],
+        [3, 0],
+        [4, 2],
+        [5, 0],
+      ],
+      barre: null,
+    },
   ],
 
   "9+": [
     {
-      region: "fret-7",
+      region: "open",
       positions: [
-        [4, 7],
-        [3, 12],
-        [2, 13],
-        [1, 8],
+        [0, 3],
+        [1, 0],
+        [2, 1],
+        [3, 0],
+        [4, 2],
+        [5, 0],
       ],
       barre: null,
     },
