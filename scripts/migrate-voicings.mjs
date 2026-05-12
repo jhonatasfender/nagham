@@ -1,7 +1,9 @@
 #!/usr/bin/env node
-// One-shot: converte src/domain/voicings/<Root>.js do formato achatado
+// Converte src/domain/voicings/<Root>.js do formato achatado
 // `[[s,f], ..., {barre, strings}?]` para `[{region, positions, barre}]`.
-// Roda uma vez. Audits devem continuar 100 % depois.
+// Idempotente — pode ser re-executado a qualquer momento; usa o shim
+// de normalização em voicings/index.js como fonte de verdade. Audits
+// devem continuar 100 % depois.
 import { writeFileSync } from "node:fs";
 import { dirname, resolve as pathResolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -17,24 +19,32 @@ const ROOT_FILE_MAP = {
 };
 
 function formatPositions(positions) {
-  return positions.map(([s, f]) => `      [${s}, ${f}],`).join("\n");
+  return positions
+    .map(([s, f]) => `        [${s}, ${f}],`)
+    .join("\n");
 }
 
 function formatBarre(barre) {
-  if (!barre) return "    barre: null,";
+  if (!barre) return "      barre: null,";
   const strings = barre.strings.join(", ");
-  return `    barre: { fret: ${barre.fret}, strings: [${strings}] },`;
+  return `      barre: { fret: ${barre.fret}, strings: [${strings}] },`;
 }
 
 function formatVariation(v) {
+  const positionsBlock =
+    v.positions.length === 0
+      ? "      positions: [],"
+      : [
+          "      positions: [",
+          formatPositions(v.positions),
+          "      ],",
+        ].join("\n");
   return [
-    "  {",
-    `    region: ${JSON.stringify(v.region)},`,
-    "    positions: [",
-    formatPositions(v.positions),
-    "    ],",
+    "    {",
+    `      region: ${JSON.stringify(v.region)},`,
+    positionsBlock,
     formatBarre(v.barre),
-    "  },",
+    "    },",
   ].join("\n");
 }
 
