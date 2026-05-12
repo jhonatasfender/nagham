@@ -39,6 +39,21 @@
   (acorde de C com Mi no baixo). Suportado via parâmetro `bass`.
 - **Inversão** — acorde com nota diferente da fundamental como mais grave.
   Atualmente só implementada via `bass` (sem análise automática).
+- **Variação (de acorde no violão)** — outra forma do mesmo acorde no
+  braço, com mesmas pitch classes mas distribuição de oitavas e/ou
+  região do braço diferentes. No Nagham, é uma posição no array de
+  variações de `(root, quality)` em `src/domain/voicings/<Root>.js`.
+  **Distinto de inversão**: inversão muda a nota mais grave; variação
+  pode ou não mudar.
+- **Região (de variação)** — chave semântica em cada variação:
+  `"open"` (envolve cordas soltas ou começa no traste 1) ou `"fret-N"`
+  (começa no traste N, com N de 1 a 12). Define o rótulo i18n pedagógico
+  ("Aberto", "3ª casa", etc.).
+- **Chord-card** — diagrama vertical compacto de acorde (formato Cifra
+  Club / musicca / Songsterr), com nut/badge de casa, marcadores ×/○,
+  círculos preenchidos nas casas pressionadas e pílula horizontal para
+  pestana. Renderizado por `drawChordCard.js` em SVG via d3. Distinto do
+  braço horizontal completo (`drawGuitar.js`).
 - **Dominante** — acorde com tétrade `1-3-5-♭7` (`C7`, `G7`). Resolve
   tipicamente para a tônica.
 - **Dim / Diminuto** — no Nagham, "dim" no UI = `dim7` (cifra BR). Quem quer

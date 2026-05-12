@@ -80,10 +80,18 @@ Para cada `(root, quality)` há até três entries (uma por instrumento):
 | ------------------------------------ | ------------------------------------- | --------------------------------------------- |
 | `src/domain/pianoVoicings/<Root>.js` | `[{name, octave}]`                    | `PianoView` (highlights por MIDI)             |
 | `src/domain/staffVoicings/<Root>.js` | `[{name, octave}]`                    | `StaffView` (renderiza grafia via `spelling`) |
-| `src/domain/voicings/<Root>.js`      | `[[string, fret]]` ou positions array | `GuitarView`                                  |
+| `src/domain/voicings/<Root>.js`      | `[{region, positions, barre}]` (array de variações) | `GuitarView`                                  |
 
 **Roots cobertos** (piano + staff): C, C#, D, D#, E, F, G, A, B.
 **Roots cobertos** (violão): + F#, G#, A# (aliases Db/Eb/Gb/Ab/Bb dirigem para os sharps).
+
+**Variações no violão (a partir de 2026-05):** cada `(root, quality)` tem
+um array de variações. Cada variação carrega `region` (`"open"` ou
+`"fret-N"`), `positions` (pares `[stringIndex, fret]`) e `barre`
+(objeto `{fret, strings}` ou `null`). Ordem do array define ordem de
+exibição (posição 0 = "principal"). Ver
+[ADR-0010](../adr/0010-estrutura-variacoes-violao.md) e
+[feature spec](../features/chord-variations-guitar/spec.md).
 
 Quando o usuário escolhe uma tônica sem voicing dedicado (ex.: `Db` no piano),
 o fallback é o `chordNotes` dinâmico. A grafia ainda fica correta porque
