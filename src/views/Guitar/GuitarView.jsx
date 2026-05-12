@@ -1,10 +1,36 @@
 import { useEffect, useRef } from "react";
 import { VIEW_MAX_WIDTH } from "../../constants/layout.js";
 import { useContainerSize } from "../../hooks/useContainerSize.js";
+import { getChordVoicing, getBarreFromVoicing } from "../../domain/voicings";
 import { drawGuitar } from "./drawGuitar";
 import { FretboardTable } from "./FretboardTable";
 
 const DEFAULT_HEIGHT = 220;
+
+function computeCenterFret({
+  chordNotes,
+  root,
+  quality,
+  customPositions,
+  customBarre,
+}) {
+  const frets = [];
+  const voicing = root && quality ? getChordVoicing(root, quality) : null;
+  if (voicing) {
+    voicing.forEach((p) => frets.push(p.fret));
+    const barre = getBarreFromVoicing(root, quality);
+    if (barre?.fret != null) frets.push(barre.fret);
+  } else if (customPositions?.length) {
+    customPositions.forEach(([, f]) => frets.push(f));
+    if (customBarre?.fret != null) frets.push(customBarre.fret);
+  } else if (chordNotes?.length) {
+    return null;
+  }
+  if (!frets.length) return null;
+  const min = Math.min(...frets);
+  const max = Math.max(...frets);
+  return (min + max) / 2;
+}
 
 export function GuitarView({
   selectedNote,
@@ -24,8 +50,11 @@ export function GuitarView({
   const containerWidth = useContainerSize(containerRef);
 
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const previousScrollLeft = el.scrollLeft;
     drawGuitar(
-      containerRef.current,
+      el,
       { selectedNote, chordNotes, root, quality, customPositions, customBarre },
       {
         onSelectNote: globalOnSelectNote,
@@ -35,6 +64,7 @@ export function GuitarView({
         isEditor,
       }
     );
+    el.scrollLeft = previousScrollLeft;
   }, [
     selectedNote,
     globalOnSelectNote,
@@ -48,6 +78,34 @@ export function GuitarView({
     isEditor,
   ]);
 
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const svg = el.querySelector("svg");
+    if (!svg) return;
+    const centerFret = computeCenterFret({
+      chordNotes,
+      root,
+      quality,
+      customPositions,
+      customBarre,
+    });
+    if (centerFret == null) return;
+
+    requestAnimationFrame(() => {
+      const contentWidth = parseFloat(svg.getAttribute("width")) || el.clientWidth;
+      const viewWidth = el.clientWidth;
+      if (contentWidth <= viewWidth) return;
+      const visibleFretCount = 14;
+      const fretPx = contentWidth / visibleFretCount;
+      const targetX = (centerFret + 0.5) * fretPx;
+      let nextScrollLeft = targetX - viewWidth / 2;
+      const maxScroll = Math.max(0, contentWidth - viewWidth);
+      nextScrollLeft = Math.max(0, Math.min(maxScroll, nextScrollLeft));
+      el.scrollLeft = nextScrollLeft;
+    });
+  }, [chordNotes, root, quality, customPositions, customBarre, containerWidth]);
+
   return (
     <div className="space-y-4 select-none">
       {showTable && (
@@ -59,7 +117,7 @@ export function GuitarView({
         />
       )}
       <div
-        className="guitar-view max-w-full overflow-hidden"
+        className="guitar-view max-w-full overflow-x-auto overflow-y-hidden [-webkit-overflow-scrolling:touch]"
         ref={containerRef}
         style={{
           width: "100%",

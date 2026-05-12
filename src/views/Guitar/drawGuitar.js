@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { getFretboardMatrix } from "../../domain/fretboardMatrix";
 import { getBarreFromVoicing } from "../../domain/voicings";
-import { PADDING } from "./constants";
+import { PADDING, NUT_WIDTH, MIN_FRET_PX } from "./constants";
 import { detectBarre } from "./chordUtils";
 import { calculateVisibleFrets } from "./visibleFrets";
 import { createDisplayIndexMap, calculateDimensions } from "./layout";
@@ -58,18 +58,26 @@ export function drawGuitar(container, data, options = {}) {
       ? getBarreFromVoicing(root, quality)
       : detectBarre(chordKeys, 12);
 
+  const minSvgContentWidth =
+    PADDING.left +
+    PADDING.right +
+    NUT_WIDTH +
+    (VISIBLE_FRETS.length - 1) * MIN_FRET_PX;
+  const svgContentWidth = Math.max(width, minSvgContentWidth);
+
   const { innerWidth, innerHeight, fretWidth, rowHeight, FRETTED_COLUMNS } =
-    calculateDimensions(width, height, VISIBLE_FRETS);
+    calculateDimensions(svgContentWidth, height, VISIBLE_FRETS);
 
   const displayIndexByString = createDisplayIndexMap();
 
   const svg = d3
     .select(container)
     .append("svg")
-    .attr("viewBox", [0, 0, width, height])
-    .attr("width", "100%")
-    .attr("height", "100%")
-    .attr("preserveAspectRatio", "xMidYMid meet");
+    .attr("viewBox", [0, 0, svgContentWidth, height])
+    .attr("width", svgContentWidth)
+    .attr("height", height)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("display", "block");
 
   const g = svg
     .append("g")

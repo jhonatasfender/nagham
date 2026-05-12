@@ -60,7 +60,7 @@ export function ChordBuilderSection({
           allowEmpty
         />
 
-        <ChordLabelBar chordLabel={chordLabel} />
+        <ChordLabelBar chordLabel={chordLabel} chordNotes={chordNotes} />
       </div>
 
       <ChordFormation chordNotes={chordNotes} />

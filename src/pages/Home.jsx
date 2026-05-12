@@ -1,7 +1,8 @@
-import { useMemo, useReducer } from "react";
+import { useCallback, useMemo, useReducer } from "react";
 import { useTranslation } from "react-i18next";
 import { ChordBuilderSection } from "../components/ChordBuilderSection";
 import { useSelectedNote } from "../context/useSelectedNote";
+import { useAudio } from "../audio/useAudio";
 import {
   effectiveChordQuality,
   EXTENSION_COMPOSABLE_WITH_TRIAD,
@@ -58,11 +59,20 @@ function chordReducer(state, action) {
 export function Home() {
   const { t } = useTranslation();
   const { selectedNote, setSelectedNote } = useSelectedNote();
+  const { playNote } = useAudio();
   const [chordState, dispatchChord] = useReducer(
     chordReducer,
     initialChordState
   );
   const { root, triad, extension, bass, useFlats } = chordState;
+
+  const handleSelectNote = useCallback(
+    (note) => {
+      setSelectedNote(note);
+      if (note && note.octave != null) playNote(note);
+    },
+    [setSelectedNote, playNote]
+  );
 
   const quality = useMemo(
     () => effectiveChordQuality({ triad, extension }),
@@ -140,7 +150,7 @@ export function Home() {
             </h3>
             <StaffView
               selectedNote={selectedNote}
-              onSelectNote={setSelectedNote}
+              onSelectNote={handleSelectNote}
               scoreMatrix={scoreMatrix}
             />
           </div>
@@ -150,7 +160,7 @@ export function Home() {
             </h3>
             <PianoView
               selectedNote={selectedNote}
-              onSelectNote={setSelectedNote}
+              onSelectNote={handleSelectNote}
               chordNotes={chordNotes}
               root={root}
               quality={quality}
@@ -163,7 +173,7 @@ export function Home() {
             </h3>
             <GuitarView
               selectedNote={selectedNote}
-              onSelectNote={setSelectedNote}
+              onSelectNote={handleSelectNote}
               syncGlobalSelection={false}
               chordNotes={chordNotes}
               root={root}

@@ -2,6 +2,7 @@ export const PADDING = { top: 8, right: 16, bottom: 24, left: 16 };
 export const NUT_WIDTH = 10;
 export const DEFAULT_VISIBLE_FRETS = [0, 1, 2, 3, 4, 5];
 export const FRETS_TO_SHOW = 6;
+export const MIN_FRET_PX = 40;
 
 export const TRIAD_FILL = "var(--guitar-dot-triad, #f59e0b)";
 export const TRIAD_STROKE = "var(--guitar-dot-triad-stroke, #b45309)";
