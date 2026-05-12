@@ -1,9 +1,10 @@
 # Feature: Variações de acordes no violão
 
-- **Status:** draft
+- **Status:** shipped
 - **Owner:** jonatas
 - **Atualizado:** 2026-05-12
-- **ADRs previstos:** ADR-0010 (estrutura de variações de violão)
+- **Shipped:** 2026-05-12
+- **ADRs gerados:** [ADR-0010](../../adr/0010-estrutura-variacoes-violao.md)
 
 ## Por quê
 
