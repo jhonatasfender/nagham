@@ -7,7 +7,6 @@ import { writeFileSync } from "node:fs";
 import { dirname, resolve as pathResolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { pitchClass } from "../src/domain/notes.js";
-const pc = pitchClass;
 import {
   QUALITY_KEYS,
   getQualityPitchClasses,
@@ -25,6 +24,9 @@ import GSharpDefault from "../src/domain/voicings/GSharp.js";
 import ADefault from "../src/domain/voicings/A.js";
 import ASharpDefault from "../src/domain/voicings/ASharp.js";
 import BDefault from "../src/domain/voicings/B.js";
+
+// Alias used internally by searchShape (pre-existing convention).
+const pc = pitchClass;
 
 const RAW_VOICINGS = {
   C: CDefault,
@@ -57,6 +59,12 @@ const ROOT_FILE_MAP = {
 const STRING_OPEN_MIDI = [64, 59, 55, 50, 45, 40]; // index 0 = high E
 const MAX_FRET = 15;
 const MAX_SPAN = 4;
+
+const REGIONS = [
+  { name: "open", range: [0, 4] },
+  { name: "mid", range: [3, 8] },
+  { name: "high", range: [7, 12] },
+];
 
 function expectedPcSet(rootName, quality) {
   const rootPc = ALL_ROOTS[rootName];
@@ -153,30 +161,10 @@ function searchShape(rootName, expected, rootPc, fretRange) {
   return best;
 }
 
-function findShape(rootName, quality) {
-  const expected = expectedPcSet(rootName, quality);
-  if (!expected) return null;
-  const rootPc = ALL_ROOTS[rootName];
-
-  // Two-pass search: open positions first, then movable shapes.
-  const openResult = searchShape(rootName, expected, rootPc, [0, 3]);
-  if (openResult && openResult.positions.length >= Math.min(expected.size, 4)) {
-    return openResult.positions;
-  }
-  const movableResult = searchShape(rootName, expected, rootPc, [0, 12]);
-  return (movableResult?.positions ?? openResult?.positions) ?? null;
-}
-
 function findVariations(rootName, quality, target) {
   const expected = expectedPcSet(rootName, quality);
   if (!expected) return [];
   const rootPc = ALL_ROOTS[rootName];
-
-  const REGIONS = [
-    { name: "open", range: [0, 4] },
-    { name: "mid", range: [3, 8] },
-    { name: "high", range: [7, 12] },
-  ];
 
   const results = [];
   const fingerprints = new Set();
@@ -203,24 +191,6 @@ function isExistingVoicingValid(rootName, quality) {
   const positions = existing.map((p) => [p.stringIndex, p.fret]);
   const pcs = pcSetFromPositions(positions);
   return setsEqual(pcs, expected);
-}
-
-function formatItem(item) {
-  if (Array.isArray(item)) {
-    return `[${item.join(", ")}]`;
-  }
-  if (item && typeof item === "object" && item.barre != null) {
-    const strings = Array.isArray(item.strings)
-      ? `[${item.strings.join(", ")}]`
-      : "[]";
-    return `{ barre: ${item.barre}, strings: ${strings} }`;
-  }
-  return JSON.stringify(item);
-}
-
-function formatVoicing(items) {
-  if (!items || !items.length) return null;
-  return "[\n" + items.map((it) => `    ${formatItem(it)},`).join("\n") + "\n  ]";
 }
 
 function computeRegionForPositions(positions) {
@@ -346,41 +316,22 @@ const onlyRoot = args.find((a) => !a.startsWith("--"));
 const VOICINGS_DIR = pathResolve(__dirname, "../src/domain/voicings");
 
 let writes = 0;
-let kept = 0;
-let regenerated = 0;
-let unresolved = 0;
+let drySkips = 0;
+
+if (TARGET_VARIATIONS > REGIONS.length) {
+  console.warn(
+    `! --variations=${TARGET_VARIATIONS} requested, but only ${REGIONS.length} regions are defined; capped to ${REGIONS.length}.`,
+  );
+}
 
 for (const rootName of Object.keys(ROOT_FILE_MAP)) {
   if (onlyRoot && onlyRoot !== rootName) continue;
   const filePath = pathResolve(VOICINGS_DIR, ROOT_FILE_MAP[rootName]);
-  const qualities = QUALITY_KEYS.filter((q) => q !== "m5");
-  let needsRegen = false;
-  const newPositions = {};
-  for (const quality of qualities) {
-    if (isExistingVoicingValid(rootName, quality)) {
-      kept++;
-      newPositions[quality] = "keep";
-    } else {
-      const shape = findShape(rootName, quality);
-      if (shape) {
-        regenerated++;
-        newPositions[quality] = shape;
-        needsRegen = true;
-      } else {
-        unresolved++;
-        console.warn(`! ${rootName} ${quality}: no shape found`);
-        newPositions[quality] = "unresolved";
-      }
-    }
-  }
-  if (!needsRegen) {
-    console.log(`✓ ${rootName}: all shapes valid, file untouched`);
-    continue;
-  }
   const content = generateFileContent(rootName);
   if (dryRun) {
     console.log(`--- would rewrite ${filePath} ---`);
     console.log(content);
+    drySkips++;
   } else {
     writeFileSync(filePath, content + "\n", "utf8");
     writes++;
@@ -388,6 +339,8 @@ for (const rootName of Object.keys(ROOT_FILE_MAP)) {
   }
 }
 
-console.log(
-  `\nSummary: kept=${kept}  regenerated=${regenerated}  unresolved=${unresolved}  wrote=${writes}`,
-);
+if (dryRun) {
+  console.log(`\nDry run: would rewrite ${drySkips} file(s).`);
+} else {
+  console.log(`\nDone. Wrote ${writes} file(s).`);
+}
