@@ -154,41 +154,56 @@ export function Scales() {
         ) : null}
 
         {tableRows.length > 0 ? (
-          <div className="select-text overflow-x-auto rounded-md border border-zinc-700">
-            <table className="min-w-full border-collapse text-sm">
-              <thead className="bg-zinc-900/80 text-zinc-300">
-                <tr>
-                  <th className="border-b border-zinc-700 px-3 py-2 text-left font-medium">
+          <div className="select-text grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {tableRows.map((row) => (
+              <article
+                key={row.root}
+                className="flex flex-col gap-3 rounded-md border border-zinc-700 bg-zinc-900/60 p-4"
+              >
+                <header className="flex items-baseline gap-2">
+                  <span className="text-xs uppercase tracking-wide text-zinc-500">
                     {t("scales.table.root")}
-                  </th>
-                  <th className="border-b border-zinc-700 px-3 py-2 text-left font-medium">
+                  </span>
+                  <span className="text-2xl font-semibold text-zinc-100">
+                    {row.root}
+                  </span>
+                </header>
+
+                <div className="space-y-1.5">
+                  <p className="text-xs font-medium text-zinc-400">
                     {t("scales.table.notes")}
-                  </th>
-                  {showTriadsColumn ? (
-                    <th className="border-b border-zinc-700 px-3 py-2 text-left font-medium">
+                  </p>
+                  <ul className="flex flex-wrap gap-1.5">
+                    {row.notes.map((note, index) => (
+                      <li
+                        key={`${row.root}-note-${index}`}
+                        className="rounded border border-zinc-700 bg-zinc-800/70 px-2 py-0.5 text-sm text-zinc-200"
+                      >
+                        {note}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {showTriadsColumn && row.triads.length > 0 ? (
+                  <div className="space-y-1.5">
+                    <p className="text-xs font-medium text-zinc-400">
                       {t("scales.table.triads")}
-                    </th>
-                  ) : null}
-                </tr>
-              </thead>
-              <tbody>
-                {tableRows.map((row) => (
-                  <tr key={row.root} className="odd:bg-zinc-800/20">
-                    <td className="border-b border-zinc-800 px-3 py-2 font-semibold text-zinc-100">
-                      {row.root}
-                    </td>
-                    <td className="border-b border-zinc-800 px-3 py-2 text-zinc-300">
-                      {row.notes.join(" - ")}
-                    </td>
-                    {showTriadsColumn ? (
-                      <td className="border-b border-zinc-800 px-3 py-2 text-zinc-300">
-                        {row.triads.join(" - ")}
-                      </td>
-                    ) : null}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </p>
+                    <ul className="flex flex-wrap gap-1.5">
+                      {row.triads.map((triad, index) => (
+                        <li
+                          key={`${row.root}-triad-${index}`}
+                          className="rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-sm text-amber-200"
+                        >
+                          {triad}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </article>
+            ))}
           </div>
         ) : (
           <p className="select-text text-sm text-zinc-400">
