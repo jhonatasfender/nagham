@@ -1,124 +1,280 @@
 const voicings = {
-  5: [
-    [1, 4],
-    [2, 3],
-    [3, 1],
+
+  "5": [
+  {
+    region: "open",
+    positions: [
+      [1, 4],
+      [2, 3],
+      [3, 1],
+    ],
+    barre: null,
+  },
   ],
 
-  6: [
-    [0, 3],
-    [1, 1],
-    [2, 3],
-    [3, 1],
+  "6": [
+  {
+    region: "open",
+    positions: [
+      [0, 3],
+      [1, 1],
+      [2, 3],
+      [3, 1],
+    ],
+    barre: null,
+  },
   ],
 
-  7: [
-    [0, 3],
-    [1, 2],
-    [2, 3],
-    [3, 1],
+  "7": [
+  {
+    region: "open",
+    positions: [
+      [0, 3],
+      [1, 2],
+      [2, 3],
+      [3, 1],
+    ],
+    barre: null,
+  },
   ],
 
-  9: [[1, 11], [3, 11], [5, 11], { barre: 10, strings: [5, 4, 3, 2, 1] }],
-
-  // Dominant 11 — 5th-string-root mini-barre (R, 11, ♭7, 9); omits the 3.
-  11: [
-    [4, 6],
-    [3, 6],
-    [2, 6],
-    [1, 6],
+  "9": [
+  {
+    region: "fret-10",
+    positions: [
+      [1, 11],
+      [3, 11],
+      [5, 11],
+    ],
+    barre: { fret: 10, strings: [5, 4, 3, 2, 1] },
+  },
   ],
 
-  // Dominant 13 — 6th-string-root shape (R, ♭7, 3, 13). 5/9/11 omitted.
-  13: [
-    [5, 11],
-    [3, 11],
-    [2, 12],
-    [1, 13],
+  "11": [
+  {
+    region: "fret-6",
+    positions: [
+      [4, 6],
+      [3, 6],
+      [2, 6],
+      [1, 6],
+    ],
+    barre: null,
+  },
   ],
 
-  // Dominant 7(#9) — 5th-string-root "Hendrix" shape (R, ♭7, 3, #9).
-  "9+": [
-    [4, 6],
-    [3, 11],
-    [2, 12],
-    [1, 7],
+  "13": [
+  {
+    region: "fret-11",
+    positions: [
+      [5, 11],
+      [3, 11],
+      [2, 12],
+      [1, 13],
+    ],
+    barre: null,
+  },
   ],
 
-  Maj: [[1, 8], [2, 8], [3, 8], { barre: 6, strings: [4, 3, 2, 1, 0] }],
+  Maj: [
+  {
+    region: "fret-6",
+    positions: [
+      [1, 8],
+      [2, 8],
+      [3, 8],
+    ],
+    barre: { fret: 6, strings: [4, 3, 2, 1, 0] },
+  },
+  ],
 
-  m: [[1, 7], [2, 8], [3, 8], { barre: 6, strings: [4, 3, 2, 1, 0] }],
+  m: [
+  {
+    region: "fret-6",
+    positions: [
+      [1, 7],
+      [2, 8],
+      [3, 8],
+    ],
+    barre: { fret: 6, strings: [4, 3, 2, 1, 0] },
+  },
+  ],
 
   dim: [
-    [0, 2],
-    [1, 4],
-    [2, 2],
-    [3, 1],
+  {
+    region: "open",
+    positions: [
+      [0, 2],
+      [1, 4],
+      [2, 2],
+      [3, 1],
+    ],
+    barre: null,
+  },
   ],
 
   aug: [
-    [0, 3],
-    [1, 0],
-    [2, 0],
-    [3, 1],
+  {
+    region: "open",
+    positions: [
+      [0, 3],
+      [1, 0],
+      [2, 0],
+      [3, 1],
+    ],
+    barre: null,
+  },
   ],
 
   sus2: [
-    [0, 1],
-    [1, 4],
-    [2, 3],
-    [3, 1],
+  {
+    region: "open",
+    positions: [
+      [0, 1],
+      [1, 4],
+      [2, 3],
+      [3, 1],
+    ],
+    barre: null,
+  },
   ],
 
   sus4: [
-    [0, 4],
-    [1, 4],
-    [2, 3],
-    [3, 1],
-  ],
-
-  m7: [
-    [0, 2],
-    [1, 2],
-    [2, 3],
-    [3, 1],
-  ],
-
-  maj7: [
-    [0, 3],
-    [1, 3],
-    [2, 3],
-    [3, 1],
-  ],
-
-  "m7(b5)": [
-    [0, 2],
-    [1, 2],
-    [2, 2],
-    [3, 1],
-  ],
-
-  dim7: [
-    [0, 2],
-    [1, 1],
-    [2, 2],
-    [3, 1],
+  {
+    region: "open",
+    positions: [
+      [0, 4],
+      [1, 4],
+      [2, 3],
+      [3, 1],
+    ],
+    barre: null,
+  },
   ],
 
   m6: [
-    [0, 2],
-    [1, 1],
-    [2, 3],
-    [3, 1],
+  {
+    region: "open",
+    positions: [
+      [0, 2],
+      [1, 1],
+      [2, 3],
+      [3, 1],
+    ],
+    barre: null,
+  },
   ],
 
-  "6/9": [[0, 6], [1, 6], [4, 6], { barre: 5, strings: [4, 3, 2, 1, 0] }],
+  "6/9": [
+  {
+    region: "fret-5",
+    positions: [
+      [0, 6],
+      [1, 6],
+      [4, 6],
+    ],
+    barre: { fret: 5, strings: [4, 3, 2, 1, 0] },
+  },
+  ],
 
-  maj9: [[1, 11], [5, 11], { barre: 10, strings: [5, 4, 2, 1, 0] }],
+  m7: [
+  {
+    region: "open",
+    positions: [
+      [0, 2],
+      [1, 2],
+      [2, 3],
+      [3, 1],
+    ],
+    barre: null,
+  },
+  ],
 
-  m9: [[0, 13], { barre: 11, strings: [5, 3, 2, 1, 0] }],
+  maj7: [
+  {
+    region: "open",
+    positions: [
+      [0, 3],
+      [1, 3],
+      [2, 3],
+      [3, 1],
+    ],
+    barre: null,
+  },
+  ],
 
-  add9: [[1, 11], [3, 13], [5, 11], { barre: 10, strings: [5, 4, 3, 2, 1] }],
+  "m7(b5)": [
+  {
+    region: "open",
+    positions: [
+      [0, 2],
+      [1, 2],
+      [2, 2],
+      [3, 1],
+    ],
+    barre: null,
+  },
+  ],
+
+  dim7: [
+  {
+    region: "open",
+    positions: [
+      [0, 2],
+      [1, 1],
+      [2, 2],
+      [3, 1],
+    ],
+    barre: null,
+  },
+  ],
+
+  add9: [
+  {
+    region: "fret-10",
+    positions: [
+      [1, 11],
+      [3, 13],
+      [5, 11],
+    ],
+    barre: { fret: 10, strings: [5, 4, 3, 2, 1] },
+  },
+  ],
+
+  maj9: [
+  {
+    region: "fret-10",
+    positions: [
+      [1, 11],
+      [5, 11],
+    ],
+    barre: { fret: 10, strings: [5, 4, 2, 1, 0] },
+  },
+  ],
+
+  m9: [
+  {
+    region: "fret-11",
+    positions: [
+      [0, 13],
+    ],
+    barre: { fret: 11, strings: [5, 3, 2, 1, 0] },
+  },
+  ],
+
+  "9+": [
+  {
+    region: "fret-6",
+    positions: [
+      [4, 6],
+      [3, 11],
+      [2, 12],
+      [1, 7],
+    ],
+    barre: null,
+  },
+  ],
+
 };
 
 export default voicings;
