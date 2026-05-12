@@ -43,10 +43,13 @@ export function drawDots(
         isEditor &&
         customPositions &&
         customPositions.some(([s, f]) => s === stringIndex && f === fret);
+      // Open-string notes (fret === 0) are valid chord tones and must
+      // render — many standard open voicings (C, G, Em, Dsus2, Asus2, ...)
+      // depend on them. The dot renders inside the nut column.
       const showDot =
         (isEditor && isCustomPosition && !isInBarre) ||
-        (!isEditor && isChord && fret > 0 && !isInBarre);
-      const isSelectedInChord = isChord && isSelected && fret > 0 && !isInBarre;
+        (!isEditor && isChord && !isInBarre);
+      const isSelectedInChord = isChord && isSelected && !isInBarre;
 
       if (showDot) {
         const x = getFretCenterX(displayFretIndex, VISIBLE_FRETS, fretWidth);
