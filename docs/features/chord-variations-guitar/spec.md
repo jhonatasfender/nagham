@@ -205,7 +205,7 @@ Converte os 12 arquivos `<Root>.js` do formato achatado para o novo, **preservan
 - [ ] Em C maior na Home: a tira aparece com ≥ 2 miniaturas; clique troca o braço.
 - [ ] Em C `m9` (1 voicing): tira **não** aparece.
 - [ ] Troca de root/quality reseta `variationIndex` para 0.
-- [ ] `variationIndex` persiste em `localStorage` (via `usePersistedReducer`).
+- [ ] `variationIndex` persiste em `localStorage` (via `usePersistedReducer`). **Follow-up:** o hook `usePersistedReducer` não existia no commit base `a71e7f7` desta branch. A integração da Home usa `useReducer` simples. Persistência será aplicada quando o hook `usePersistedReducer` (WIP em `main`) for mergeado junto.
 - [ ] Em mobile (375 px): tira rola horizontalmente; tap em miniatura funciona; tap target ≥ 44 px.
 - [ ] Teclado: Tab/Shift+Tab entre miniaturas; Enter/Space seleciona; foco visível com ring amber.
 - [ ] Tema escuro: cores das miniaturas batem com o braço grande (`constants.js` compartilhado).
