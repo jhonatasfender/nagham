@@ -37,6 +37,7 @@ export function PianoView({
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+    const previousScrollLeft = el.scrollLeft;
     const svg = drawPiano(
       el,
       { chordNotes: notesToHighlight, selectedNote },
@@ -47,49 +48,56 @@ export function PianoView({
       }
     );
     svgRef.current = svg;
+    el.scrollLeft = previousScrollLeft;
   }, [onSelectNote, notesToHighlight, selectedNote, containerWidth]);
 
   useEffect(() => {
-    if (!selectedNote || !svgRef.current || selectedNote.octave == null) return;
-
+    const el = containerRef.current;
+    if (!el || !svgRef.current) return;
     const svg = svgRef.current;
-    if (!svg) return;
+
+    const targetKeyName = (() => {
+      if (selectedNote && selectedNote.octave != null) {
+        const { name, octave } = midiToNote(
+          noteToMidi(selectedNote.name, selectedNote.octave)
+        );
+        return `${name}${octave}`;
+      }
+      if (notesToHighlight?.length) {
+        const midis = notesToHighlight
+          .filter((n) => typeof n.octave === "number")
+          .map((n) => noteToMidi(n.name, n.octave))
+          .sort((a, b) => a - b);
+        if (!midis.length) return null;
+        const medianMidi = midis[Math.floor(midis.length / 2)];
+        const { name, octave } = midiToNote(medianMidi);
+        return `${name}${octave}`;
+      }
+      return null;
+    })();
+
+    if (!targetKeyName) return;
 
     requestAnimationFrame(() => {
-      const { name, octave } = midiToNote(
-        noteToMidi(selectedNote.name, selectedNote.octave)
-      );
-      const keyName = `${name}${octave}`;
-      const keyElement = svg.select(`rect[data-key="${keyName}"]`);
-
+      const keyElement = svg.select(`rect[data-key="${targetKeyName}"]`);
       if (keyElement.empty()) return;
 
       const keyX = parseFloat(keyElement.attr("x")) || 0;
       const keyWidth = parseFloat(keyElement.attr("width")) || 0;
       const keyCenter = keyX + keyWidth / 2;
-      const viewWidth = containerWidth;
+      const viewWidth = el.clientWidth || containerWidth;
+      const contentWidth = parseFloat(svg.attr("width")) || viewWidth;
 
-      const gScroll = svg.select(".piano-scroll-layer");
-      if (gScroll.empty()) return;
-
-      let targetTranslateX = -(keyCenter - viewWidth / 2);
-
-      const scrollWidth = parseFloat(svg.attr("width")) || viewWidth;
-      const minTranslate =
-        scrollWidth > viewWidth ? -(scrollWidth - viewWidth) : 0;
-      const maxTranslate = 0;
-      targetTranslateX = Math.max(
-        minTranslate,
-        Math.min(maxTranslate, targetTranslateX)
-      );
-
-      gScroll.attr("transform", `translate(${targetTranslateX}, 0)`);
+      let nextScrollLeft = keyCenter - viewWidth / 2;
+      const maxScroll = Math.max(0, contentWidth - viewWidth);
+      nextScrollLeft = Math.max(0, Math.min(maxScroll, nextScrollLeft));
+      el.scrollLeft = nextScrollLeft;
     });
   }, [selectedNote, containerWidth, notesToHighlight]);
 
   return (
     <div
-      className="piano-view relative max-w-full overflow-hidden rounded-md bg-zinc-950/90 ring-1 ring-inset ring-zinc-600/35 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+      className="piano-view relative max-w-full overflow-x-auto overflow-y-hidden rounded-md bg-zinc-950/90 ring-1 ring-inset ring-zinc-600/35 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] [scrollbar-width:thin] [-webkit-overflow-scrolling:touch]"
       ref={containerRef}
       style={{
         width: "100%",
