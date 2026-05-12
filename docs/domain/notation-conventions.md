@@ -64,6 +64,34 @@ são colapsados para o equivalente natural com letra do conjunto de bemóis
 Detalhes da decisão de `dim = dim7` em
 [ADR-0003](../adr/0003-dim-significa-dim7-cifra-br.md).
 
+## Tabela de sufixos de qualidade (estilo ASCII)
+
+Fonte única: `src/domain/chordSymbol.js` (`QUALITY_SUFFIX`). Veja
+[ADR-0006](../adr/0006-ascii-text-chord-symbol-style.md) para o porquê
+do estilo ASCII.
+
+| Quality interna | Sufixo exibido | Exemplo (root = C) |
+|---|---|---|
+| `Maj` | _(vazio)_ | `C` |
+| `m` | `m` | `Cm` |
+| `5` / `m5` | `5` | `C5` |
+| `dim` (tríade) | `dim` | `Cdim` |
+| `dim7` | `dim` | `Cdim` (4 notas — ver ADR-0003) |
+| `aug` | `aug` | `Caug` |
+| `sus2`, `sus4` | `sus2` / `sus4` | `Csus4` |
+| `6`, `m6` | `6` / `m6` | `Cm6` |
+| `6/9` | `6/9` | `C6/9` |
+| `7`, `m7`, `maj7` | `7` / `m7` / `maj7` | `Cmaj7` |
+| `m7(b5)` | `m7(b5)` | `Cm7(b5)` |
+| `9`, `m9`, `maj9` | `9` / `m9` / `maj9` | `Cmaj9` |
+| `add9` | `add9` | `Cadd9` |
+| `9+` | `7(#9)` | `C7(#9)` (Hendrix chord) |
+| `11`, `13` | `11` / `13` | `C13` |
+
+Tríades em graus de escala usam a mesma tabela (via
+`formatTriadLabel` em `scales.js`). Resultado em C major: `C · Dm · Em
+· F · G · Am · Bdim`.
+
 ## Escalas: `letterSteps`
 
 Para escalas com menos de 7 notas (pentatônica, blues, hirajoshi), o

@@ -24,9 +24,4 @@ export const TRIAD_I18N_KEY = {
   m: "chordBuilder.triadMinor",
 };
 
-export function extensionChipLabel(quality) {
-  if (quality === "maj9") return "M9";
-  if (quality === "dim7") return "dim";
-  if (quality === "9+") return "7(#9)";
-  return quality;
-}
+export { formatQualitySuffix as extensionChipLabel } from "../../domain/chordSymbol";

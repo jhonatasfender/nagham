@@ -3,6 +3,7 @@ import {
   NOTE_NAMES_FLATS,
   pitchNameToPitchClass,
 } from "./notes";
+import { formatQualitySuffix } from "./chordSymbol";
 
 const LETTERS = ["C", "D", "E", "F", "G", "A", "B"];
 const LETTER_NATURAL_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
@@ -169,12 +170,17 @@ function triadQualityFromIntervals(thirdSemitones, fifthSemitones) {
   return TriadQuality.other;
 }
 
+const TRIAD_QUALITY_TO_CHORD_KEY = {
+  [TriadQuality.major]: "Maj",
+  [TriadQuality.minor]: "m",
+  [TriadQuality.dim]: "dim",
+  [TriadQuality.aug]: "aug",
+};
+
 function formatTriadLabel(rootNoteName, triadQuality) {
-  if (triadQuality === TriadQuality.major) return rootNoteName;
-  if (triadQuality === TriadQuality.minor) return `${rootNoteName}m`;
-  if (triadQuality === TriadQuality.dim) return `${rootNoteName}°`;
-  if (triadQuality === TriadQuality.aug) return `${rootNoteName}+`;
-  return `${rootNoteName}(?)`;
+  const chordKey = TRIAD_QUALITY_TO_CHORD_KEY[triadQuality];
+  if (!chordKey) return `${rootNoteName}(?)`;
+  return `${rootNoteName}${formatQualitySuffix(chordKey)}`;
 }
 
 export function buildScaleDegreeTriads(

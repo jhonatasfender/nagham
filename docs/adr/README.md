@@ -17,6 +17,7 @@
 | [0003](0003-dim-significa-dim7-cifra-br.md) | "dim" no UI significa dim7 (cifra brasileira) | Accepted | 2026-05-12 |
 | [0004](0004-touch-mobile-pointerdown.md) | Captura de toque mobile via pointerdown + touch-action | Accepted | 2026-05-12 |
 | [0005](0005-audio-web-audio-puro.md) | Áudio via Web Audio puro (sem Tone.js) | Accepted | 2026-05-12 |
+| [0006](0006-ascii-text-chord-symbol-style.md) | Renderização de cifras em texto ASCII | Accepted | 2026-05-12 |
 
 ## Template
 

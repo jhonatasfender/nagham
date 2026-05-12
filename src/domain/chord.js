@@ -1,5 +1,6 @@
 import { notes as chordNotes, get as chordGet } from "@tonaljs/chord";
 import { NOTE_NAMES, NOTE_NAMES_FLATS, pitchNameToPitchClass } from "./notes";
+import { formatChordSymbol } from "./chordSymbol";
 
 const QUALITY_TO_TONAL = {
   Maj: "maj",
@@ -96,14 +97,6 @@ function qualityToChordSymbolSuffix(quality) {
   return quality;
 }
 
-function qualityToDisplaySuffix(quality) {
-  if (quality === "Maj") return "";
-  if (quality === "maj9") return "M9";
-  if (quality === "dim7") return "dim";
-  if (quality === "9+") return "7(#9)";
-  return quality;
-}
-
 function toCanonicalName(name, noteNames) {
   const sharpToFlat = {
     "C#": "Db",
@@ -145,18 +138,10 @@ export function effectiveChordQuality({ triad, extension }) {
 }
 
 export function getChordLabel(root, quality, useFlats, bass = null) {
-  const rootDisplay = toCanonicalName(
-    root,
-    useFlats ? NOTE_NAMES_FLATS : NOTE_NAMES
-  );
-  const suffix = qualityToDisplaySuffix(quality);
-  const main = suffix ? `${rootDisplay}${suffix}` : rootDisplay;
-  if (bass && bass !== root) {
-    const bassDisplay = toCanonicalName(
-      bass,
-      useFlats ? NOTE_NAMES_FLATS : NOTE_NAMES
-    );
-    return `${main}/${bassDisplay}`;
-  }
-  return main;
+  const noteNames = useFlats ? NOTE_NAMES_FLATS : NOTE_NAMES;
+  return formatChordSymbol({
+    root: toCanonicalName(root, noteNames),
+    quality,
+    bass: bass ? toCanonicalName(bass, noteNames) : null,
+  });
 }
