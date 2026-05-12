@@ -11,6 +11,10 @@ import {
 } from "../domain/chord";
 import { createMatrixFromChord } from "../domain/notationMatrix";
 import { getStaffChordVoicing } from "../domain/pianoVoicings";
+import {
+  getChordVariations,
+} from "../domain/voicings";
+import { ChordVariationStrip } from "../views/Guitar/ChordVariationStrip.jsx";
 import { GuitarView } from "../views/Guitar/GuitarView";
 import { PianoView } from "../views/Piano/PianoView";
 import { StaffView } from "../views/Staff/StaffView";
@@ -21,17 +25,19 @@ const initialChordState = {
   extension: null,
   bass: null,
   useFlats: false,
+  variationIndex: 0,
 };
 
 function chordReducer(state, action) {
   switch (action.type) {
     case "SET_ROOT":
-      return { ...state, root: action.payload };
+      return { ...state, root: action.payload, variationIndex: 0 };
     case "SET_TRIAD": {
       if (action.payload === state.triad) return state;
       return {
         ...state,
         triad: action.payload,
+        variationIndex: 0,
         extension: EXTENSION_COMPOSABLE_WITH_TRIAD.has(state.extension)
           ? state.extension
           : null,
@@ -39,13 +45,17 @@ function chordReducer(state, action) {
     }
     case "SET_EXTENSION": {
       const { ext, impliedTriad } = action.payload;
-      if (ext == null) return { ...state, extension: null };
+      if (ext == null)
+        return { ...state, extension: null, variationIndex: 0 };
       return {
         ...state,
         extension: ext,
+        variationIndex: 0,
         triad: impliedTriad != null ? impliedTriad : state.triad,
       };
     }
+    case "SET_VARIATION_INDEX":
+      return { ...state, variationIndex: action.payload };
     case "SET_BASS":
       return { ...state, bass: action.payload };
     case "SET_USE_FLATS":
@@ -63,7 +73,7 @@ export function Home() {
     chordReducer,
     initialChordState
   );
-  const { root, triad, extension, bass, useFlats } = chordState;
+  const { root, triad, extension, bass, useFlats, variationIndex } = chordState;
 
   const handleSelectNote = useCallback(
     (note) => {
@@ -85,6 +95,10 @@ export function Home() {
   const chordNotes = useMemo(
     () => getChordNotes(root, quality, { bass, useFlats }),
     [root, quality, bass, useFlats]
+  );
+  const variations = useMemo(
+    () => getChordVariations(root, quality),
+    [root, quality]
   );
   const notesForStaff = useMemo(() => {
     if (chordNotes?.length && root && quality) {
@@ -164,14 +178,24 @@ export function Home() {
             <h3 className="mb-3 text-sm font-medium text-zinc-400">
               {t("app.sections.guitar")}
             </h3>
-            <GuitarView
-              selectedNote={selectedNote}
-              onSelectNote={handleSelectNote}
-              syncGlobalSelection={false}
-              chordNotes={chordNotes}
-              root={root}
-              quality={quality}
-            />
+            <div className="space-y-6">
+              <GuitarView
+                selectedNote={selectedNote}
+                onSelectNote={handleSelectNote}
+                syncGlobalSelection={false}
+                chordNotes={chordNotes}
+                root={root}
+                quality={quality}
+                variationIndex={variationIndex}
+              />
+              <ChordVariationStrip
+                variations={variations}
+                selectedIndex={variationIndex}
+                onSelect={(idx) =>
+                  dispatchChord({ type: "SET_VARIATION_INDEX", payload: idx })
+                }
+              />
+            </div>
           </div>
         </section>
       </div>
