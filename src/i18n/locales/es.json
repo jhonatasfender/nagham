@@ -128,7 +128,9 @@
     "qualityHintFive": "Con Mayor: power chord (solo tónica y quinta). Con Menor: cifra “m5” (mismas notas que “m”, notación alternativa).",
     "qualityHint679": "Con Mayor: 6, 7 o 9 mayor/dominante. Con Menor: los mismos botones dan m6, m7 o m9 en la cifra.",
     "qualityHintM9": "Novena mayor sobre séptima mayor — cifra M9 (no confundir con novena aumentada).",
-    "qualityHint9Plus": "Séptima de dominante con novena aumentada (#9) — cifra 9+."
+    "qualityHint9Plus": "Séptima de dominante con novena aumentada (#9) — cifra 9+.",
+    "qualityHintDim": "Séptima disminuida (cifrado brasileño F°): T-3m-5d-7d, cuatro notas en terceras menores apiladas (ej.: F-La♭-Si♭♭-Re♭♭). Para la tríada disminuida de 3 notas, usar m7(♭5) sin la 7ª.",
+    "qualityHintHalfDim": "Semidisminuido (Cø o m7♭5): tríada disminuida con séptima menor (T-3m-5d-7m). Ej.: F-La♭-Si♭♭-Mi♭."
   },
   "fretboard": {
     "string": "Cuerda",

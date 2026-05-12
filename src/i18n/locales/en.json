@@ -128,7 +128,9 @@
     "qualityHintFive": "With Major: power chord (root and fifth only). With Minor: “m5” symbol (same notes as “m”, alternate notation).",
     "qualityHint679": "With Major: sixth (major 6), dominant 7, or dominant 9. With Minor: the same buttons produce m6, m7, or m9 in the symbol.",
     "qualityHintM9": "Major ninth over major seventh — M9 symbol (not an augmented ninth).",
-    "qualityHint9Plus": "Dominant seventh with augmented ninth (#9) — 9+ symbol."
+    "qualityHint9Plus": "Dominant seventh with augmented ninth (#9) — 9+ symbol.",
+    "qualityHintDim": "Diminished 7th (Brazilian cifra F°): R-m3-d5-d7, four notes stacked in minor thirds (e.g., F-A♭-C♭-E♭♭). For the 3-note diminished triad, use m7(♭5) without the 7th.",
+    "qualityHintHalfDim": "Half-diminished (Cø or m7♭5): diminished triad with minor seventh (R-m3-d5-m7). Ex: F-A♭-C♭-E♭."
   },
   "fretboard": {
     "string": "String",

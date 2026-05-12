@@ -128,7 +128,9 @@
     "qualityHintFive": "Com Maior: power chord (só tônica e quinta). Com Menor: cifra “m5” (mesmas notas que “m”, notação alternativa).",
     "qualityHint679": "Com Maior: 6, 7 ou 9 maiores/dominantes. Com Menor: mesmos botões geram m6, m7 ou m9 na cifra.",
     "qualityHintM9": "Nona maior com sétima maior — cifra M9 (não confundir com nona aumentada).",
-    "qualityHint9Plus": "Sétima dominante com nona aumentada (#9) — cifra 9+."
+    "qualityHint9Plus": "Sétima dominante com nona aumentada (#9) — cifra 9+.",
+    "qualityHintDim": "Sétima diminuta (cifra brasileira F°): T-3m-5d-7d, quatro notas em terças menores empilhadas (ex.: F-Lá♭-Si♭♭-Ré♭♭). Para a tríade diminuta de 3 notas, use m7(♭5) sem a 7ª.",
+    "qualityHintHalfDim": "Meio-diminuto (Cø ou m7♭5): tríade diminuta com sétima menor (T-3m-5d-7m). Ex.: F-Lá♭-Si♭♭-Mi♭."
   },
   "fretboard": {
     "string": "Corda",

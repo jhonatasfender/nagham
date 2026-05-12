@@ -103,6 +103,7 @@ function qualityToChordSymbolSuffix(quality) {
 function qualityToDisplaySuffix(quality) {
   if (quality === "Maj") return "";
   if (quality === "maj9") return "M9";
+  if (quality === "dim7") return "dim";
   return quality;
 }
 

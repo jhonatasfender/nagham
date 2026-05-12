@@ -2,7 +2,6 @@ export const CHORD_QUALITY_TRIAD = ["Maj", "m"];
 
 export const CHORD_QUALITIES_REST = [
   "5",
-  "dim",
   "aug",
   "sus2",
   "sus4",
@@ -27,5 +26,6 @@ export const TRIAD_I18N_KEY = {
 
 export function extensionChipLabel(quality) {
   if (quality === "maj9") return "M9";
+  if (quality === "dim7") return "dim";
   return quality;
 }

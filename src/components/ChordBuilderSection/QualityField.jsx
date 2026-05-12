@@ -25,6 +25,12 @@ function extensionQualityTooltip(q, t) {
   if (q === "9+") {
     return t("chordBuilder.qualityHint9Plus");
   }
+  if (q === "dim7") {
+    return t("chordBuilder.qualityHintDim");
+  }
+  if (q === "m7(b5)") {
+    return t("chordBuilder.qualityHintHalfDim");
+  }
   return undefined;
 }
 
