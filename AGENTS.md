@@ -2,6 +2,8 @@
 
 Este ficheiro resume o projeto para assistentes de código e ferramentas de IA. O pacote npm chama-se **nota**; o produto e textos públicos (por exemplo `public/llms.txt`) usam o nome **Nagham** — aplicação web para estudar notas e acordes com vistas sincronizadas (partitura, piano, violão).
 
+> **Antes de modificar comportamento documentado**, leia [`docs/constitution.md`](docs/constitution.md) e o glossário em [`docs/domain/glossary.md`](docs/domain/glossary.md). Decisões teóricas grandes têm ADR em [`docs/adr/`](docs/adr/). Para features médias/grandes, crie pasta em [`docs/features/`](docs/features/) seguindo o template.
+
 ## Stack
 
 - **Runtime:** React 19, Vite 8, ES modules (`"type": "module"`).
@@ -77,4 +79,19 @@ npm run preview          # pré-visualizar dist
 - `public/robots.txt`, `public/llms.txt` — política de crawlers e resumo do site.
 - `public/notes-index.xml` — gerado; não editar à mão de forma duradoura sem alterar o script ou o domínio em `notes.js`.
 
-Para decisões de arquitetura mais profundas (fluxo da nota selecionada, D3, escalas), seguir `docs/frontend-architecture.md` e, se existir, `docs/braco-do-violao.md`.
+## Documentação adicional
+
+A pasta `docs/` segue **Spec-Driven Development** (referência: [GitHub Spec Kit](https://github.com/github/spec-kit)). Estrutura:
+
+- [`docs/constitution.md`](docs/constitution.md) — princípios invioláveis (idioma, convenção brasileira, grafia estrita, a11y, validação).
+- [`docs/domain/`](docs/domain/) — modelagem de teoria musical:
+  - [`glossary.md`](docs/domain/glossary.md) — vocabulário ubíquo PT-BR.
+  - [`notation-conventions.md`](docs/domain/notation-conventions.md) — grafia, useFlats, cifra brasileira.
+  - [`chords.md`](docs/domain/chords.md) — qualidades, voicings, validação.
+  - [`scales.md`](docs/domain/scales.md) — escalas, graus, tríades.
+- [`docs/adr/`](docs/adr/) — Architecture Decision Records (formato MADR). Imutáveis; ver `README.md` para índice e template.
+- [`docs/features/`](docs/features/) — spec.md / plan.md / tasks.md por feature.
+- [`docs/frontend-architecture.md`](docs/frontend-architecture.md) — convenções de pastas/D3 (continua valendo).
+- [`docs/braco-do-violao.md`](docs/braco-do-violao.md) — tabela de referência (cordas × casas).
+
+**Regra de ouro:** toda PR que muda comportamento documentado atualiza o doc relevante ou cria um ADR. Sem isso a doc apodrece.
