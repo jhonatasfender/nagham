@@ -6,6 +6,7 @@ import {
   CHORD_CARD_MARGIN,
   TRIAD_FILL,
 } from "./constants.js";
+import { computeStringStates, STRING_STATE } from "./markers.js";
 
 // stringIndex 0 = high E (right side of card)
 // stringIndex 5 = low E  (left side of card)
@@ -91,11 +92,14 @@ export function drawChordCard(el, { variation, isSelected }, options = {}) {
   const gridHeight = gridBottom - gridTop;
 
   const markerY = M.top - 6;
+  const stringStates = computeStringStates({
+    positions: variation.positions,
+    barre: variation.barre,
+  });
   for (let s = 0; s < STRING_COUNT; s++) {
-    const positionsOnString = variation.positions.filter(([ps]) => ps === s);
-    const onBarre = variation.barre?.strings?.includes(s);
+    const state = stringStates.get(s);
     const x = stringX(s, gridWidth, gridLeft);
-    if (positionsOnString.length === 0 && !onBarre) {
+    if (state === STRING_STATE.MUTED) {
       svg
         .append("text")
         .attr("x", x)
@@ -104,7 +108,7 @@ export function drawChordCard(el, { variation, isSelected }, options = {}) {
         .attr("font-size", 9)
         .attr("fill", "#888")
         .text("×");
-    } else if (positionsOnString.some(([, f]) => f === 0)) {
+    } else if (state === STRING_STATE.OPEN) {
       svg
         .append("circle")
         .attr("cx", x)

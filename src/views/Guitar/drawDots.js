@@ -6,6 +6,7 @@ import {
   SELECTED_STROKE,
 } from "./constants";
 import { getStringY, getFretCenterX } from "./layout";
+import { computeStringStates, STRING_STATE } from "./markers";
 
 export function drawDots(
   cells,
@@ -23,6 +24,13 @@ export function drawDots(
   onSelectNote
 ) {
   const dotRadius = Math.min(fretWidth, rowHeight) * 0.28;
+
+  const positions = isEditor && customPositions ? customPositions : null;
+  const stringStates = computeStringStates({
+    chordKeys: positions ? undefined : chordKeys,
+    positions,
+    barre,
+  });
 
   for (let stringIndex = 0; stringIndex < STRING_COUNT; stringIndex++) {
     for (
@@ -46,9 +54,12 @@ export function drawDots(
       // Open-string notes (fret === 0) are valid chord tones and must
       // render — many standard open voicings (C, G, Em, Dsus2, Asus2, ...)
       // depend on them. The dot renders inside the nut column.
+      const isOpenStringDot =
+        fret === 0 && stringStates.get(stringIndex) === STRING_STATE.OPEN;
       const showDot =
-        (isEditor && isCustomPosition && !isInBarre) ||
-        (!isEditor && isChord && !isInBarre);
+        !isOpenStringDot &&
+        ((isEditor && isCustomPosition && !isInBarre) ||
+          (!isEditor && isChord && !isInBarre));
       const isSelectedInChord = isChord && isSelected && !isInBarre;
 
       if (showDot) {
@@ -95,6 +106,47 @@ export function drawDots(
             onSelectNote({ name: note.name, octave: note.octave });
           });
         }
+      }
+    }
+  }
+
+  // Render open-string outline / muted-string × marker at the fret 0 column.
+  // Only when fret 0 is part of VISIBLE_FRETS (always true for the standard
+  // visible range, but defensive).
+  const openCol = VISIBLE_FRETS.indexOf(0);
+  if (openCol !== -1) {
+    const xOpen = getFretCenterX(openCol, VISIBLE_FRETS, fretWidth);
+    for (let stringIndex = 0; stringIndex < STRING_COUNT; stringIndex++) {
+      const state = stringStates.get(stringIndex);
+      if (state !== STRING_STATE.OPEN && state !== STRING_STATE.MUTED) continue;
+
+      const y = getStringY(stringIndex, displayIndexByString, rowHeight);
+
+      if (state === STRING_STATE.OPEN) {
+        cells
+          .append("circle")
+          .attr("cx", xOpen)
+          .attr("cy", y)
+          .attr("r", dotRadius)
+          .attr("fill", "none")
+          .attr("stroke", TRIAD_FILL)
+          .attr("stroke-width", 1.5)
+          .style("pointer-events", "none")
+          .raise();
+      } else {
+        // muted
+        cells
+          .append("text")
+          .attr("x", xOpen)
+          .attr("y", y)
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "central")
+          .attr("font-size", Math.max(10, dotRadius * 1.4))
+          .attr("font-weight", "700")
+          .attr("fill", "#888")
+          .style("pointer-events", "none")
+          .text("×")
+          .raise();
       }
     }
   }
