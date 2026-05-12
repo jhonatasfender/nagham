@@ -14,7 +14,7 @@ import {
 } from "../Guitar/constants.js";
 
 const BLACK_WIDTH_RATIO = 0.58;
-const MIN_WHITE_KEY_PX = 38;
+const MIN_WHITE_KEY_PX = 48;
 const KEYBOARD_PAD_X = 6;
 const WHITE_KEY_RX = 3;
 const BLACK_KEY_RX = 2;
@@ -105,7 +105,8 @@ export function drawPiano(container, data, options = {}) {
     .attr("class", "piano-keyboard-svg")
     .style("display", "block")
     .style("max-width", "none")
-    .style("overflow", "visible");
+    .style("overflow", "visible")
+    .style("touch-action", "manipulation");
 
   const noteIsInChord = (key) => isKeyInChord(chordNotes, key.name, key.octave);
 
@@ -140,7 +141,7 @@ export function drawPiano(container, data, options = {}) {
         .attr("stroke-width", style.strokeWidth)
         .style("cursor", "pointer");
     })
-    .on("click", (_, whiteKey) =>
+    .on("pointerdown", (_, whiteKey) =>
       onSelectNote?.({ name: whiteKey.name, octave: whiteKey.octave })
     );
 
@@ -184,7 +185,7 @@ export function drawPiano(container, data, options = {}) {
       .style("cursor", "pointer");
     blackKeyRect
       .attr("data-key", blackKey.key)
-      .on("click", () =>
+      .on("pointerdown", () =>
         onSelectNote?.({ name: blackKey.name, octave: blackKey.octave })
       );
   });

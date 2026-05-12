@@ -226,8 +226,9 @@ export async function drawStaff(container, data, options = {}) {
     const el = container.querySelector(`#${CSS.escape(id)}`);
     if (!el) return;
     el.classList.add("staff-note--interactive");
+    el.style.touchAction = "manipulation";
     if (!onSelectNote) return;
-    el.addEventListener("click", (event) => {
+    el.addEventListener("pointerdown", (event) => {
       event.preventDefault();
       event.stopPropagation();
       onSelectNote(noteData);

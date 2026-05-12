@@ -77,7 +77,8 @@ export function drawGuitar(container, data, options = {}) {
     .attr("width", svgContentWidth)
     .attr("height", height)
     .attr("preserveAspectRatio", "xMidYMid meet")
-    .style("display", "block");
+    .style("display", "block")
+    .style("touch-action", "manipulation");
 
   const g = svg
     .append("g")

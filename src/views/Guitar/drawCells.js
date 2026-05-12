@@ -55,7 +55,7 @@ export function drawCells(
       if (isEditor && onPositionClick) {
         const isExistingPosition = isCustomPosition;
         cell
-          .on("click", () => {
+          .on("pointerdown", () => {
             onPositionClick(stringIndex, fret);
           })
           .on("mouseenter", function () {
@@ -71,7 +71,7 @@ export function drawCells(
             d3.select(this).attr("fill", "transparent");
           });
       } else {
-        cell.on("click", () =>
+        cell.on("pointerdown", () =>
           onSelectNote?.({ name: note.name, octave: note.octave })
         );
       }

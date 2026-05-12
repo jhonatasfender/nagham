@@ -81,13 +81,13 @@ export function drawDots(
           .raise();
 
         if (isEditor && onPositionClick) {
-          circle.on("click", (e) => {
+          circle.on("pointerdown", (e) => {
             e.stopPropagation();
             onPositionClick(stringIndex, fret);
           });
         } else if (!isEditor && onSelectNote) {
           const note = matrix[stringIndex][fret];
-          circle.on("click", (e) => {
+          circle.on("pointerdown", (e) => {
             e.stopPropagation();
             onSelectNote({ name: note.name, octave: note.octave });
           });
