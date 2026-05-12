@@ -85,7 +85,7 @@ Para cada `(root, quality)` há até três entries (uma por instrumento):
 **Roots cobertos** (piano + staff): C, C#, D, D#, E, F, G, A, B.
 **Roots cobertos** (violão): + F#, G#, A# (aliases Db/Eb/Gb/Ab/Bb dirigem para os sharps).
 
-**Variações no violão (a partir de 2026-05):** cada `(root, quality)` tem
+**Variações no violão:** cada `(root, quality)` tem
 um array de variações. Cada variação carrega `region` (`"open"` ou
 `"fret-N"`), `positions` (pares `[stringIndex, fret]`) e `barre`
 (objeto `{fret, strings}` ou `null`). Ordem do array define ordem de

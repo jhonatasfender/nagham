@@ -33,8 +33,8 @@
   Nagham é uma string em `src/domain/chord.js` (`QUALITY_TO_TONAL`).
 - **Voicing** — distribuição específica das notas (qual oitava, qual ordem).
   Diferente em piano (`src/domain/pianoVoicings/`), partitura
-  (`src/domain/staffVoicings/`) e violão (`src/domain/voicings/` — usa
-  pares `[corda, casa]`).
+  (`src/domain/staffVoicings/`) e violão (`src/domain/voicings/` —
+  array de variações; ver **Variação**).
 - **Cifra de baixo / slash chord** — acorde com baixo invertido, ex.: `C/E`
   (acorde de C com Mi no baixo). Suportado via parâmetro `bass`.
 - **Inversão** — acorde com nota diferente da fundamental como mais grave.
@@ -47,7 +47,9 @@
   pode ou não mudar.
 - **Região (de variação)** — chave semântica em cada variação:
   `"open"` (envolve cordas soltas ou começa no traste 1) ou `"fret-N"`
-  (começa no traste N, com N de 1 a 12). Define o rótulo i18n pedagógico
+  (começa no traste N, com N de 2 a 12 — `fret-1` não ocorre porque
+  formas que tocam o traste 1 sem cordas soltas continuam sendo
+  classificadas como `"open"`). Define o rótulo i18n pedagógico
   ("Aberto", "3ª casa", etc.).
 - **Chord-card** — diagrama vertical compacto de acorde (formato Cifra
   Club / musicca / Songsterr), com nut/badge de casa, marcadores ×/○,

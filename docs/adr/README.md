@@ -20,6 +20,7 @@
 | [0006](0006-ascii-text-chord-symbol-style.md) | Renderização de cifras em texto ASCII                  | Accepted | 2026-05-12 |
 | [0007](0007-unificar-piano-staff-voicings.md) | Unificar piano e staff voicings em uma fonte única     | Accepted | 2026-05-12 |
 | [0008](0008-chord-qualities-single-source.md) | `chordQualities.js` como fonte única de intervalos     | Accepted | 2026-05-12 |
+| [0010](0010-estrutura-variacoes-violao.md)     | Estrutura de variações de voicing de violão            | Accepted | 2026-05-12 |
 
 ## Template
 
