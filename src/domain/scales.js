@@ -1,4 +1,11 @@
-import { NOTE_NAMES, NOTE_NAMES_FLATS, NOTE_TO_INDEX } from "./notes";
+import {
+  NOTE_NAMES,
+  NOTE_NAMES_FLATS,
+  pitchNameToPitchClass,
+} from "./notes";
+
+const LETTERS = ["C", "D", "E", "F", "G", "A", "B"];
+const LETTER_NATURAL_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 
 const INTERVAL_SEMITONES_12TET = Object.freeze({
   minorThird: 3,
@@ -22,6 +29,12 @@ const TriadQuality = Object.freeze({
   other: "other",
 });
 
+// `letterSteps` defines how many letter positions each note is from the
+// tonic letter (0-indexed). 7-note scales default to [0,1,2,3,4,5,6]
+// (one per letter); pentatonic/hexatonic scales need explicit steps so
+// the spelling preserves traditional naming (e.g. blues uses two letters
+// of position 3 for the "blue note" + perfect 4th, not three different
+// letters).
 export const SCALE_DEFINITIONS = [
   { id: "major-ionian", semitones: [0, 2, 4, 5, 7, 9, 11] },
   { id: "natural-minor", semitones: [0, 2, 3, 5, 7, 8, 10] },
@@ -32,11 +45,32 @@ export const SCALE_DEFINITIONS = [
   { id: "lydian", semitones: [0, 2, 4, 6, 7, 9, 11] },
   { id: "mixolydian", semitones: [0, 2, 4, 5, 7, 9, 10] },
   { id: "locrian", semitones: [0, 1, 3, 5, 6, 8, 10] },
-  { id: "major-pentatonic", semitones: [0, 2, 4, 7, 9] },
-  { id: "minor-pentatonic", semitones: [0, 3, 5, 7, 10] },
-  { id: "blues", semitones: [0, 3, 5, 6, 7, 10] },
-  { id: "chinese-pentatonic", semitones: [0, 2, 4, 7, 9] },
-  { id: "hirajoshi", semitones: [0, 2, 3, 7, 8], approximate12Tet: true },
+  {
+    id: "major-pentatonic",
+    semitones: [0, 2, 4, 7, 9],
+    letterSteps: [0, 1, 2, 4, 5],
+  },
+  {
+    id: "minor-pentatonic",
+    semitones: [0, 3, 5, 7, 10],
+    letterSteps: [0, 2, 3, 4, 6],
+  },
+  {
+    id: "blues",
+    semitones: [0, 3, 5, 6, 7, 10],
+    letterSteps: [0, 2, 3, 3, 4, 6],
+  },
+  {
+    id: "chinese-pentatonic",
+    semitones: [0, 2, 4, 7, 9],
+    letterSteps: [0, 1, 2, 4, 5],
+  },
+  {
+    id: "hirajoshi",
+    semitones: [0, 2, 3, 7, 8],
+    letterSteps: [0, 1, 2, 4, 5],
+    approximate12Tet: true,
+  },
   { id: "hungarian-minor", semitones: [0, 2, 3, 6, 7, 8, 11] },
   {
     id: "arabic-maqam",
@@ -62,15 +96,54 @@ export function getScaleDefinition(scaleId) {
   );
 }
 
-export function buildScaleNotes(root, semitones, useFlats = false) {
+function accidentalToken(offset) {
+  if (offset === 0) return "";
+  if (offset > 0) return "#".repeat(offset);
+  return "b".repeat(-offset);
+}
+
+function defaultLetterSteps(semitones) {
+  if (semitones.length === 7) return [0, 1, 2, 3, 4, 5, 6];
+  // For unknown shapes, derive a best-effort letter step from each
+  // semitone — this only matters as a fallback; the SCALE_DEFINITIONS
+  // entries below provide explicit letterSteps for the 5/6-note shapes.
+  return semitones.map((s) => {
+    const guess = Math.round(s / 2);
+    return ((guess % 7) + 7) % 7;
+  });
+}
+
+// Spells a scale by walking through the tonic's letter sequence and
+// computing the accidental needed on each letter so the audible pitch
+// matches the requested semitone interval. Falls back to the chromatic
+// spelling row if the tonic's letter cannot be parsed.
+export function buildScaleNotes(root, semitones, useFlats = false, options = {}) {
   if (!Array.isArray(semitones) || semitones.length === 0) return [];
-  const tonicPitchClass = NOTE_TO_INDEX[root];
+  const tonicPitchClass = pitchNameToPitchClass(root);
   if (tonicPitchClass == null) return [];
-  const spellingRow = useFlats ? NOTE_NAMES_FLATS : NOTE_NAMES;
-  return semitones.map(
-    (intervalFromTonic) =>
-      spellingRow[(tonicPitchClass + intervalFromTonic) % 12]
-  );
+
+  const rootLetter = root[0];
+  const rootLetterIdx = LETTERS.indexOf(rootLetter);
+  if (rootLetterIdx === -1) {
+    const spellingRow = useFlats ? NOTE_NAMES_FLATS : NOTE_NAMES;
+    return semitones.map(
+      (intervalFromTonic) =>
+        spellingRow[(tonicPitchClass + intervalFromTonic) % 12],
+    );
+  }
+
+  const letterSteps = options.letterSteps ?? defaultLetterSteps(semitones);
+
+  return semitones.map((intervalFromTonic, idx) => {
+    const letterStep = letterSteps[idx] ?? 0;
+    const targetLetter = LETTERS[(rootLetterIdx + letterStep) % 7];
+    const naturalPc = LETTER_NATURAL_PC[targetLetter];
+    const targetPc = (tonicPitchClass + intervalFromTonic) % 12;
+    let offset = targetPc - naturalPc;
+    while (offset > 6) offset -= 12;
+    while (offset < -6) offset += 12;
+    return targetLetter + accidentalToken(offset);
+  });
 }
 
 function triadQualityFromIntervals(thirdSemitones, fifthSemitones) {
@@ -104,8 +177,13 @@ function formatTriadLabel(rootNoteName, triadQuality) {
   return `${rootNoteName}(?)`;
 }
 
-export function buildScaleDegreeTriads(root, semitones, useFlats = false) {
-  const scaleSpellings = buildScaleNotes(root, semitones, useFlats);
+export function buildScaleDegreeTriads(
+  root,
+  semitones,
+  useFlats = false,
+  options = {}
+) {
+  const scaleSpellings = buildScaleNotes(root, semitones, useFlats, options);
   const degreeCount = scaleSpellings.length;
   if (degreeCount < 3) return [];
 
@@ -114,9 +192,9 @@ export function buildScaleDegreeTriads(root, semitones, useFlats = false) {
     const rootSpelling = scaleSpellings[degreeIndex];
     const thirdSpelling = scaleSpellings[(degreeIndex + 2) % degreeCount];
     const fifthSpelling = scaleSpellings[(degreeIndex + 4) % degreeCount];
-    const rootPitchClass = NOTE_TO_INDEX[rootSpelling];
-    const thirdPitchClass = NOTE_TO_INDEX[thirdSpelling];
-    const fifthPitchClass = NOTE_TO_INDEX[fifthSpelling];
+    const rootPitchClass = pitchNameToPitchClass(rootSpelling);
+    const thirdPitchClass = pitchNameToPitchClass(thirdSpelling);
+    const fifthPitchClass = pitchNameToPitchClass(fifthSpelling);
     if (
       rootPitchClass == null ||
       thirdPitchClass == null ||
@@ -163,9 +241,9 @@ export function buildNaturalMinorTriadsWithBorrowedSixth(root, useFlats) {
       degreeIndex === SUPERTONIC_DEGREE_INDEX
         ? melodicAscSpellings[(degreeIndex + 4) % degreeCount]
         : aeolianSpellings[(degreeIndex + 4) % degreeCount];
-    const rootPitchClass = NOTE_TO_INDEX[rootSpelling];
-    const thirdPitchClass = NOTE_TO_INDEX[thirdSpelling];
-    const fifthPitchClass = NOTE_TO_INDEX[fifthSpelling];
+    const rootPitchClass = pitchNameToPitchClass(rootSpelling);
+    const thirdPitchClass = pitchNameToPitchClass(thirdSpelling);
+    const fifthPitchClass = pitchNameToPitchClass(fifthSpelling);
     if (
       rootPitchClass == null ||
       thirdPitchClass == null ||
@@ -188,7 +266,7 @@ export function buildNaturalMinorTriadsWithBorrowedSixth(root, useFlats) {
 
 export function buildScalesTableTriads(
   root,
-  { showTriadsColumn, scaleId, semitones, useFlats }
+  { showTriadsColumn, scaleId, semitones, useFlats, letterSteps }
 ) {
   if (!showTriadsColumn) {
     return [];
@@ -196,7 +274,7 @@ export function buildScalesTableTriads(
   if (scaleId === "natural-minor") {
     return buildNaturalMinorTriadsWithBorrowedSixth(root, useFlats);
   }
-  return buildScaleDegreeTriads(root, semitones, useFlats);
+  return buildScaleDegreeTriads(root, semitones, useFlats, { letterSteps });
 }
 
 function semitoneStepLabel(stepWidthSemitones) {

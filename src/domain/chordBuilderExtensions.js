@@ -8,7 +8,7 @@ export const EXTENSION_IMPLIES_MAJOR = new Set([
   "11",
   "13",
   "add9",
-  "2",
+  "6/9",
 ]);
 
 export function impliedTriadForExtension(ext) {

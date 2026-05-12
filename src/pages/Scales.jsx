@@ -38,6 +38,7 @@ export function Scales() {
     [selectedSemitones]
   );
   const roots = useMemo(() => scaleRoots(useFlats), [useFlats]);
+  const selectedLetterSteps = selectedDefinition?.letterSteps;
   const tableRows = useMemo(() => {
     if (!Array.isArray(selectedSemitones) || selectedSemitones.length === 0) {
       return [];
@@ -45,12 +46,15 @@ export function Scales() {
 
     return roots.map((root) => ({
       root,
-      notes: buildScaleNotes(root, selectedSemitones, useFlats),
+      notes: buildScaleNotes(root, selectedSemitones, useFlats, {
+        letterSteps: selectedLetterSteps,
+      }),
       triads: buildScalesTableTriads(root, {
         showTriadsColumn,
         scaleId: selectedDefinition?.id,
         semitones: selectedSemitones,
         useFlats,
+        letterSteps: selectedLetterSteps,
       }),
     }));
   }, [
@@ -58,6 +62,7 @@ export function Scales() {
     selectedSemitones,
     useFlats,
     selectedDefinition?.id,
+    selectedLetterSteps,
     showTriadsColumn,
   ]);
 

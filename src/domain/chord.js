@@ -9,9 +9,9 @@ const QUALITY_TO_TONAL = {
   aug: "aug",
   sus2: "sus2",
   sus4: "sus4",
-  2: "add9",
   6: "6",
   m6: "m6",
+  "6/9": "69",
   7: "7",
   maj7: "maj7",
   m7: "m7",
@@ -82,14 +82,9 @@ export function getChordNotes(root, quality, options = {}) {
     noteStrings = chordNotes(tonalType, tonic);
   }
 
-  const noteNameSet = useFlats ? NOTE_NAMES_FLATS : NOTE_NAMES;
   return noteStrings
     .map((str) => parseTonalNote(str, useFlats))
-    .filter(Boolean)
-    .map(({ name, octave: oct }) => {
-      const canonical = toCanonicalName(name, noteNameSet);
-      return { name: canonical, octave: oct };
-    });
+    .filter(Boolean);
 }
 
 function qualityToChordSymbolSuffix(quality) {
@@ -97,6 +92,7 @@ function qualityToChordSymbolSuffix(quality) {
   if (quality === "m5") return "5";
   if (quality === "9+") return "7#9";
   if (quality === "m7(b5)") return "m7b5";
+  if (quality === "6/9") return "69";
   return quality;
 }
 
@@ -104,6 +100,7 @@ function qualityToDisplaySuffix(quality) {
   if (quality === "Maj") return "";
   if (quality === "maj9") return "M9";
   if (quality === "dim7") return "dim";
+  if (quality === "9+") return "7(#9)";
   return quality;
 }
 
