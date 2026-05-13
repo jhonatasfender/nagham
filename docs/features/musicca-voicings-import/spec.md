@@ -1,9 +1,10 @@
 # Feature: Importar voicings de violão a partir do musicca.com
 
-- **Status:** draft
+- **Status:** shipped
 - **Owner:** jonatas
 - **Atualizado:** 2026-05-13
-- **ADRs previstos:** ADR-0011 (musicca.com como fonte de referência de voicings)
+- **Shipped:** 2026-05-13
+- **ADRs gerados:** [ADR-0011](../../adr/0011-musicca-as-voicings-source.md)
 
 ## Por quê
 
