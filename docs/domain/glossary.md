@@ -56,6 +56,14 @@
   círculos preenchidos nas casas pressionadas e pílula horizontal para
   pestana. Renderizado por `drawChordCard.js` em SVG via d3. Distinto do
   braço horizontal completo (`drawGuitar.js`).
+- **Fingerprint (de variação)** — hash determinístico do conteúdo de uma
+  variação. Calculado por `<positions ordenadas>|<barre normalizado>`. Duas
+  variações com o mesmo fingerprint são consideradas equivalentes para
+  efeito de merge com fontes externas (ver
+  [`features/musicca-voicings-import`](../features/musicca-voicings-import/spec.md)).
+- **Variação manual** — variação em `<Root>.js` com campo `manual: true`.
+  Imune à sobrescrita por importadores automáticos
+  (`scripts/musicca/apply.mjs`). Usada para preservar correções editoriais.
 - **Dominante** — acorde com tétrade `1-3-5-♭7` (`C7`, `G7`). Resolve
   tipicamente para a tônica.
 - **Dim / Diminuto** — no Nagham, "dim" no UI = `dim7` (cifra BR). Quem quer
