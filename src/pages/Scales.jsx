@@ -19,9 +19,51 @@ function notationToggleButtonClassName(isActive) {
   );
 }
 
+const AUTO_ROOTS = [
+  "C",
+  "Db",
+  "D",
+  "Eb",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "Ab",
+  "A",
+  "Bb",
+  "B",
+];
+
+function isFlatRoot(root) {
+  return root.includes("b");
+}
+
+const HARD_ENHARMONIC_MAP = {
+  Cbb: "Bb",
+  Fbb: "Eb",
+  "C##": "D",
+  "D##": "E",
+  "F##": "G",
+  "G##": "A",
+  "A##": "B",
+  "E##": "F#",
+  "B##": "C#",
+  "E#": "F",
+  "B#": "C",
+  Cb: "B",
+  Fb: "E",
+};
+
+const HARD_ENHARMONIC_RE =
+  /Cbb|Fbb|C##|D##|F##|G##|A##|E##|B##|E#|B#|Cb|Fb/g;
+
+function simplifyHardEnharmonics(text) {
+  return text.replace(HARD_ENHARMONIC_RE, (m) => HARD_ENHARMONIC_MAP[m] ?? m);
+}
+
 export function Scales() {
   const { t } = useTranslation();
-  const [useFlats, setUseFlats] = useState(false);
+  const [notationMode, setNotationMode] = useState("auto");
   const [selectedScale, setSelectedScale] = useState(SCALE_DEFINITIONS[0]?.id);
   const selectedDefinition = useMemo(
     () => getScaleDefinition(selectedScale),
@@ -37,30 +79,44 @@ export function Scales() {
     () => Array.isArray(selectedSemitones) && selectedSemitones.length === 7,
     [selectedSemitones]
   );
-  const roots = useMemo(() => scaleRoots(useFlats), [useFlats]);
+  const roots = useMemo(() => {
+    if (notationMode === "auto") return AUTO_ROOTS;
+    return scaleRoots(notationMode === "flats");
+  }, [notationMode]);
+  const flatsForRoot = (root) => {
+    if (notationMode === "auto") return isFlatRoot(root);
+    return notationMode === "flats";
+  };
   const selectedLetterSteps = selectedDefinition?.letterSteps;
   const tableRows = useMemo(() => {
     if (!Array.isArray(selectedSemitones) || selectedSemitones.length === 0) {
       return [];
     }
 
-    return roots.map((root) => ({
-      root,
-      notes: buildScaleNotes(root, selectedSemitones, useFlats, {
+    return roots.map((root) => {
+      const rowUseFlats = flatsForRoot(root);
+      const rawNotes = buildScaleNotes(root, selectedSemitones, rowUseFlats, {
         letterSteps: selectedLetterSteps,
-      }),
-      triads: buildScalesTableTriads(root, {
+      });
+      const rawTriads = buildScalesTableTriads(root, {
         showTriadsColumn,
         scaleId: selectedDefinition?.id,
         semitones: selectedSemitones,
-        useFlats,
+        useFlats: rowUseFlats,
         letterSteps: selectedLetterSteps,
-      }),
-    }));
+      });
+      const shouldSimplify = notationMode !== "auto";
+      return {
+        root,
+        notes: shouldSimplify ? rawNotes.map(simplifyHardEnharmonics) : rawNotes,
+        triads: shouldSimplify ? rawTriads.map(simplifyHardEnharmonics) : rawTriads,
+      };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     roots,
     selectedSemitones,
-    useFlats,
+    notationMode,
     selectedDefinition?.id,
     selectedLetterSteps,
     showTriadsColumn,
@@ -101,15 +157,28 @@ export function Scales() {
           <div className="rounded-md border border-zinc-600 bg-zinc-900 p-1">
             <button
               type="button"
-              onClick={() => setUseFlats(false)}
-              className={notationToggleButtonClassName(!useFlats)}
+              onClick={() => setNotationMode("auto")}
+              className={notationToggleButtonClassName(
+                notationMode === "auto"
+              )}
+            >
+              {t("scales.table.auto", { defaultValue: "Auto" })}
+            </button>
+            <button
+              type="button"
+              onClick={() => setNotationMode("sharps")}
+              className={notationToggleButtonClassName(
+                notationMode === "sharps"
+              )}
             >
               {t("scales.table.sharps")}
             </button>
             <button
               type="button"
-              onClick={() => setUseFlats(true)}
-              className={notationToggleButtonClassName(useFlats)}
+              onClick={() => setNotationMode("flats")}
+              className={notationToggleButtonClassName(
+                notationMode === "flats"
+              )}
             >
               {t("scales.table.flats")}
             </button>
