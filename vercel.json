@@ -1,3 +1,9 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/chord-builder", "destination": "/chord-builder.html" },
+    { "source": "/scales", "destination": "/scales.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
