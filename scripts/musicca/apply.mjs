@@ -42,11 +42,35 @@ function regionRank(region) {
   return m ? parseInt(m[1], 10) : 999;
 }
 
+function countIndependentFingers(v) {
+  // Replica do algoritmo em scripts/check-playability.mjs:
+  //   - Posições em fret 0 não contam.
+  //   - Posições cobertas pela pestana no mesmo fret não contam.
+  //   - Pestana conta como 1 dedo (o indicador).
+  const fretted = v.positions.filter(([, f]) => f > 0);
+  let count = 0;
+  if (v.barre) {
+    for (const [s, f] of fretted) {
+      if (v.barre.strings.includes(s) && f === v.barre.fret) continue;
+      count++;
+    }
+    count += 1; // barre itself
+  } else {
+    count = fretted.length;
+  }
+  return count;
+}
+
+function isPlayable(v) {
+  return countIndependentFingers(v) <= 4;
+}
+
 function mergeQuality(existing, musicca) {
   const result = [];
   const seenFingerprints = new Set();
+  const playableMusicca = musicca.filter(isPlayable);
   const musiccaFps = new Map();
-  for (const v of musicca) musiccaFps.set(fingerprint(v), v);
+  for (const v of playableMusicca) musiccaFps.set(fingerprint(v), v);
 
   // Pass 1: existing variations
   for (const v of existing) {
@@ -63,7 +87,7 @@ function mergeQuality(existing, musicca) {
   }
 
   // Pass 2: musicca variations not in result yet
-  for (const v of musicca) {
+  for (const v of playableMusicca) {
     const fp = fingerprint(v);
     if (seenFingerprints.has(fp)) continue;
     result.push({ region: v.region, positions: v.positions, barre: v.barre });
