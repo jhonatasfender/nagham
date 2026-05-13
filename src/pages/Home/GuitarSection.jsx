@@ -15,19 +15,21 @@ export function GuitarSection({
   chordNotes,
   root,
   quality,
+  bass,
   variationIndex,
   onSelectVariation,
 }) {
   const { t } = useTranslation();
 
   const variations = useMemo(
-    () => getChordVariations(root, quality),
-    [root, quality]
+    () => getChordVariations(root, quality, bass),
+    [root, quality, bass]
   );
 
   const variationCode = useMemo(() => {
-    const positions = getChordVoicing(root, quality, variationIndex) ?? [];
-    const barre = getBarreFromVoicing(root, quality, variationIndex);
+    const positions =
+      getChordVoicing(root, quality, variationIndex, bass) ?? [];
+    const barre = getBarreFromVoicing(root, quality, variationIndex, bass);
     if (positions.length === 0 && !barre) return null;
     const lines = ["  ["];
     for (const p of positions) {
@@ -40,7 +42,7 @@ export function GuitarSection({
     }
     lines.push("  ],");
     return lines.join("\n");
-  }, [root, quality, variationIndex]);
+  }, [root, quality, bass, variationIndex]);
 
   return (
     <div className="rounded-lg border border-zinc-700 bg-zinc-800/50 p-4">
@@ -55,6 +57,7 @@ export function GuitarSection({
           chordNotes={chordNotes}
           root={root}
           quality={quality}
+          bass={bass}
           variationIndex={variationIndex}
         />
         <ChordVariationStrip

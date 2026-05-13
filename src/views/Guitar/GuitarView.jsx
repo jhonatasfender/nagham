@@ -11,16 +11,19 @@ function computeCenterFret({
   chordNotes,
   root,
   quality,
+  bass,
   customPositions,
   customBarre,
   variationIndex = 0,
 }) {
   const frets = [];
   const voicing =
-    root && quality ? getChordVoicing(root, quality, variationIndex) : null;
+    root && quality
+      ? getChordVoicing(root, quality, variationIndex, bass)
+      : null;
   if (voicing) {
     voicing.forEach((p) => frets.push(p.fret));
-    const barre = getBarreFromVoicing(root, quality, variationIndex);
+    const barre = getBarreFromVoicing(root, quality, variationIndex, bass);
     if (barre?.fret != null) frets.push(barre.fret);
   } else if (customPositions?.length) {
     customPositions.forEach(([, f]) => frets.push(f));
@@ -40,6 +43,7 @@ export function GuitarView({
   chordNotes,
   root,
   quality,
+  bass = null,
   showTable = true,
   customPositions,
   customBarre,
@@ -63,6 +67,7 @@ export function GuitarView({
         chordNotes,
         root,
         quality,
+        bass,
         customPositions,
         customBarre,
         variationIndex,
@@ -82,6 +87,7 @@ export function GuitarView({
     chordNotes,
     root,
     quality,
+    bass,
     containerWidth,
     customPositions,
     customBarre,
@@ -99,6 +105,7 @@ export function GuitarView({
       chordNotes,
       root,
       quality,
+      bass,
       customPositions,
       customBarre,
       variationIndex,
@@ -122,6 +129,7 @@ export function GuitarView({
     chordNotes,
     root,
     quality,
+    bass,
     customPositions,
     customBarre,
     containerWidth,

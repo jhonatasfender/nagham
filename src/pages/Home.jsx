@@ -116,6 +116,7 @@ export function Home() {
             chordNotes={chordNotes}
             root={root}
             quality={quality}
+            bass={bass}
             variationIndex={variationIndex}
             onSelectVariation={(idx) =>
               dispatchChord({ type: "SET_VARIATION_INDEX", payload: idx })

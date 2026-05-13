@@ -37,7 +37,7 @@ export function chordReducer(state, action) {
     case "SET_VARIATION_INDEX":
       return { ...state, variationIndex: action.payload };
     case "SET_BASS":
-      return { ...state, bass: action.payload };
+      return { ...state, bass: action.payload, variationIndex: 0 };
     case "SET_USE_FLATS":
       return { ...state, useFlats: action.payload };
     default:

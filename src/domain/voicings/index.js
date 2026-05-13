@@ -23,6 +23,7 @@ const CSharp = CSharpDefault;
 import DSharpDefault from "./DSharp.js";
 const DSharp = DSharpDefault;
 import { resolveVoicingQuality } from "../voicingQualityAlias.js";
+import { getSlashVariations } from "../slashVoicings/index.js";
 
 const VOICINGS_BY_ROOT = {
   C,
@@ -111,38 +112,52 @@ function computeRegion(positions, barre) {
 
 // ─── Public API ─────────────────────────────────────────────────
 
-export function getChordVariations(root, quality) {
+// `bass` is optional. When set to a note distinct from `root` and we have
+// slash chord variations for (root, quality, bass), those are returned.
+// Otherwise we fall back to the regular voicings so the UI still renders
+// a shape even for slash combos not covered by chords-db.
+function getRegularVariations(root, quality) {
   const rootVoicings = VOICINGS_BY_ROOT[root];
   if (!rootVoicings) return [];
-  const raw = rootVoicings[resolveVoicingQuality(quality)];
-  return normalizeVoicing(raw);
+  return normalizeVoicing(rootVoicings[resolveVoicingQuality(quality)]);
 }
 
-export function getChordVoicing(root, quality, variationIndex = 0) {
-  const variations = getChordVariations(root, quality);
+export function getChordVariations(root, quality, bass = null) {
+  if (bass && bass !== root) {
+    const slash = getSlashVariations(root, quality, bass);
+    if (slash.length > 0) return slash;
+  }
+  return getRegularVariations(root, quality);
+}
+
+function pickVariation(root, quality, variationIndex, bass) {
+  const variations = getChordVariations(root, quality, bass);
   if (!variations.length) return null;
   const idx =
     variationIndex >= 0 && variationIndex < variations.length
       ? variationIndex
       : 0;
-  return variations[idx].positions.map(([stringIndex, fret]) => ({
-    stringIndex,
-    fret,
-  }));
+  return variations[idx];
 }
 
-export function getBarreFromVoicing(root, quality, variationIndex = 0) {
-  const variations = getChordVariations(root, quality);
-  if (!variations.length) return null;
-  const idx =
-    variationIndex >= 0 && variationIndex < variations.length
-      ? variationIndex
-      : 0;
-  return variations[idx].barre ?? null;
+export function getChordVoicing(root, quality, variationIndex = 0, bass = null) {
+  const v = pickVariation(root, quality, variationIndex, bass);
+  if (!v) return null;
+  return v.positions.map(([stringIndex, fret]) => ({ stringIndex, fret }));
 }
 
-export function getChordVoicingCount(root, quality) {
-  return getChordVariations(root, quality).length;
+export function getBarreFromVoicing(
+  root,
+  quality,
+  variationIndex = 0,
+  bass = null
+) {
+  const v = pickVariation(root, quality, variationIndex, bass);
+  return v?.barre ?? null;
+}
+
+export function getChordVoicingCount(root, quality, bass = null) {
+  return getChordVariations(root, quality, bass).length;
 }
 
 export function getVariationRegionLabelKey(region) {

@@ -23,6 +23,7 @@ export function drawGuitar(container, data, options = {}) {
     chordNotes,
     root,
     quality,
+    bass = null,
     customPositions,
     customBarre,
     variationIndex = 0,
@@ -46,7 +47,8 @@ export function drawGuitar(container, data, options = {}) {
     root,
     quality,
     VISIBLE_FRETS,
-    variationIndex
+    variationIndex,
+    bass
   );
 
   const barre = isEditor
@@ -57,7 +59,7 @@ export function drawGuitar(container, data, options = {}) {
         }
       : null
     : root && quality
-      ? getBarreFromVoicing(root, quality, variationIndex)
+      ? getBarreFromVoicing(root, quality, variationIndex, bass)
       : detectBarre(chordKeys, 12);
 
   const minSvgContentWidth =

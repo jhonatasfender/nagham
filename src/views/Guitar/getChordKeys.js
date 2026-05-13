@@ -12,7 +12,8 @@ export function getChordKeys(
   root,
   quality,
   visibleFrets,
-  variationIndex = 0
+  variationIndex = 0,
+  bass = null
 ) {
   if (isEditor && customPositions) {
     return new Set(
@@ -20,13 +21,18 @@ export function getChordKeys(
     );
   }
   if (chordNotes?.length && root && quality) {
-    const basicVoicing = getBasicChordVoicing(root, quality, variationIndex);
+    const basicVoicing = getBasicChordVoicing(
+      root,
+      quality,
+      variationIndex,
+      bass
+    );
     if (basicVoicing) {
       const keys = new Set(
         basicVoicing.map((p) => `${p.stringIndex}-${p.fret}`)
       );
 
-      const barre = getBarreFromVoicing(root, quality, variationIndex);
+      const barre = getBarreFromVoicing(root, quality, variationIndex, bass);
       if (barre?.strings) {
         barre.strings.forEach((stringIndex) => {
           keys.add(`${stringIndex}-${barre.fret}`);
