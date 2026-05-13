@@ -4,8 +4,7 @@
 // sobrescrita por scripts/musicca/apply.mjs.
 
 const voicings = {
-
-  "5": [
+  5: [
     {
       region: "open",
       positions: [
@@ -53,7 +52,7 @@ const voicings = {
     },
   ],
 
-  "6": [
+  6: [
     {
       region: "open",
       positions: [
@@ -111,7 +110,7 @@ const voicings = {
     },
   ],
 
-  "7": [
+  7: [
     {
       region: "open",
       positions: [
@@ -148,7 +147,7 @@ const voicings = {
     },
   ],
 
-  "9": [
+  9: [
     {
       region: "open",
       positions: [
@@ -195,7 +194,7 @@ const voicings = {
     },
   ],
 
-  "11": [
+  11: [
     {
       region: "open",
       positions: [
@@ -264,7 +263,7 @@ const voicings = {
     },
   ],
 
-  "13": [
+  13: [
     {
       region: "open",
       positions: [
@@ -1149,7 +1148,6 @@ const voicings = {
       barre: null,
     },
   ],
-
 };
 
 export default voicings;

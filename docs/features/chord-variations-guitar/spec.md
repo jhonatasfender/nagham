@@ -116,13 +116,13 @@ convenção curatorial, da casa mais baixa para a mais alta.
 
 ## API do domínio (mudanças em `src/domain/voicings/index.js`)
 
-| Função | Antes | Depois |
-| --- | --- | --- |
-| `getChordVoicing(root, quality, idx=0)` | retorna `[{stringIndex, fret}]` da default | mesma assinatura; usa o `positions` da variação `idx` |
-| `getBarreFromVoicing(root, quality, idx=0)` | retorna `{fret, strings}` da default; **não aceita idx** | mesma assinatura, aceita `idx` |
-| `getChordVoicingCount(root, quality)` | conta voicings (já existe) | retorna `variations.length` |
-| **NOVA** `getChordVariations(root, quality)` | — | retorna `[{region, positions: [{stringIndex,fret}], barre}]` (lista completa, pronta pra UI iterar) |
-| **NOVA** `getVariationRegionLabelKey(region)` | — | `"open"` → `{ key: "voicings.region.open" }`; `"fret-N"` → `{ key: "voicings.region.fret", params: { n: N } }` |
+| Função                                        | Antes                                                    | Depois                                                                                                         |
+| --------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `getChordVoicing(root, quality, idx=0)`       | retorna `[{stringIndex, fret}]` da default               | mesma assinatura; usa o `positions` da variação `idx`                                                          |
+| `getBarreFromVoicing(root, quality, idx=0)`   | retorna `{fret, strings}` da default; **não aceita idx** | mesma assinatura, aceita `idx`                                                                                 |
+| `getChordVoicingCount(root, quality)`         | conta voicings (já existe)                               | retorna `variations.length`                                                                                    |
+| **NOVA** `getChordVariations(root, quality)`  | —                                                        | retorna `[{region, positions: [{stringIndex,fret}], barre}]` (lista completa, pronta pra UI iterar)            |
+| **NOVA** `getVariationRegionLabelKey(region)` | —                                                        | `"open"` → `{ key: "voicings.region.open" }`; `"fret-N"` → `{ key: "voicings.region.fret", params: { n: N } }` |
 
 Assinaturas atuais permanecem retro-compatíveis para `idx === 0`.
 

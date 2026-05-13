@@ -24,9 +24,28 @@ de objetos por qualidade):
 
 ```js
 Maj: [
-  { region: "open", positions: [[4,3],[3,2],[2,0],[1,1],[0,0]], barre: null },
-  { region: "fret-3", positions: [[4,3],[3,5],[2,5],[1,5]], barre: { fret: 3, strings: [4,3,2,1,0] } },
-]
+  {
+    region: "open",
+    positions: [
+      [4, 3],
+      [3, 2],
+      [2, 0],
+      [1, 1],
+      [0, 0],
+    ],
+    barre: null,
+  },
+  {
+    region: "fret-3",
+    positions: [
+      [4, 3],
+      [3, 5],
+      [2, 5],
+      [1, 5],
+    ],
+    barre: { fret: 3, strings: [4, 3, 2, 1, 0] },
+  },
+];
 ```
 
 Campos: `region` (semântica `"open"` | `"fret-N"`), `positions` (pares

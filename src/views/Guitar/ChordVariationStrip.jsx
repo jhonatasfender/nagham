@@ -23,7 +23,9 @@ export function ChordVariationStrip({ variations, selectedIndex, onSelect }) {
             t("voicings.variation_label", {
               n: idx + 1,
               total: variations.length,
-            }) + " — " + label;
+            }) +
+            " — " +
+            label;
           return (
             <ChordCard
               key={idx}

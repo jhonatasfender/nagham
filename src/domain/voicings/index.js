@@ -70,11 +70,7 @@ function normalizeVoicing(raw) {
     });
   }
 
-  if (
-    Array.isArray(raw) &&
-    Array.isArray(raw[0]) &&
-    Array.isArray(raw[0][0])
-  ) {
+  if (Array.isArray(raw) && Array.isArray(raw[0]) && Array.isArray(raw[0][0])) {
     return raw.map((inner) => splitPositionsAndBarre(inner));
   }
 
@@ -104,13 +100,9 @@ function splitPositionsAndBarre(items) {
 
 function computeRegion(positions, barre) {
   if (!positions.length && !barre) return "open";
-  const frettedFrets = positions
-    .map(([, f]) => f)
-    .filter((f) => f > 0);
+  const frettedFrets = positions.map(([, f]) => f).filter((f) => f > 0);
   const hasOpenString = positions.some(([, f]) => f === 0);
-  const minFretted = frettedFrets.length
-    ? Math.min(...frettedFrets)
-    : Infinity;
+  const minFretted = frettedFrets.length ? Math.min(...frettedFrets) : Infinity;
   const minBarre = barre?.fret ?? Infinity;
   const minOverall = Math.min(minFretted, minBarre);
   if (hasOpenString || minOverall <= 1) return "open";

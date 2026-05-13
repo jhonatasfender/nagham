@@ -54,8 +54,7 @@ const HARD_ENHARMONIC_MAP = {
   Fb: "E",
 };
 
-const HARD_ENHARMONIC_RE =
-  /Cbb|Fbb|C##|D##|F##|G##|A##|E##|B##|E#|B#|Cb|Fb/g;
+const HARD_ENHARMONIC_RE = /Cbb|Fbb|C##|D##|F##|G##|A##|E##|B##|E#|B#|Cb|Fb/g;
 
 function simplifyHardEnharmonics(text) {
   return text.replace(HARD_ENHARMONIC_RE, (m) => HARD_ENHARMONIC_MAP[m] ?? m);
@@ -108,8 +107,12 @@ export function Scales() {
       const shouldSimplify = notationMode !== "auto";
       return {
         root,
-        notes: shouldSimplify ? rawNotes.map(simplifyHardEnharmonics) : rawNotes,
-        triads: shouldSimplify ? rawTriads.map(simplifyHardEnharmonics) : rawTriads,
+        notes: shouldSimplify
+          ? rawNotes.map(simplifyHardEnharmonics)
+          : rawNotes,
+        triads: shouldSimplify
+          ? rawTriads.map(simplifyHardEnharmonics)
+          : rawTriads,
       };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,9 +161,7 @@ export function Scales() {
             <button
               type="button"
               onClick={() => setNotationMode("auto")}
-              className={notationToggleButtonClassName(
-                notationMode === "auto"
-              )}
+              className={notationToggleButtonClassName(notationMode === "auto")}
             >
               {t("scales.table.auto", { defaultValue: "Auto" })}
             </button>

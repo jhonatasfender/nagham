@@ -58,7 +58,15 @@ export function GuitarView({
     const previousScrollLeft = el.scrollLeft;
     drawGuitar(
       el,
-      { selectedNote, chordNotes, root, quality, customPositions, customBarre, variationIndex },
+      {
+        selectedNote,
+        chordNotes,
+        root,
+        quality,
+        customPositions,
+        customBarre,
+        variationIndex,
+      },
       {
         onSelectNote: globalOnSelectNote,
         onPositionClick,
@@ -110,7 +118,15 @@ export function GuitarView({
       nextScrollLeft = Math.max(0, Math.min(maxScroll, nextScrollLeft));
       el.scrollLeft = nextScrollLeft;
     });
-  }, [chordNotes, root, quality, customPositions, customBarre, containerWidth, variationIndex]);
+  }, [
+    chordNotes,
+    root,
+    quality,
+    customPositions,
+    customBarre,
+    containerWidth,
+    variationIndex,
+  ]);
 
   return (
     <div className="space-y-4 select-none">

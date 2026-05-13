@@ -119,44 +119,44 @@ scripts/
 
 Tabela em `scripts/musicca/slugs.js`. Padrões observados em musicca:
 
-| Root | Slug fragment |
-|---|---|
-| C | `do` |
-| C# | `do-sustenido` |
-| Db | `re-bemol` |
-| D | `re` |
-| D# | `re-sustenido` |
-| Eb | `mi-bemol` |
-| E | `mi` |
-| E# | `mi-sustenido` *(raro mas existe — ver `mi-sustenido-de-13a-dominante`)* |
-| F | `fa` |
-| F# | `fa-sustenido` |
-| G | `sol` |
-| G# | `sol-sustenido` |
-| A | `la` |
-| A# | `la-sustenido` |
-| B | `si` |
+| Root | Slug fragment                                                            |
+| ---- | ------------------------------------------------------------------------ |
+| C    | `do`                                                                     |
+| C#   | `do-sustenido`                                                           |
+| Db   | `re-bemol`                                                               |
+| D    | `re`                                                                     |
+| D#   | `re-sustenido`                                                           |
+| Eb   | `mi-bemol`                                                               |
+| E    | `mi`                                                                     |
+| E#   | `mi-sustenido` _(raro mas existe — ver `mi-sustenido-de-13a-dominante`)_ |
+| F    | `fa`                                                                     |
+| F#   | `fa-sustenido`                                                           |
+| G    | `sol`                                                                    |
+| G#   | `sol-sustenido`                                                          |
+| A    | `la`                                                                     |
+| A#   | `la-sustenido`                                                           |
+| B    | `si`                                                                     |
 
 Qualidades:
 
-| Quality | Slug fragment |
-|---|---|
-| Maj | `maior` |
-| m | `menor` |
-| 7 | `de-7a-dominante` |
-| maj7 | `de-7a-maior` |
-| m7 | `menor-com-7a` |
-| dim7 (dim) | `diminuto-com-7a` |
-| m7(b5) | `meio-diminuto` |
-| sus2 | `de-2a-suspensa` |
-| sus4 | `de-4a-suspensa` |
-| 5 | `power-chord` *(verificar)* |
-| 6 | `com-6a` |
-| 9 | `com-9a` |
-| 11 | `com-11a` |
-| 13 | `de-13a-dominante` |
-| add9 | `com-9a-adicionada` *(verificar)* |
-| aug | `aumentado` |
+| Quality    | Slug fragment                     |
+| ---------- | --------------------------------- |
+| Maj        | `maior`                           |
+| m          | `menor`                           |
+| 7          | `de-7a-dominante`                 |
+| maj7       | `de-7a-maior`                     |
+| m7         | `menor-com-7a`                    |
+| dim7 (dim) | `diminuto-com-7a`                 |
+| m7(b5)     | `meio-diminuto`                   |
+| sus2       | `de-2a-suspensa`                  |
+| sus4       | `de-4a-suspensa`                  |
+| 5          | `power-chord` _(verificar)_       |
+| 6          | `com-6a`                          |
+| 9          | `com-9a`                          |
+| 11         | `com-11a`                         |
+| 13         | `de-13a-dominante`                |
+| add9       | `com-9a-adicionada` _(verificar)_ |
+| aug        | `aumentado`                       |
 
 Slugs completos: `<root>-<quality>` (ex.: `do-maior`, `re-bemol-menor`, `mi-sustenido-de-13a-dominante`).
 

@@ -26,8 +26,7 @@ export function chordReducer(state, action) {
     }
     case "SET_EXTENSION": {
       const { ext, impliedTriad } = action.payload;
-      if (ext == null)
-        return { ...state, extension: null, variationIndex: 0 };
+      if (ext == null) return { ...state, extension: null, variationIndex: 0 };
       return {
         ...state,
         extension: ext,

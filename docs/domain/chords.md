@@ -76,10 +76,10 @@ O `ChordBuilderSection` permite combinar `Maj/m` + uma das extensões abaixo
 
 Para cada `(root, quality)` há até três entries (uma por instrumento):
 
-| Diretório                            | Formato                               | Quem desenha                                  |
-| ------------------------------------ | ------------------------------------- | --------------------------------------------- |
-| `src/domain/pianoVoicings/<Root>.js` | `[{name, octave}]`                    | `PianoView` (highlights por MIDI)             |
-| `src/domain/staffVoicings/<Root>.js` | `[{name, octave}]`                    | `StaffView` (renderiza grafia via `spelling`) |
+| Diretório                            | Formato                                             | Quem desenha                                  |
+| ------------------------------------ | --------------------------------------------------- | --------------------------------------------- |
+| `src/domain/pianoVoicings/<Root>.js` | `[{name, octave}]`                                  | `PianoView` (highlights por MIDI)             |
+| `src/domain/staffVoicings/<Root>.js` | `[{name, octave}]`                                  | `StaffView` (renderiza grafia via `spelling`) |
 | `src/domain/voicings/<Root>.js`      | `[{region, positions, barre}]` (array de variações) | `GuitarView`                                  |
 
 **Roots cobertos** (piano + staff): C, C#, D, D#, E, F, G, A, B.

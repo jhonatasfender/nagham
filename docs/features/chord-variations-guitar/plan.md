@@ -12,31 +12,32 @@
 
 ## File structure
 
-| Caminho | Mudança | Responsabilidade |
-| --- | --- | --- |
-| `docs/adr/0010-estrutura-variacoes-violao.md` | Criar | ADR registrando a decisão de migrar pro formato objeto |
-| `docs/domain/chords.md` | Modificar | Atualizar seção "Voicings" descrevendo formato novo |
-| `docs/domain/glossary.md` | Modificar | + termos "Variação", "Região", "Chord-card" |
-| `src/domain/voicings/index.js` | Modificar | Shim de leitura + `getChordVariations` + `getVariationRegionLabelKey` + `idx` em getBarreFromVoicing |
-| `src/domain/voicings/<12 files>.js` | Modificar | Migrar pro formato `[{region, positions, barre}]` |
-| `scripts/migrate-voicings.mjs` | Criar | One-shot: lê arquivos no formato achatado, reescreve no objeto |
-| `scripts/generate-guitar-voicings.mjs` | Modificar | + flag `--variations=N`, busca por região, deduplicação |
-| `scripts/render-notes.mjs` | Modificar | Iterar `variations[]` por (root, quality) |
-| `scripts/check-playability.mjs` | Modificar | Iterar `variations[]` por (root, quality) |
-| `src/views/Guitar/constants.js` | Modificar | + `CHORD_CARD_*` dimensions |
-| `src/views/Guitar/drawChordCard.js` | Criar | d3 puro: chord-card compacto vertical |
-| `src/views/Guitar/ChordCard.jsx` | Criar | Wrapper React: `<button>` + `drawChordCard` no useEffect |
-| `src/views/Guitar/ChordVariationStrip.jsx` | Criar | Lista horizontal scrollável; oculta se < 2 variações |
-| `src/views/Guitar/GuitarView.jsx` | Modificar | + prop `variationIndex`, repassa para domain |
-| `src/pages/Home.jsx` | Modificar | `chordReducer` ganha `variationIndex`, reset em root/quality/extension; render `<ChordVariationStrip>` |
-| `src/i18n/locales/{pt-BR,en,es}.json` | Modificar | + chaves `voicings.region.*`, `voicings.variation_label`, `voicings.variations_strip_title`, `voicings.no_variations` |
-| `docs/features/chord-variations-guitar/tasks.md` | Criar | Checklist por convenção SDD do Nagham |
+| Caminho                                          | Mudança   | Responsabilidade                                                                                                      |
+| ------------------------------------------------ | --------- | --------------------------------------------------------------------------------------------------------------------- |
+| `docs/adr/0010-estrutura-variacoes-violao.md`    | Criar     | ADR registrando a decisão de migrar pro formato objeto                                                                |
+| `docs/domain/chords.md`                          | Modificar | Atualizar seção "Voicings" descrevendo formato novo                                                                   |
+| `docs/domain/glossary.md`                        | Modificar | + termos "Variação", "Região", "Chord-card"                                                                           |
+| `src/domain/voicings/index.js`                   | Modificar | Shim de leitura + `getChordVariations` + `getVariationRegionLabelKey` + `idx` em getBarreFromVoicing                  |
+| `src/domain/voicings/<12 files>.js`              | Modificar | Migrar pro formato `[{region, positions, barre}]`                                                                     |
+| `scripts/migrate-voicings.mjs`                   | Criar     | One-shot: lê arquivos no formato achatado, reescreve no objeto                                                        |
+| `scripts/generate-guitar-voicings.mjs`           | Modificar | + flag `--variations=N`, busca por região, deduplicação                                                               |
+| `scripts/render-notes.mjs`                       | Modificar | Iterar `variations[]` por (root, quality)                                                                             |
+| `scripts/check-playability.mjs`                  | Modificar | Iterar `variations[]` por (root, quality)                                                                             |
+| `src/views/Guitar/constants.js`                  | Modificar | + `CHORD_CARD_*` dimensions                                                                                           |
+| `src/views/Guitar/drawChordCard.js`              | Criar     | d3 puro: chord-card compacto vertical                                                                                 |
+| `src/views/Guitar/ChordCard.jsx`                 | Criar     | Wrapper React: `<button>` + `drawChordCard` no useEffect                                                              |
+| `src/views/Guitar/ChordVariationStrip.jsx`       | Criar     | Lista horizontal scrollável; oculta se < 2 variações                                                                  |
+| `src/views/Guitar/GuitarView.jsx`                | Modificar | + prop `variationIndex`, repassa para domain                                                                          |
+| `src/pages/Home.jsx`                             | Modificar | `chordReducer` ganha `variationIndex`, reset em root/quality/extension; render `<ChordVariationStrip>`                |
+| `src/i18n/locales/{pt-BR,en,es}.json`            | Modificar | + chaves `voicings.region.*`, `voicings.variation_label`, `voicings.variations_strip_title`, `voicings.no_variations` |
+| `docs/features/chord-variations-guitar/tasks.md` | Criar     | Checklist por convenção SDD do Nagham                                                                                 |
 
 ---
 
 ## Task 1: ADR-0010 + atualização da documentação do domínio
 
 **Files:**
+
 - Create: `docs/adr/0010-estrutura-variacoes-violao.md`
 - Modify: `docs/domain/chords.md` (seção "Voicings: três representações paralelas")
 - Modify: `docs/domain/glossary.md` (seção "Acordes")
@@ -67,8 +68,8 @@ Adotar formato:
 
 \`\`\`js
 Maj: [
-  { region: "open", positions: [[4,3],[3,2],[2,0],[1,1],[0,0]], barre: null },
-  { region: "fret-3", positions: [[4,3],[3,5],[2,5],[1,5]], barre: { fret: 3, strings: [4,3,2,1,0] } },
+{ region: "open", positions: [[4,3],[3,2],[2,0],[1,1],[0,0]], barre: null },
+{ region: "fret-3", positions: [[4,3],[3,5],[2,5],[1,5]], barre: { fret: 3, strings: [4,3,2,1,0] } },
 ]
 \`\`\`
 
@@ -77,11 +78,13 @@ Campos: `region` (semântica `"open"` | `"fret-N"`), `positions` (pares `[s,f]` 
 ## Consequências
 
 **Boas:**
+
 - Cada variação carrega seu próprio metadado; rótulos i18n derivam de `region`.
 - Iteração consistente sobre todas as variações para audits.
 - Sem mistura de tipos no array; código de consumo mais simples.
 
 **Custos:**
+
 - Migração one-shot dos 12 arquivos `<Root>.js`.
 - Shim de leitura em `voicings/index.js` cobre formato antigo e novo durante a transição.
 - Auditorias `render-notes.mjs` e `check-playability.mjs` reescritas pra iterar `variations[]`.
@@ -150,6 +153,7 @@ git commit -m "docs(variations): ADR-0010 + glossary + chords.md for guitar vari
 ## Task 2: API do domínio + shim de leitura
 
 **Files:**
+
 - Modify: `src/domain/voicings/index.js`
 
 **Objetivo:** aceitar 3 formatos (legado achatado, legado aninhado, novo objeto) e expor `getChordVariations` + `getVariationRegionLabelKey`. Os 12 arquivos `<Root>.js` continuam no formato antigo até Task 3.
@@ -229,11 +233,7 @@ function normalizeVoicing(raw) {
   }
 
   // Formato 2 (legado aninhado): array de arrays de pares
-  if (
-    Array.isArray(raw) &&
-    Array.isArray(raw[0]) &&
-    Array.isArray(raw[0][0])
-  ) {
+  if (Array.isArray(raw) && Array.isArray(raw[0]) && Array.isArray(raw[0][0])) {
     return raw.map((inner) => splitPositionsAndBarre(inner));
   }
 
@@ -263,9 +263,7 @@ function splitPositionsAndBarre(items) {
 }
 
 function computeRegion(positions, barre) {
-  const frettedFrets = positions
-    .map(([, f]) => f)
-    .filter((f) => f > 0);
+  const frettedFrets = positions.map(([, f]) => f).filter((f) => f > 0);
   const hasOpenString = positions.some(([, f]) => f === 0);
   const minFretted = frettedFrets.length ? Math.min(...frettedFrets) : Infinity;
   const minBarre = barre?.fret ?? Infinity;
@@ -313,7 +311,8 @@ export function getChordVoicingCount(root, quality) {
 export function getVariationRegionLabelKey(region) {
   if (region === "open") return { key: "voicings.region.open", params: {} };
   const m = /^fret-(\d+)$/.exec(region ?? "");
-  if (m) return { key: "voicings.region.fret", params: { n: parseInt(m[1], 10) } };
+  if (m)
+    return { key: "voicings.region.fret", params: { n: parseInt(m[1], 10) } };
   return { key: "voicings.region.open", params: {} };
 }
 ```
@@ -350,6 +349,7 @@ git commit -m "feat(voicings): add variations API + multi-format read shim"
 ## Task 3: Script de migração + executar nos 12 arquivos `<Root>.js`
 
 **Files:**
+
 - Create: `scripts/migrate-voicings.mjs`
 - Modify: `src/domain/voicings/{A,ASharp,B,C,CSharp,D,DSharp,E,F,FSharp,G,GSharp}.js`
 
@@ -369,9 +369,18 @@ import { QUALITY_KEYS } from "../src/domain/chordQualities.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const ROOT_FILE_MAP = {
-  C: "C.js", "C#": "CSharp.js", D: "D.js", "D#": "DSharp.js",
-  E: "E.js", F: "F.js", "F#": "FSharp.js", G: "G.js",
-  "G#": "GSharp.js", A: "A.js", "A#": "ASharp.js", B: "B.js",
+  C: "C.js",
+  "C#": "CSharp.js",
+  D: "D.js",
+  "D#": "DSharp.js",
+  E: "E.js",
+  F: "F.js",
+  "F#": "FSharp.js",
+  G: "G.js",
+  "G#": "GSharp.js",
+  A: "A.js",
+  "A#": "ASharp.js",
+  B: "B.js",
 };
 
 function formatPositions(positions) {
@@ -496,6 +505,7 @@ git commit -m "refactor(voicings): migrate 12 root files to {region, positions, 
 ## Task 4: Atualizar `render-notes.mjs` e `check-playability.mjs` para iterar variações
 
 **Files:**
+
 - Modify: `scripts/render-notes.mjs`
 - Modify: `scripts/check-playability.mjs`
 
@@ -511,10 +521,35 @@ import { getChordVariations } from "../src/domain/voicings/index.js";
 // ... (mantém analyze, pitchClassSet, checkPlayability inalteradas) ...
 
 const results = [];
-let total = 0, pass = 0, fail = 0;
+let total = 0,
+  pass = 0,
+  fail = 0;
 const failList = [];
 
-const QUALITIES_TO_CHECK = ["5","6","7","9","11","13","9+","Maj","m","dim","aug","sus2","sus4","m7","maj7","m7(b5)","dim7","m6","6/9","maj9","m9","add9"];
+const QUALITIES_TO_CHECK = [
+  "5",
+  "6",
+  "7",
+  "9",
+  "11",
+  "13",
+  "9+",
+  "Maj",
+  "m",
+  "dim",
+  "aug",
+  "sus2",
+  "sus4",
+  "m7",
+  "maj7",
+  "m7(b5)",
+  "dim7",
+  "m6",
+  "6/9",
+  "maj9",
+  "m9",
+  "add9",
+];
 
 for (const rootName of Object.keys(ROOTS)) {
   for (const quality of QUALITIES_TO_CHECK) {
@@ -596,6 +631,7 @@ git commit -m "refactor(audits): iterate guitar variations in render-notes and c
 ## Task 5: Estender `generate-guitar-voicings.mjs` para N variações
 
 **Files:**
+
 - Modify: `scripts/generate-guitar-voicings.mjs`
 
 **Não executar ainda** — só commitar a extensão. Geração curada vem em Task 6.
@@ -662,13 +698,11 @@ Substituir a função `generateFileContent` (linha ~197) por:
 
 ```js
 function computeRegionForPositions(positions) {
-  const fretted = positions
-    .filter((p) => Array.isArray(p))
-    .map(([, f]) => f);
+  const fretted = positions.filter((p) => Array.isArray(p)).map(([, f]) => f);
   const hasOpen = fretted.some((f) => f === 0);
   const nonZero = fretted.filter((f) => f > 0);
   const barreItem = positions.find(
-    (p) => p && typeof p === "object" && p.barre != null,
+    (p) => p && typeof p === "object" && p.barre != null
   );
   const minBarre = barreItem ? barreItem.barre : Infinity;
   const minFretted = nonZero.length ? Math.min(...nonZero) : Infinity;
@@ -742,10 +776,13 @@ function generateFileContent(rootName) {
       const extras = findVariations(
         rootName,
         quality,
-        TARGET_VARIATIONS - variations.length,
+        TARGET_VARIATIONS - variations.length
       );
       for (const ex of extras) {
-        const fp = ex.map(([s, f]) => `${s}:${f}`).sort().join("|");
+        const fp = ex
+          .map(([s, f]) => `${s}:${f}`)
+          .sort()
+          .join("|");
         const dup = variations.some((v) => {
           const fv = v
             .filter((p) => Array.isArray(p))
@@ -806,6 +843,7 @@ git commit -m "feat(generator): support --variations=N for guitar voicings"
 ## Task 6: Gerar variações curadas para 25 combinações pedagógicas
 
 **Files:**
+
 - Modify: `src/domain/voicings/{C,D,E,G,A}.js` (variações para Maj, m, 7, m7, maj7)
 
 **Por que limitar:** PR enxuto e revisável; expansão pra outras qualidades vira PRs incrementais.
@@ -858,6 +896,7 @@ git commit -m "feat(voicings): curated variations for C/D/E/G/A × Maj/m/7/m7/ma
 ## Task 7: `drawChordCard.js` — função d3 pura
 
 **Files:**
+
 - Modify: `src/views/Guitar/constants.js`
 - Create: `src/views/Guitar/drawChordCard.js`
 
@@ -1097,6 +1136,7 @@ git commit -m "feat(guitar): d3 drawChordCard for compact vertical chord diagram
 ## Task 8: `ChordCard.jsx` — React wrapper
 
 **Files:**
+
 - Create: `src/views/Guitar/ChordCard.jsx`
 
 - [ ] **Step 1: Criar `src/views/Guitar/ChordCard.jsx`**
@@ -1170,6 +1210,7 @@ git commit -m "feat(guitar): ChordCard React wrapper for chord diagrams"
 ## Task 9: `ChordVariationStrip.jsx`
 
 **Files:**
+
 - Create: `src/views/Guitar/ChordVariationStrip.jsx`
 
 - [ ] **Step 1: Criar `src/views/Guitar/ChordVariationStrip.jsx`**
@@ -1200,7 +1241,9 @@ export function ChordVariationStrip({ variations, selectedIndex, onSelect }) {
             t("voicings.variation_label", {
               n: idx + 1,
               total: variations.length,
-            }) + " — " + label;
+            }) +
+            " — " +
+            label;
           return (
             <ChordCard
               key={idx}
@@ -1237,6 +1280,7 @@ git commit -m "feat(guitar): ChordVariationStrip horizontal scroller"
 ## Task 10: i18n — adicionar strings nos 3 locales
 
 **Files:**
+
 - Modify: `src/i18n/locales/pt-BR.json`
 - Modify: `src/i18n/locales/en.json`
 - Modify: `src/i18n/locales/es.json`
@@ -1305,6 +1349,7 @@ git commit -m "i18n: add voicings.region/variation_label keys"
 ## Task 11: `GuitarView.jsx` aceita `variationIndex`
 
 **Files:**
+
 - Modify: `src/views/Guitar/GuitarView.jsx`
 
 - [ ] **Step 1: Adicionar prop `variationIndex` (default 0)**
@@ -1318,7 +1363,15 @@ Localizar a chamada `drawGuitar` (linha ~56): garantir que o `chordNotes` / `roo
 ```js
 drawGuitar(
   el,
-  { selectedNote, chordNotes, root, quality, variationIndex, customPositions, customBarre },
+  {
+    selectedNote,
+    chordNotes,
+    root,
+    quality,
+    variationIndex,
+    customPositions,
+    customBarre,
+  }
   // ...
 );
 ```
@@ -1356,6 +1409,7 @@ git commit -m "feat(guitar): GuitarView accepts variationIndex prop"
 ## Task 12: Integração na Home
 
 **Files:**
+
 - Modify: `src/pages/Home.jsx`
 
 - [ ] **Step 1: Atualizar `initialChordState` e `chordReducer`**
@@ -1491,6 +1545,7 @@ git commit -m "feat(home): integrate ChordVariationStrip and variationIndex stat
 ## Task 13: Validação manual de UI + marcar feature como shipped
 
 **Files:**
+
 - Modify: `docs/features/chord-variations-guitar/spec.md`
 
 - [ ] **Step 1: Subir dev server**
@@ -1560,15 +1615,15 @@ git commit -m "docs(variations): mark feature shipped"
 
 ## Riscos
 
-| Risco | Mitigação |
-| --- | --- |
-| Shim falha em algum formato edge case | Task 2 inclui audits após mudança; se quebrar, o shim pode ser ajustado antes do commit. |
-| Migração perde semântica | Task 3 step 4 roda os 3 audits depois da migração. |
-| Gerador produz shape inválido | `check-playability` bloqueia commit; Task 6 step 2 inspeciona diff manualmente. |
-| Estado persistido velho (`variationIndex` >= novo `variations.length`) | `getChordVoicing` cai pra `idx=0` automaticamente (já tratado na API). |
-| `drawGuitar` interno usa `getChordVoicing` sem `variationIndex` | Task 11 step 1 inspeciona e atualiza chamadas internas. |
-| Tap target em mobile com 92×110 ainda funciona? | Excede 44×44 obrigatório (constituição §4); confirmado em Task 13 step 2. |
-| `variations` array vazio causa null no GuitarView | `getChordVoicing` retorna `null`; `GuitarView` cai no fallback `chordNotes` (já existente). |
+| Risco                                                                  | Mitigação                                                                                   |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Shim falha em algum formato edge case                                  | Task 2 inclui audits após mudança; se quebrar, o shim pode ser ajustado antes do commit.    |
+| Migração perde semântica                                               | Task 3 step 4 roda os 3 audits depois da migração.                                          |
+| Gerador produz shape inválido                                          | `check-playability` bloqueia commit; Task 6 step 2 inspeciona diff manualmente.             |
+| Estado persistido velho (`variationIndex` >= novo `variations.length`) | `getChordVoicing` cai pra `idx=0` automaticamente (já tratado na API).                      |
+| `drawGuitar` interno usa `getChordVoicing` sem `variationIndex`        | Task 11 step 1 inspeciona e atualiza chamadas internas.                                     |
+| Tap target em mobile com 92×110 ainda funciona?                        | Excede 44×44 obrigatório (constituição §4); confirmado em Task 13 step 2.                   |
+| `variations` array vazio causa null no GuitarView                      | `getChordVoicing` retorna `null`; `GuitarView` cai no fallback `chordNotes` (já existente). |
 
 ## Validação (recapitulada)
 

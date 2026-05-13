@@ -12,33 +12,34 @@
 
 ## File structure
 
-| Path | Mutation | Responsibility |
-|---|---|---|
-| `package.json` | Modify | Add `cheerio` to `devDependencies` |
-| `docs/adr/0011-musicca-as-voicings-source.md` | Create | ADR for musicca dependency + cheerio rationale |
-| `docs/domain/glossary.md` | Modify | Add "fingerprint", "variação manual" |
-| `docs/adr/README.md` | Modify | Index ADR-0011 row |
-| `scripts/musicca/slugs.js` | Create | Hardcoded `(root, quality) → slug` table |
-| `scripts/musicca/parseSvgDiagram.mjs` | Create | Pure function: HTML/SVG fragment → `{region, positions, barre}` |
-| `scripts/musicca/fetch.mjs` | Create | HTTP downloader with rate limit + local cache |
-| `scripts/musicca/extract.mjs` | Create | Orchestrate parser across cache, emit `_extracted.json` |
-| `scripts/musicca/apply.mjs` | Create | Merge `_extracted.json` into `<Root>.js`, fingerprint-based |
-| `scripts/musicca/README.md` | Create | Usage instructions, rate limit notes, attribution |
-| `scripts/musicca-cache/.gitkeep` | Create | Empty placeholder so the directory exists in git |
-| `src/domain/voicings/index.js` | Modify | Preserve `manual` flag through `normalizeVoicing` |
-| `src/domain/voicings/C.js` | Modify | Mark C Maj fret-5 variation as `manual: true` |
-| `scripts/musicca-cache/<slug>.html` × 264 | Create (Task 5 runtime) | HTML snapshots |
-| `scripts/musicca-cache/_extracted.json` | Create (Task 7 runtime) | Consolidated extracted data |
-| `scripts/musicca-cache/_errors.log` | Create (Task 5/7 runtime) | Failures log |
-| `src/domain/voicings/<Root>.js` × 12 | Modify (Task 12 runtime) | Rewritten with merged voicings |
-| `docs/features/musicca-voicings-import/spec.md` | Modify | Mark shipped, link ADR-0011 |
-| `docs/features/musicca-voicings-import/tasks.md` | Create | SDD checklist |
+| Path                                             | Mutation                  | Responsibility                                                  |
+| ------------------------------------------------ | ------------------------- | --------------------------------------------------------------- |
+| `package.json`                                   | Modify                    | Add `cheerio` to `devDependencies`                              |
+| `docs/adr/0011-musicca-as-voicings-source.md`    | Create                    | ADR for musicca dependency + cheerio rationale                  |
+| `docs/domain/glossary.md`                        | Modify                    | Add "fingerprint", "variação manual"                            |
+| `docs/adr/README.md`                             | Modify                    | Index ADR-0011 row                                              |
+| `scripts/musicca/slugs.js`                       | Create                    | Hardcoded `(root, quality) → slug` table                        |
+| `scripts/musicca/parseSvgDiagram.mjs`            | Create                    | Pure function: HTML/SVG fragment → `{region, positions, barre}` |
+| `scripts/musicca/fetch.mjs`                      | Create                    | HTTP downloader with rate limit + local cache                   |
+| `scripts/musicca/extract.mjs`                    | Create                    | Orchestrate parser across cache, emit `_extracted.json`         |
+| `scripts/musicca/apply.mjs`                      | Create                    | Merge `_extracted.json` into `<Root>.js`, fingerprint-based     |
+| `scripts/musicca/README.md`                      | Create                    | Usage instructions, rate limit notes, attribution               |
+| `scripts/musicca-cache/.gitkeep`                 | Create                    | Empty placeholder so the directory exists in git                |
+| `src/domain/voicings/index.js`                   | Modify                    | Preserve `manual` flag through `normalizeVoicing`               |
+| `src/domain/voicings/C.js`                       | Modify                    | Mark C Maj fret-5 variation as `manual: true`                   |
+| `scripts/musicca-cache/<slug>.html` × 264        | Create (Task 5 runtime)   | HTML snapshots                                                  |
+| `scripts/musicca-cache/_extracted.json`          | Create (Task 7 runtime)   | Consolidated extracted data                                     |
+| `scripts/musicca-cache/_errors.log`              | Create (Task 5/7 runtime) | Failures log                                                    |
+| `src/domain/voicings/<Root>.js` × 12             | Modify (Task 12 runtime)  | Rewritten with merged voicings                                  |
+| `docs/features/musicca-voicings-import/spec.md`  | Modify                    | Mark shipped, link ADR-0011                                     |
+| `docs/features/musicca-voicings-import/tasks.md` | Create                    | SDD checklist                                                   |
 
 ---
 
 ## Task 1: ADR-0011 + glossary + cheerio dependency
 
 **Files:**
+
 - Create: `docs/adr/0011-musicca-as-voicings-source.md`
 - Modify: `docs/adr/README.md` (index)
 - Modify: `docs/domain/glossary.md` (Acordes section)
@@ -158,6 +159,7 @@ git commit -m "docs(musicca): ADR-0011 + glossary terms + cheerio dependency"
 ## Task 2: `scripts/musicca/slugs.js` — slug table
 
 **Files:**
+
 - Create: `scripts/musicca/slugs.js`
 
 - [ ] **Step 1: Create the directory and file**
@@ -200,25 +202,25 @@ const ROOT_SLUG = {
 const QUALITY_SLUG = {
   Maj: "maior",
   m: "menor",
-  "5": "power-chord",
+  5: "power-chord",
   aug: "aumentado",
   sus2: "de-2a-suspensa",
   sus4: "de-4a-suspensa",
-  "6": "com-6a",
+  6: "com-6a",
   m6: "menor-com-6a",
-  "7": "de-7a-dominante",
+  7: "de-7a-dominante",
   m7: "menor-com-7a",
   maj7: "de-7a-maior",
   "m7(b5)": "meio-diminuto",
   dim7: "diminuto-com-7a",
   "6/9": "com-6a-e-9a",
   add9: "com-9a-adicionada",
-  "9": "com-9a",
+  9: "com-9a",
   m9: "menor-com-9a",
   maj9: "de-9a-maior",
   "9+": "com-9a-aumentada",
-  "11": "com-11a",
-  "13": "de-13a-dominante",
+  11: "com-11a",
+  13: "de-13a-dominante",
 };
 
 // We export (root, quality) → slug.
@@ -240,6 +242,7 @@ node --input-type=module -e "import('./scripts/musicca/slugs.js').then(m => { co
 ```
 
 Expected:
+
 - `(not in table — E# missing)` — E# is intentionally absent for now (rare, can be added later).
 - `do-maior`
 - `fa-sustenido-de-4a-suspensa`
@@ -257,9 +260,11 @@ git commit -m "feat(musicca): slug table for roots and qualities"
 ## Task 3: `scripts/musicca/parseSvgDiagram.mjs` — pure parser
 
 **Files:**
+
 - Create: `scripts/musicca/parseSvgDiagram.mjs`
 
 **Geometry contract** (verified by inspecting musicca's SVG):
+
 - viewBox: `0 0 235 271`.
 - Strings (vertical lines) at `x ∈ {30, 65, 100, 135, 170, 205}`. Map: `x=30 → stringIndex 5` (low E, leftmost), `x=205 → stringIndex 0` (high E, rightmost).
 - Frets (horizontal lines) at `y ∈ {55 (nut), 104, 153, 202, 251}`. Row centers `y ∈ {79.5, 128.5, 177.5, 226.5}` correspond to frets 1, 2, 3, 4 of the diagram. If the diagram is shifted (fret label "3" on the left), the first visible row is fret `startFret` (parsed from the label).
@@ -317,7 +322,9 @@ function yToDisplayFret(y) {
 
 function parseTranslate(transformAttr) {
   if (!transformAttr) return null;
-  const m = /translate\(\s*(-?[\d.]+)\s*,?\s*(-?[\d.]+)?\s*\)/.exec(transformAttr);
+  const m = /translate\(\s*(-?[\d.]+)\s*,?\s*(-?[\d.]+)?\s*\)/.exec(
+    transformAttr
+  );
   if (!m) return null;
   return { x: parseFloat(m[1]), y: parseFloat(m[2] ?? "0") };
 }
@@ -374,7 +381,8 @@ export function parseSvgDiagram($, $svg) {
     const y = parseFloat($el.attr("y") ?? "NaN");
     const w = parseFloat($el.attr("width") ?? "NaN");
     const h = parseFloat($el.attr("height") ?? "NaN");
-    if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(w)) return;
+    if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(w))
+      return;
     const cy = y + h / 2;
     const displayFret = yToDisplayFret(cy);
     if (displayFret === -1) return;
@@ -416,7 +424,12 @@ export function parseSvgDiagram($, $svg) {
 }
 
 // Used internally by the smoke test in Task 3 step 2.
-export const __test_internals = { xToStringIndex, yToDisplayFret, STRING_X, FRET_ROW_Y };
+export const __test_internals = {
+  xToStringIndex,
+  yToDisplayFret,
+  STRING_X,
+  FRET_ROW_Y,
+};
 ```
 
 - [ ] **Step 2: Smoke test with a fixture**
@@ -444,6 +457,7 @@ console.log(JSON.stringify(result, null, 2));
 ```
 
 Expected (approximately):
+
 ```json
 {
   "region": "open",
@@ -480,6 +494,7 @@ git commit -m "feat(musicca): pure SVG-diagram parser"
 ## Task 4: `scripts/musicca/fetch.mjs` — HTTP cache downloader
 
 **Files:**
+
 - Create: `scripts/musicca/fetch.mjs`
 - Create: `scripts/musicca-cache/.gitkeep`
 
@@ -575,7 +590,7 @@ async function main() {
     }
   }
   console.log(
-    `\nSummary: downloaded=${downloaded} cached=${cached} failed=${failed}`,
+    `\nSummary: downloaded=${downloaded} cached=${cached} failed=${failed}`
   );
 }
 
@@ -622,6 +637,7 @@ git commit -m "feat(musicca): HTTP cache fetcher with rate limit"
 ## Task 5: Populate the full cache (264 fetches)
 
 **Files:**
+
 - 264 files at `scripts/musicca-cache/<slug>.html`
 - `scripts/musicca-cache/_errors.log` if any failures
 
@@ -656,6 +672,7 @@ Expected commit size: large but acceptable (~5-15 MB of compressed HTML in git o
 ## Task 6: `scripts/musicca/extract.mjs` — parse all cache into `_extracted.json`
 
 **Files:**
+
 - Create: `scripts/musicca/extract.mjs`
 
 - [ ] **Step 1: Write the script**
@@ -669,7 +686,12 @@ Expected commit size: large but acceptable (~5-15 MB of compressed HTML in git o
 //
 // Uso:
 //   node --import ./scripts/_resolver.mjs scripts/musicca/extract.mjs
-import { readFileSync, writeFileSync, existsSync, appendFileSync } from "node:fs";
+import {
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  appendFileSync,
+} from "node:fs";
 import { dirname, resolve as pathResolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { load } from "cheerio";
@@ -686,8 +708,23 @@ const ERROR_LOG = pathResolve(CACHE_DIR, "_errors.log");
 const STRING_OPEN_MIDI = [64, 59, 55, 50, 45, 40]; // index 0 = high E
 
 const ROOT_PC = {
-  C: 0, "C#": 1, Db: 1, D: 2, "D#": 3, Eb: 3, E: 4, F: 5,
-  "F#": 6, Gb: 6, G: 7, "G#": 8, Ab: 8, A: 9, "A#": 10, Bb: 10, B: 11,
+  C: 0,
+  "C#": 1,
+  Db: 1,
+  D: 2,
+  "D#": 3,
+  Eb: 3,
+  E: 4,
+  F: 5,
+  "F#": 6,
+  Gb: 6,
+  G: 7,
+  "G#": 8,
+  Ab: 8,
+  A: 9,
+  "A#": 10,
+  Bb: 10,
+  B: 11,
 };
 
 function logError(line) {
@@ -747,7 +784,7 @@ function extractOne(root, quality) {
         const actual = pcsFromVariation(variation);
         if (!setsEqual(actual, expected)) {
           logError(
-            `${root} ${quality} ${slug}#${idx}: pc mismatch expected=${[...expected].sort()} actual=${[...actual].sort()}`,
+            `${root} ${quality} ${slug}#${idx}: pc mismatch expected=${[...expected].sort()} actual=${[...actual].sort()}`
           );
           return; // skip this variation
         }
@@ -789,7 +826,7 @@ for (const root of ALL_ROOTS) {
 
 writeFileSync(OUT_FILE, JSON.stringify(result, null, 2), "utf8");
 console.log(
-  `\nWrote ${OUT_FILE} — ${counts.roots} roots, ${counts.qualities} (root, quality) entries, ${counts.variations} variations.`,
+  `\nWrote ${OUT_FILE} — ${counts.roots} roots, ${counts.qualities} (root, quality) entries, ${counts.variations} variations.`
 );
 ```
 
@@ -827,6 +864,7 @@ git commit -m "feat(musicca): orchestrate extraction into _extracted.json"
 ## Task 7: Update `voicings/index.js` to preserve `manual` flag
 
 **Files:**
+
 - Modify: `src/domain/voicings/index.js`
 
 - [ ] **Step 1: Modify `normalizeVoicing`**
@@ -834,43 +872,43 @@ git commit -m "feat(musicca): orchestrate extraction into _extracted.json"
 In `src/domain/voicings/index.js`, find the branch that handles the new-objects format (around lines 54-67). Currently:
 
 ```js
-  if (
-    Array.isArray(raw) &&
-    raw.length > 0 &&
-    raw[0] &&
-    typeof raw[0] === "object" &&
-    !Array.isArray(raw[0]) &&
-    Array.isArray(raw[0].positions)
-  ) {
-    return raw.map((v) => ({
-      region: v.region ?? computeRegion(v.positions, v.barre),
-      positions: v.positions,
-      barre: v.barre ?? null,
-    }));
-  }
+if (
+  Array.isArray(raw) &&
+  raw.length > 0 &&
+  raw[0] &&
+  typeof raw[0] === "object" &&
+  !Array.isArray(raw[0]) &&
+  Array.isArray(raw[0].positions)
+) {
+  return raw.map((v) => ({
+    region: v.region ?? computeRegion(v.positions, v.barre),
+    positions: v.positions,
+    barre: v.barre ?? null,
+  }));
+}
 ```
 
 Replace with:
 
 ```js
-  if (
-    Array.isArray(raw) &&
-    raw.length > 0 &&
-    raw[0] &&
-    typeof raw[0] === "object" &&
-    !Array.isArray(raw[0]) &&
-    Array.isArray(raw[0].positions)
-  ) {
-    return raw.map((v) => {
-      const out = {
-        region: v.region ?? computeRegion(v.positions, v.barre),
-        positions: v.positions,
-        barre: v.barre ?? null,
-      };
-      if (v.manual === true) out.manual = true;
-      return out;
-    });
-  }
+if (
+  Array.isArray(raw) &&
+  raw.length > 0 &&
+  raw[0] &&
+  typeof raw[0] === "object" &&
+  !Array.isArray(raw[0]) &&
+  Array.isArray(raw[0].positions)
+) {
+  return raw.map((v) => {
+    const out = {
+      region: v.region ?? computeRegion(v.positions, v.barre),
+      positions: v.positions,
+      barre: v.barre ?? null,
+    };
+    if (v.manual === true) out.manual = true;
+    return out;
+  });
+}
 ```
 
 - [ ] **Step 2: Run audits — must not regress**
@@ -897,6 +935,7 @@ git commit -m "feat(voicings): preserve manual flag through normalization"
 ## Task 8: Mark `C Maj fret-5` variation as `manual: true`
 
 **Files:**
+
 - Modify: `src/domain/voicings/C.js`
 
 - [ ] **Step 1: Find and edit the entry**
@@ -951,9 +990,11 @@ git commit -m "feat(voicings): mark C Maj fret-5 barre variation as manual"
 ## Task 9: `scripts/musicca/apply.mjs` — merge `_extracted.json` into `<Root>.js`
 
 **Files:**
+
 - Create: `scripts/musicca/apply.mjs`
 
 **Merge algorithm:**
+
 1. Load existing voicings via `getChordVariations(root, quality)`.
 2. Compute fingerprint for each existing and each musicca variation.
 3. Output set:
@@ -985,9 +1026,18 @@ const EXTRACTED = pathResolve(CACHE_DIR, "_extracted.json");
 const VOICINGS_DIR = pathResolve(__dirname, "../../src/domain/voicings");
 
 const ROOT_FILE_MAP = {
-  C: "C.js", "C#": "CSharp.js", D: "D.js", "D#": "DSharp.js",
-  E: "E.js", F: "F.js", "F#": "FSharp.js", G: "G.js",
-  "G#": "GSharp.js", A: "A.js", "A#": "ASharp.js", B: "B.js",
+  C: "C.js",
+  "C#": "CSharp.js",
+  D: "D.js",
+  "D#": "DSharp.js",
+  E: "E.js",
+  F: "F.js",
+  "F#": "FSharp.js",
+  G: "G.js",
+  "G#": "GSharp.js",
+  A: "A.js",
+  "A#": "ASharp.js",
+  B: "B.js",
 };
 
 const args = process.argv.slice(2);
@@ -1117,7 +1167,10 @@ for (const [rootName, fileName] of Object.entries(ROOT_FILE_MAP)) {
     touched++;
   }
 }
-if (dryRun) console.log(`\n(dry run) would touch ${Object.keys(ROOT_FILE_MAP).length} files.`);
+if (dryRun)
+  console.log(
+    `\n(dry run) would touch ${Object.keys(ROOT_FILE_MAP).length} files.`
+  );
 else console.log(`\nDone. Wrote ${touched} file(s).`);
 ```
 
@@ -1147,6 +1200,7 @@ git commit -m "feat(musicca): merge extracted variations into voicings via finge
 ## Task 10: Run `apply.mjs` for real + commit results
 
 **Files:**
+
 - Modify: all 12 `src/domain/voicings/<Root>.js`
 
 - [ ] **Step 1: Apply**
@@ -1166,6 +1220,7 @@ node --import ./scripts/_resolver.mjs scripts/render-notes.mjs --summary 2>&1 | 
 ```
 
 Expected:
+
 - `audit-spelling`: clean (no change).
 - `check-playability`: `Unplayable: 0`. Total count varies; CRITICAL it's 0 unplayable.
 - `render-notes --summary`: GUITAR failures should be LOWER than 128 (curated shapes have better PC coverage). If higher, something parsed wrong.
@@ -1194,6 +1249,7 @@ Expected: `1`.
 Then visually check (manual or via Chrome MCP): open `http://localhost:5173/`, switch through a few chords (C Maj, F# m7, G sus4), confirm the variation strip shows multiple cards with sensible shapes.
 
 Stop the dev server:
+
 ```bash
 pkill -f vite
 ```
@@ -1210,13 +1266,14 @@ git commit -m "feat(voicings): import curated shapes from musicca.com"
 ## Task 11: `scripts/musicca/README.md` + ship spec
 
 **Files:**
+
 - Create: `scripts/musicca/README.md`
 - Modify: `docs/features/musicca-voicings-import/spec.md` (mark shipped)
 - Create: `docs/features/musicca-voicings-import/tasks.md`
 
 - [ ] **Step 1: Write `scripts/musicca/README.md`**
 
-```markdown
+````markdown
 # scripts/musicca/ — Importador de voicings do musicca.com
 
 Pipeline em 3 etapas para sincronizar `src/domain/voicings/<Root>.js`
@@ -1233,6 +1290,7 @@ fetch.mjs   →   musicca-cache/<slug>.html
                                           ↓
                                    apply.mjs   →   src/domain/voicings/<Root>.js
 ```
+````
 
 ## Comandos
 
@@ -1264,7 +1322,8 @@ commitado para que mudanças upstream apareçam como diffs revisáveis.
 Variações com `manual: true` em `<Root>.js` NÃO são sobrescritas pelo
 `apply.mjs`. Use isso para preservar correções editoriais que diferem
 do musicca (ex.: shape `C Maj fret-5 barre`).
-```
+
+````
 
 - [ ] **Step 2: Create `docs/features/musicca-voicings-import/tasks.md`**
 
@@ -1284,7 +1343,7 @@ Ver detalhes em [`plan.md`](./plan.md).
 9. [x] `scripts/musicca/apply.mjs`
 10. [x] Apply rodado + voicings reescritas
 11. [x] README + spec shipped
-```
+````
 
 - [ ] **Step 3: Mark spec shipped**
 
@@ -1318,14 +1377,14 @@ git commit -m "docs(musicca): README + mark feature shipped"
 
 ## Riscos
 
-| Risco | Mitigação |
-| --- | --- |
-| musicca muda estrutura HTML | Cache local commitado expõe mudança como diff; `extract.mjs` falha com erro claro. |
-| Parser interpreta SVG errado | Validação contra `getQualityPitchClasses` em `extract.mjs` rejeita variações com pitch class set incorreto. |
-| `apply.mjs` apaga variação editorial | `manual: true` é gate inviolável. C Maj fret-5 já marcado em Task 8. |
-| 404s pra slugs raros | Listados em `_errors.log`, ignorados em runtime. Slug table pode ser corrigida e re-rodada. |
-| Cheerio adiciona vulnerabilidade | É devDependencies; não afeta bundle. Auditado via `npm audit` no commit final. |
-| Cache muito grande no git | ~5-15 MB esperados. Se virar problema, considerar mover pra LFS em ADR futuro. |
+| Risco                                | Mitigação                                                                                                   |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| musicca muda estrutura HTML          | Cache local commitado expõe mudança como diff; `extract.mjs` falha com erro claro.                          |
+| Parser interpreta SVG errado         | Validação contra `getQualityPitchClasses` em `extract.mjs` rejeita variações com pitch class set incorreto. |
+| `apply.mjs` apaga variação editorial | `manual: true` é gate inviolável. C Maj fret-5 já marcado em Task 8.                                        |
+| 404s pra slugs raros                 | Listados em `_errors.log`, ignorados em runtime. Slug table pode ser corrigida e re-rodada.                 |
+| Cheerio adiciona vulnerabilidade     | É devDependencies; não afeta bundle. Auditado via `npm audit` no commit final.                              |
+| Cache muito grande no git            | ~5-15 MB esperados. Se virar problema, considerar mover pra LFS em ADR futuro.                              |
 
 ## Validação (recapitulada)
 

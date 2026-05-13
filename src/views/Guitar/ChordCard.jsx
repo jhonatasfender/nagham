@@ -1,10 +1,7 @@
 import { useEffect, useRef } from "react";
 import { cn } from "../../utils/cn";
 import { drawChordCard } from "./drawChordCard";
-import {
-  CHORD_CARD_WIDTH,
-  CHORD_CARD_HEIGHT,
-} from "./constants.js";
+import { CHORD_CARD_WIDTH, CHORD_CARD_HEIGHT } from "./constants.js";
 
 export function ChordCard({
   variation,
@@ -19,11 +16,7 @@ export function ChordCard({
 
   useEffect(() => {
     if (!svgRef.current) return;
-    drawChordCard(
-      svgRef.current,
-      { variation, isSelected },
-      { width, height }
-    );
+    drawChordCard(svgRef.current, { variation, isSelected }, { width, height });
   }, [variation, isSelected, width, height]);
 
   return (

@@ -4,8 +4,7 @@
 // sobrescrita por scripts/musicca/apply.mjs.
 
 const voicings = {
-
-  "5": [
+  5: [
     {
       region: "fret-2",
       positions: [
@@ -54,7 +53,7 @@ const voicings = {
     },
   ],
 
-  "6": [
+  6: [
     {
       region: "open",
       positions: [
@@ -97,7 +96,7 @@ const voicings = {
     },
   ],
 
-  "7": [
+  7: [
     {
       region: "fret-2",
       positions: [
@@ -155,7 +154,7 @@ const voicings = {
     },
   ],
 
-  "9": [
+  9: [
     {
       region: "open",
       positions: [
@@ -201,7 +200,7 @@ const voicings = {
     },
   ],
 
-  "11": [
+  11: [
     {
       region: "fret-2",
       positions: [
@@ -1117,7 +1116,6 @@ const voicings = {
       barre: { fret: 2, strings: [1, 3, 5] },
     },
   ],
-
 };
 
 export default voicings;
