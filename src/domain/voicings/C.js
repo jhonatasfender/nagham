@@ -123,14 +123,13 @@ const voicings = {
       barre: null,
     },
     {
-      region: "fret-7",
+      region: "fret-5",
       positions: [
         [0, 8],
-        [1, 8],
         [4, 7],
         [5, 8],
       ],
-      barre: null,
+      barre: { fret: 5, strings: [5, 4, 3, 2, 1, 0] },
     },
   ],
 
