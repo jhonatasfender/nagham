@@ -21,6 +21,8 @@ dist-ssr
 # Tooling / IDE (local state, MCP artifacts)
 .cursor
 .playwright-mcp
+.superpowers
+.claude
 
 # Test & lint caches
 coverage
