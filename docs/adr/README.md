@@ -22,6 +22,7 @@
 | [0008](0008-chord-qualities-single-source.md) | `chordQualities.js` como fonte única de intervalos     | Accepted | 2026-05-12 |
 | [0010](0010-estrutura-variacoes-violao.md)    | Estrutura de variações de voicing de violão            | Accepted | 2026-05-12 |
 | [0011](0011-musicca-as-voicings-source.md)    | musicca.com como fonte de referência de voicings       | Accepted | 2026-05-13 |
+| [0012](0012-chords-db-as-slash-voicings-source.md) | chords-db como fonte de slash chord voicings      | Accepted | 2026-05-13 |
 
 ## Template
 
