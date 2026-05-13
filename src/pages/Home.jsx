@@ -12,7 +12,9 @@ import {
 import { createMatrixFromChord } from "../domain/notationMatrix";
 import { getStaffChordVoicing } from "../domain/pianoVoicings";
 import {
+  getBarreFromVoicing,
   getChordVariations,
+  getChordVoicing,
 } from "../domain/voicings";
 import { ChordVariationStrip } from "../views/Guitar/ChordVariationStrip.jsx";
 import { GuitarView } from "../views/Guitar/GuitarView";
@@ -100,6 +102,22 @@ export function Home() {
     () => getChordVariations(root, quality),
     [root, quality]
   );
+  const variationCode = useMemo(() => {
+    const positions = getChordVoicing(root, quality, variationIndex) ?? [];
+    const barre = getBarreFromVoicing(root, quality, variationIndex);
+    if (positions.length === 0 && !barre) return null;
+    const lines = ["  ["];
+    for (const p of positions) {
+      lines.push(`    [${p.stringIndex}, ${p.fret}],`);
+    }
+    if (barre && barre.strings && barre.strings.length > 0) {
+      lines.push(
+        `    { barre: ${barre.fret}, strings: [${barre.strings.join(", ")}] },`
+      );
+    }
+    lines.push("  ],");
+    return lines.join("\n");
+  }, [root, quality, variationIndex]);
   const notesForStaff = useMemo(() => {
     if (chordNotes?.length && root && quality) {
       const voicing = getStaffChordVoicing(root, quality);
@@ -195,6 +213,25 @@ export function Home() {
                   dispatchChord({ type: "SET_VARIATION_INDEX", payload: idx })
                 }
               />
+              {variationCode && (
+                <div className="rounded border border-zinc-700 bg-zinc-900/50 p-3 font-mono text-xs text-zinc-300 relative">
+                  <button
+                    type="button"
+                    onClick={() => navigator.clipboard.writeText(variationCode)}
+                    className="absolute top-2 right-2 rounded px-2 py-1 text-xs font-medium text-amber-400 bg-amber-500/20 hover:bg-amber-500/30 transition-colors"
+                  >
+                    {t("home.code.copy", { defaultValue: "Copiar" })}
+                  </button>
+                  <div className="text-[10px] uppercase tracking-wide text-zinc-500 mb-1">
+                    {t("home.code.title", {
+                      defaultValue: "Código da variação",
+                    })}
+                  </div>
+                  <pre className="select-text whitespace-pre font-mono text-xs text-zinc-300 overflow-x-auto pr-16">
+                    {variationCode}
+                  </pre>
+                </div>
+              )}
             </div>
           </div>
         </section>
