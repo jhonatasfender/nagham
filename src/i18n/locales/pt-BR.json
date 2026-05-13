@@ -103,7 +103,10 @@
       "notes": "Notas",
       "triads": "Acordes nos graus",
       "triadsNaturalMinorHybridHint": "Menor natural: as tríades seguem sobretudo a eólia (ex.: III maior — D♯ ou E♭ maior, não aumentado). Só no II grau a quinta vem da menor melódica ascendente (6ª maior), para formar acorde menor (Dm) em vez de diminuto (D°), como em muitos métodos de harmonia.",
-      "triadsHeptatonicOnly": "A coluna de acordos só aparece para escalas de 7 graus: a regra (terça + quinta a cada dois passos na escala) não corresponde a tríades diatónicas clássicas em pentatónicas ou blues."
+      "triadsHeptatonicOnly": "A coluna de acordos só aparece para escalas de 7 graus: a regra (terça + quinta a cada dois passos na escala) não corresponde a tríades diatónicas clássicas em pentatónicas ou blues.",
+      "viewLabel": "Exibir como",
+      "viewTable": "Tabela",
+      "viewCards": "Cards"
     }
   },
   "chordBuilder": {

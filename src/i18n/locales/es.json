@@ -103,7 +103,10 @@
       "notes": "Notas",
       "triads": "Acordes por grado",
       "triadsNaturalMinorHybridHint": "Menor natural: las tríadas siguen sobre todo la eolia (p. ej. III mayor — D♯ o Mi♭ mayor, no aumentado). Solo en el II el quinto grado toma la 6ª de la menor melódica ascendente, para un acorde menor (Dm) en lugar de disminuido (D°), como en muchos métodos de armonía.",
-      "triadsHeptatonicOnly": "La columna de acordos solo aparece en escalas de 7 grados: apilar cada dos pasos no equivale a tríadas diatónicas clásicas en pentatónicas o blues."
+      "triadsHeptatonicOnly": "La columna de acordos solo aparece en escalas de 7 grados: apilar cada dos pasos no equivale a tríadas diatónicas clásicas en pentatónicas o blues.",
+      "viewLabel": "Ver como",
+      "viewTable": "Tabla",
+      "viewCards": "Tarjetas"
     }
   },
   "chordBuilder": {

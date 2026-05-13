@@ -103,7 +103,10 @@
       "notes": "Notes",
       "triads": "Chords by degree",
       "triadsNaturalMinorHybridHint": "Natural minor: triads are mostly Aeolian (so ♭III is major—e.g. D♯ or E♭ major, not augmented). Only on ii does the fifth come from ascending melodic minor (raised 6th), giving a minor triad (Dm) instead of diminished (D°), matching common harmony teaching.",
-      "triadsHeptatonicOnly": "Chord column only shows for 7-note scales: stacking every other scale step is not the same as classical diatonic triads on pentatonic or blues collections."
+      "triadsHeptatonicOnly": "Chord column only shows for 7-note scales: stacking every other scale step is not the same as classical diatonic triads on pentatonic or blues collections.",
+      "viewLabel": "View as",
+      "viewTable": "Table",
+      "viewCards": "Cards"
     }
   },
   "chordBuilder": {
