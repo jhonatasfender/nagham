@@ -59,11 +59,15 @@ function normalizeVoicing(raw) {
     !Array.isArray(raw[0]) &&
     Array.isArray(raw[0].positions)
   ) {
-    return raw.map((v) => ({
-      region: v.region ?? computeRegion(v.positions, v.barre),
-      positions: v.positions,
-      barre: v.barre ?? null,
-    }));
+    return raw.map((v) => {
+      const out = {
+        region: v.region ?? computeRegion(v.positions, v.barre),
+        positions: v.positions,
+        barre: v.barre ?? null,
+      };
+      if (v.manual === true) out.manual = true;
+      return out;
+    });
   }
 
   if (
